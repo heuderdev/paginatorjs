@@ -9,7 +9,7 @@ $token = demo_token();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?php echo htmlspecialchars($token, ENT_QUOTES, 'UTF-8'); ?>">
     <title>hr-paginationjs — exemplo realista</title>
-    <link rel="stylesheet" href="../src/hr-paginationjs.css">
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
     <style>
         body { font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0; background: #f8f9fb; color: #1d2939; }
         main { max-width: 1180px; margin: 0 auto; padding: 24px 16px 64px; }
@@ -194,8 +194,8 @@ $token = demo_token();
 </main>
 
 <script src="../vendor/jquery-1.12.4.min.js"></script>
-<script src="../vendor/pagination-2.6.0.min.js"></script>
-<script src="../src/hr-paginationjs.js"></script>
+<script src="../dist/pagination-2.6.0.min.js"></script>
+<script src="../dist/hr-paginationjs.min.js"></script>
 <script>
     (function () {
         var log = document.getElementById('log');

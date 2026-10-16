@@ -9,9 +9,13 @@ PHP 7.0 + Joomla 3, sem alterar nenhum helper.
 |---|---|
 | `controllers/clientes.php` | `administrator/components/com_loja/controllers/clientes.php` |
 | `views/clientes/tmpl/default.php` | `administrator/components/com_loja/views/clientes/tmpl/default.php` |
-| `../../vendor/pagination-2.6.0.min.js` | `media/com_loja/js/pagination-2.6.0.min.js` |
-| `../../src/hr-paginationjs.js` | `media/com_loja/js/hr-paginationjs.js` |
-| `../../src/hr-paginationjs.css` | `media/com_loja/css/hr-paginationjs.css` |
+| `../../dist/pagination-2.6.0.min.js` | `media/com_loja/js/pagination-2.6.0.min.js` |
+| `../../dist/hr-paginationjs.min.js` | `media/com_loja/js/hr-paginationjs.min.js` |
+| `../../dist/hr-paginationjs.js` | `media/com_loja/js/hr-paginationjs.js` (usado com o debug do Joomla ligado) |
+| `../../dist/hr-paginationjs.min.css` | `media/com_loja/css/hr-paginationjs.min.css` |
+| `../../dist/hr-paginationjs.css` | `media/com_loja/css/hr-paginationjs.css` (debug) |
+
+Atalho: `npm run pacote` gera um zip com `js/` e `css/` prontos para copiar.
 
 Os helpers ficam onde o componente já os carrega (ex.: `administrator/components/com_loja/helpers/`).
 **Não copie** `vendor/jquery-1.12.4.min.js`: no Joomla usa-se o jQuery do próprio Joomla via `JHtml::_('jquery.framework')`.
@@ -21,7 +25,7 @@ Os helpers ficam onde o componente já os carrega (ex.: `administrator/component
 1. `JHtml::_('jquery.framework')` → jQuery 1.12.4 do Joomla (`media/jui/js/jquery.min.js`) + noConflict.
    (A biblioteca aceita qualquer jQuery ≥ 1.7, inclusive *slim*; o jQuery só é usado pelo Pagination.js.)
 2. `pagination-2.6.0.min.js` (registra `jQuery.fn.pagination`).
-3. `hr-paginationjs.js` (procura as telas `[data-paginationjs]` no `DOMContentLoaded`).
+3. `hr-paginationjs.min.js` (procura as telas `[data-paginationjs]` no `DOMContentLoaded`).
 
 Se a ordem estiver errada, a listagem mostra uma mensagem clara no lugar da tabela e no console.
 

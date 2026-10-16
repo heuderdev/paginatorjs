@@ -9,8 +9,8 @@ $url = function ($task) use ($base) {
 
 JHtml::_('jquery.framework');
 JHtml::_('script', 'com_loja/pagination-2.6.0.min.js', array('relative' => true, 'version' => 'auto'));
-JHtml::_('script', 'com_loja/hr-paginationjs.js', array('relative' => true, 'version' => 'auto'));
-JHtml::_('stylesheet', 'com_loja/hr-paginationjs.css', array('relative' => true, 'version' => 'auto'));
+JHtml::_('script', 'com_loja/hr-paginationjs.min.js', array('relative' => true, 'version' => 'auto'));
+JHtml::_('stylesheet', 'com_loja/hr-paginationjs.min.css', array('relative' => true, 'version' => 'auto'));
 
 $usuario = (int) JFactory::getUser()->id;
 ?>

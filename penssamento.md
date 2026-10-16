@@ -64,7 +64,7 @@ não entra axios nem outra dependência.
 
 ## 3. Estrutura de arquivos
 
-- [x] `src/hr-paginationjs.js` — biblioteca (um arquivo, sem build). `node --check` OK.
+- [x] `src/hr-paginationjs.js` — biblioteca (fonte; um IIFE sem imports). `node --check` OK. Produção: `dist/` (ver §11).
 - [x] `src/hr-paginationjs.css` — estilos isolados em `.hrpjs` / `.hrpjs-table`.
 - [x] `vendor/` — `jquery-1.12.4.min.js` (só para demo/testes), `pagination-2.6.0.min.js`, `pagination-LICENSE.txt`.
 - [x] `exemplos/minimo.html` — exemplo mínimo (só HTML).
@@ -184,3 +184,22 @@ Execução:
 - [x] Suíte (35 testes) em todas as versões: 1.7.2 … 4.0.0 slim → **35/35 em cada uma**; 1.6.4 → recusado com "exige jQuery 1.7 ou superior" (esperado).
 - [x] Ponta a ponta (jsdom + `php -S` + `exemplos/index.php`, jQuery trocado via ResourceLoader) com 1.7.2, 1.12.4, 2.2.4, 3.7.1, 3.7.1 slim, 4.0.0 e 4.0.0 slim: carga, paginação, ordenação, filtros, ação remota com token, 4 erros simulados, "Ir" da listagem DataTables e botão "Restaurar dados" — tudo OK, console sem erros.
 - [ ] Não executado: navegadores reais com cada versão.
+
+## 11. Build com arquivos minificados (pedido de 2026-10-16, "igual ao alpine-framework")
+
+Referência lida: `C:\laragon\wwwlpine-framework` (`package.json` com devDependencies e scripts npm, `build.mjs` com esbuild, `dist/` versionado com `.js`/`.min.js` + `sizes.json`, `scripts/pacote.mjs` gerando zip, `pacote/` e `node_modules/` no `.gitignore`).
+
+- [x] `package.json`: devDependencies `esbuild 0.25.10` (mesma versão do alpine-framework), `jsdom 26.1.0`, `marked 12.0.2`; scripts `build`, `test`, `test:dist`, `test:all`, `docs`, `serve`, `pacote`. Sem `"type": "module"` (os scripts `.js` de teste/docs são CommonJS).
+- [x] `build.mjs`: `dist/hr-paginationjs.js` (cópia legível), `.min.js` (esbuild, `target es2015` para não introduzir sintaxe mais nova que a do Pagination.js — conferido: nenhum `??`, `?.` ou `=>`), `.css`, `.min.css`, `pagination-2.6.0.min.js` + licença, `sizes.json`. Falha se a versão do `src` divergir do `package.json`. Sem ESM: a biblioteca é script global.
+- [x] Tamanhos: `.min.js` 51,0 KiB (gzip 17,4 KiB) contra 123,2 KiB legível; `.min.css` 6,8 KiB (gzip 1,7 KiB).
+- [x] `scripts/pacote.mjs`: `pacote/hr-paginationjs-1.0.0.zip` (10 arquivos, 57 KB: `js/`, `css/`, `joomla3/`, `LEIAME.md`). Zip verificado com `zipfile.testzip()` → íntegro.
+- [x] `tools/build-docs.js` movido para `scripts/build-docs.js`; jsdom e marked agora vêm do `npm install` (não precisam mais de `HRPJS_JSDOM`/`HRPJS_MARKED`). `tests/run-node.js` ganhou `--lib` e `--jquery`.
+- [x] Exemplos (`minimo.html`, `index.php`) e view Joomla passaram a carregar `dist/*.min.*`.
+- [x] Docs atualizadas (README raiz novo, instalação com tabela do `dist/`, índice com comandos npm, testes) e HTML regerado.
+
+Execução:
+- [x] `npm test` (src) → 35/35; `npm run test:dist` (min) → 35/35.
+- [x] `.min.js` com as 15 versões do jQuery: 1.7.2 … 4.0.0 slim → 35/35 cada; 1.6.4 → recusado com a mensagem clara (esperado).
+- [x] Ponta a ponta com `exemplos/index.php` carregando `dist/*.min.*` (jQuery 1.12.4 e 4.0.0 slim) e `exemplos/minimo.html` → tudo OK, console sem erros.
+- [ ] Não executado: navegador real; o comportamento do `JHtml` no modo debug do Joomla (trocar `.min.js` pela versão sem `.min`) não foi testado num Joomla.
+

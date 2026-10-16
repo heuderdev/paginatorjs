@@ -12,27 +12,27 @@ dependências, que roda **o mesmo arquivo de testes** no navegador e no Node.
 
 ## Rodar no Node
 
-O jsdom **não** é dependência do projeto. Instale numa pasta temporária fora do repositório:
-
 ```bash
-npm install --prefix C:\temp\hrpjs-jsdom jsdom@24
-set HRPJS_JSDOM=C:\temp\hrpjs-jsdom\node_modules\jsdom      # PowerShell: $env:HRPJS_JSDOM = '...'
-node tests/run-node.js
+npm install            # jsdom é dependência de desenvolvimento
+npm test               # contra src/hr-paginationjs.js
+npm run test:dist      # contra dist/hr-paginationjs.min.js (rode npm run build antes)
+npm run test:all       # build + os dois
 ```
 
-Saída: a versão do jQuery usada, uma linha por teste e o total. Código de saída `1` se algum falhar.
+Saída: a versão do jQuery e o arquivo testado, uma linha por teste e o total. Código de saída `1` se algum falhar.
+Opções do `tests/run-node.js`: `--lib <arquivo>` (biblioteca a testar) e `--jquery <arquivo>` (versão do jQuery).
 
 ### Testar com outra versão do jQuery
 
-Por padrão é usado `vendor/jquery-1.12.4.min.js`. Para outra versão, aponte `HRPJS_JQUERY` para o arquivo
-(baixe numa pasta fora do projeto, ex.: `https://code.jquery.com/jquery-3.7.1.slim.min.js`):
+Por padrão é usado `vendor/jquery-1.12.4.min.js`. Para outra versão, baixe o arquivo numa pasta fora do projeto
+(ex.: `https://code.jquery.com/jquery-3.7.1.slim.min.js`) e:
 
 ```bash
-set HRPJS_JQUERY=C:\temp\jquery-versions\jquery-3.7.1.slim.min.js   # PowerShell: $env:HRPJS_JQUERY = '...'
-node tests/run-node.js
+node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js
+node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js --lib dist/hr-paginationjs.min.js
 ```
 
-Matriz executada em 2026-10-16 (35 testes cada):
+Matriz executada em 2026-10-16 (35 testes cada, tanto com `src/` quanto com `dist/hr-paginationjs.min.js`):
 
 | jQuery | Resultado |
 |---|---|

@@ -33,7 +33,7 @@
             </ul>
         </nav>
         <main id="conteudo" class="content">
-<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#dependências">Dependências</a></li><li><a href="#compatibilidade-com-versões-do-jquery">Compatibilidade com versões do jQuery</a></li><li><a href="#ordem-obrigatória">Ordem obrigatória</a></li><li><a href="#o-que-acontece-se-a-ordem-estiver-errada">O que acontece se a ordem estiver errada</a></li><li><a href="#inicialização-automática">Inicialização automática</a></li></ul></nav>
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#dependências">Dependências</a></li><li><a href="#arquivos-para-produção-dist">Arquivos para produção (dist/)</a></li><li><a href="#compatibilidade-com-versões-do-jquery">Compatibilidade com versões do jQuery</a></li><li><a href="#ordem-obrigatória">Ordem obrigatória</a></li><li><a href="#o-que-acontece-se-a-ordem-estiver-errada">O que acontece se a ordem estiver errada</a></li><li><a href="#inicialização-automática">Inicialização automática</a></li></ul></nav>
 <h1 id="instalação-e-ordem-de-carregamento">Instalação e ordem de carregamento</h1>
 <h2 id="dependências">Dependências <a class="anchor" href="#dependências" aria-label="Link para esta seção">#</a></h2>
 <div class="table-wrap"><table>
@@ -53,7 +53,7 @@
 <tr>
 <td>Pagination.js</td>
 <td>2.6.0</td>
-<td><code>vendor/pagination-2.6.0.min.js</code>. Usa template strings → navegadores modernos (não roda no IE11).</td>
+<td><code>dist/pagination-2.6.0.min.js</code>. Usa template strings → navegadores modernos (não roda no IE11).</td>
 </tr>
 <tr>
 <td>Bootstrap</td>
@@ -63,6 +63,47 @@
 </tbody>
 </table></div>
 <p>Nenhum bundler, transpiler ou gerenciador de pacotes é necessário.</p>
+<h2 id="arquivos-para-produção-dist">Arquivos para produção (<code>dist/</code>) <a class="anchor" href="#arquivos-para-produção-dist" aria-label="Link para esta seção">#</a></h2>
+<p>Use sempre os arquivos de <code>dist/</code>, gerados por <code>npm run build</code> e versionados no repositório:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Uso</th>
+<th>Tamanho (gzip)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dist/hr-paginationjs.min.js</code></td>
+<td><strong>produção</strong></td>
+<td>51 KiB (17,4 KiB)</td>
+</tr>
+<tr>
+<td><code>dist/hr-paginationjs.js</code></td>
+<td>legível, para depurar (o Joomla 3 em modo debug carrega este no lugar da <code>.min</code>)</td>
+<td>123 KiB</td>
+</tr>
+<tr>
+<td><code>dist/hr-paginationjs.min.css</code></td>
+<td><strong>produção</strong></td>
+<td>6,8 KiB (1,7 KiB)</td>
+</tr>
+<tr>
+<td><code>dist/hr-paginationjs.css</code></td>
+<td>legível</td>
+<td>8,4 KiB</td>
+</tr>
+<tr>
+<td><code>dist/pagination-2.6.0.min.js</code></td>
+<td>dependência (MIT, licença em <code>dist/pagination-LICENSE.txt</code>)</td>
+<td>15 KiB</td>
+</tr>
+</tbody>
+</table></div>
+<p>Os tamanhos exatos de cada build ficam em <code>dist/sizes.json</code>. Para levar a outro projeto, <code>npm run pacote</code> gera
+<code>pacote/hr-paginationjs-&lt;versão&gt;.zip</code> com <code>js/</code>, <code>css/</code>, o exemplo <code>joomla3/</code> e um <code>LEIAME.md</code>.</p>
+<p>A pasta <code>src/</code> é a fonte para desenvolvimento; a <code>.min.js</code> passa pelos mesmos testes (<code>npm run test:dist</code>).</p>
 <h2 id="compatibilidade-com-versões-do-jquery">Compatibilidade com versões do jQuery <a class="anchor" href="#compatibilidade-com-versões-do-jquery" aria-label="Link para esta seção">#</a></h2>
 <p>A biblioteca usa o jQuery <strong>apenas</strong> para desenhar a paginação com o Pagination.js
 (<code>$(elemento).pagination(...)</code>). As requisições usam <code>XMLHttpRequest</code> nativo, então <code>$.ajax</code>, <code>$.param</code> e os
@@ -110,17 +151,17 @@ com outra versão.</p>
 <code>jQuery.noConflict(true)</code>, que remove também <code>window.jQuery</code>, carregue o Pagination.js e o hr-paginationjs
 <strong>antes</strong> dessa chamada.</p>
 <h2 id="ordem-obrigatória">Ordem obrigatória <a class="anchor" href="#ordem-obrigatória" aria-label="Link para esta seção">#</a></h2>
-<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;hr-paginationjs.css&quot;&gt;
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;hr-paginationjs.min.css&quot;&gt;
 
 &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;              &lt;!-- 1. jQuery (no Joomla: o do Joomla) --&gt;
 &lt;script src=&quot;pagination-2.6.0.min.js&quot;&gt;&lt;/script&gt;    &lt;!-- 2. Pagination.js --&gt;
-&lt;script src=&quot;hr-paginationjs.js&quot;&gt;&lt;/script&gt;         &lt;!-- 3. hr-paginationjs --&gt;
+&lt;script src=&quot;hr-paginationjs.min.js&quot;&gt;&lt;/script&gt;     &lt;!-- 3. hr-paginationjs --&gt;
 </code></pre>
 <p>No Joomla 3 (view):</p>
 <pre><code class="language-php">JHtml::_(&#39;jquery.framework&#39;);
 JHtml::_(&#39;script&#39;, &#39;com_loja/pagination-2.6.0.min.js&#39;, array(&#39;relative&#39; =&gt; true, &#39;version&#39; =&gt; &#39;auto&#39;));
-JHtml::_(&#39;script&#39;, &#39;com_loja/hr-paginationjs.js&#39;, array(&#39;relative&#39; =&gt; true, &#39;version&#39; =&gt; &#39;auto&#39;));
-JHtml::_(&#39;stylesheet&#39;, &#39;com_loja/hr-paginationjs.css&#39;, array(&#39;relative&#39; =&gt; true, &#39;version&#39; =&gt; &#39;auto&#39;));
+JHtml::_(&#39;script&#39;, &#39;com_loja/hr-paginationjs.min.js&#39;, array(&#39;relative&#39; =&gt; true, &#39;version&#39; =&gt; &#39;auto&#39;));
+JHtml::_(&#39;stylesheet&#39;, &#39;com_loja/hr-paginationjs.min.css&#39;, array(&#39;relative&#39; =&gt; true, &#39;version&#39; =&gt; &#39;auto&#39;));
 </code></pre>
 <h2 id="o-que-acontece-se-a-ordem-estiver-errada">O que acontece se a ordem estiver errada <a class="anchor" href="#o-que-acontece-se-a-ordem-estiver-errada" aria-label="Link para esta seção">#</a></h2>
 <p>A biblioteca verifica as dependências <strong>no momento de iniciar cada listagem</strong> (sem polling):</p>
@@ -143,7 +184,7 @@ se o documento já estiver pronto) e cria uma instância para cada um.</p>
 <tbody>
 <tr>
 <td>Desligar a inicialização automática da página inteira</td>
-<td><code>&lt;script src=&quot;hr-paginationjs.js&quot; data-paginationjs-autoinit=&quot;false&quot;&gt;&lt;/script&gt;</code></td>
+<td><code>&lt;script src=&quot;hr-paginationjs.min.js&quot; data-paginationjs-autoinit=&quot;false&quot;&gt;&lt;/script&gt;</code></td>
 </tr>
 <tr>
 <td>Que uma listagem específica não inicie sozinha</td>

@@ -27,9 +27,11 @@ renderização, colunas, preferências e erros pertencem ao hr-paginationjs.
 
 | Caminho | Conteúdo |
 |---|---|
-| `src/hr-paginationjs.js` | A biblioteca (um arquivo, sem build). |
-| `src/hr-paginationjs.css` | Estilos isolados em `.hrpjs` / `.hrpjs-table`. |
-| `vendor/pagination-2.6.0.min.js` | Pagination.js 2.6.0 (MIT). |
+| `dist/hr-paginationjs.min.js` / `.min.css` | **Arquivos para produção** (gerados por `npm run build`). |
+| `dist/hr-paginationjs.js` / `.css` | Versões legíveis (depuração / Joomla em modo debug). |
+| `dist/pagination-2.6.0.min.js` | Pagination.js 2.6.0 (MIT). |
+| `src/hr-paginationjs.js` / `.css` | Fonte para desenvolvimento (um IIFE, sem imports). |
+| `build.mjs`, `scripts/` | Build (esbuild), geração da documentação e pacote zip. |
 | `vendor/jquery-1.12.4.min.js` | Só para os exemplos fora do Joomla. No Joomla, ou em qualquer site, use o jQuery que já existe (1.7 ou superior, inclusive *slim*). |
 | `exemplos/minimo.html` | Exemplo mínimo. |
 | `exemplos/index.php` | Exemplo realista (duas listagens, filtros, ações, URL, preferências). |
@@ -45,17 +47,27 @@ arquivo direto, sem servidor.
 As páginas `.html` são geradas a partir de `docs/md/*.md` (a fonte). Depois de editar um `.md`, regere:
 
 ```bash
-npm install --prefix C:\temp\hrpjs-marked marked@12
-set HRPJS_MARKED=C:\temp\hrpjs-marked\node_modules\marked      # PowerShell: $env:HRPJS_MARKED = '...'
-node tools/build-docs.js
+npm install
+npm run docs
 ```
 
-O `marked` não é dependência do projeto (fica numa pasta temporária, como o jsdom dos testes).
+## Comandos
+
+| Comando | O que faz |
+|---|---|
+| `npm install` | Instala as ferramentas de desenvolvimento (esbuild, jsdom, marked). A biblioteca em si não tem dependências npm. |
+| `npm run build` | Gera `dist/` (`.js`, `.min.js`, `.css`, `.min.css`, Pagination.js) e `dist/sizes.json`. |
+| `npm test` | 35 testes contra `src/`. |
+| `npm run test:dist` | Os mesmos 35 testes contra `dist/hr-paginationjs.min.js`. |
+| `npm run test:all` | build + os dois acima. |
+| `npm run docs` | Gera `docs/*.html` a partir de `docs/md/`. |
+| `npm run pacote` | build + `pacote/hr-paginationjs-<versão>.zip` para levar aos projetos. |
+| `npm run serve` | Servidor PHP em `http://127.0.0.1:8080/` (exemplos em `/exemplos/`, docs em `/docs/`). |
 
 ## Rodar os exemplos
 
 Com o Laragon: `http://localhost/paginatorjs/exemplos/` (o `index.php` precisa de PHP).
-Sem o Laragon: `php -S 127.0.0.1:8000 -t C:\laragon\www\paginatorjs` e abra `http://127.0.0.1:8000/exemplos/`.
+Sem o Laragon: `npm run serve` e abra `http://127.0.0.1:8080/exemplos/`.
 
 ## Núcleo, extensões e fora do escopo
 

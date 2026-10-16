@@ -33,7 +33,7 @@
             </ul>
         </nav>
         <main id="conteudo" class="content">
-<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#índice">Índice</a></li><li><a href="#arquivos">Arquivos</a></li><li><a href="#esta-documentação">Esta documentação</a></li><li><a href="#rodar-os-exemplos">Rodar os exemplos</a></li><li><a href="#núcleo-extensões-e-fora-do-escopo">Núcleo, extensões e fora do escopo</a></li></ul></nav>
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#índice">Índice</a></li><li><a href="#arquivos">Arquivos</a></li><li><a href="#esta-documentação">Esta documentação</a></li><li><a href="#comandos">Comandos</a></li><li><a href="#rodar-os-exemplos">Rodar os exemplos</a></li><li><a href="#núcleo-extensões-e-fora-do-escopo">Núcleo, extensões e fora do escopo</a></li></ul></nav>
 <h1 id="hr-paginationjs--documentação">hr-paginationjs — documentação</h1>
 <p>Micro-framework de listagens remotas para Joomla 3 / PHP 7.0. Toda a tela é configurada por atributos
 <code>data-paginationjs-*</code>; JavaScript só é necessário para integrações específicas (eventos e API).</p>
@@ -66,16 +66,24 @@ renderização, colunas, preferências e erros pertencem ao hr-paginationjs.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>src/hr-paginationjs.js</code></td>
-<td>A biblioteca (um arquivo, sem build).</td>
+<td><code>dist/hr-paginationjs.min.js</code> / <code>.min.css</code></td>
+<td><strong>Arquivos para produção</strong> (gerados por <code>npm run build</code>).</td>
 </tr>
 <tr>
-<td><code>src/hr-paginationjs.css</code></td>
-<td>Estilos isolados em <code>.hrpjs</code> / <code>.hrpjs-table</code>.</td>
+<td><code>dist/hr-paginationjs.js</code> / <code>.css</code></td>
+<td>Versões legíveis (depuração / Joomla em modo debug).</td>
 </tr>
 <tr>
-<td><code>vendor/pagination-2.6.0.min.js</code></td>
+<td><code>dist/pagination-2.6.0.min.js</code></td>
 <td>Pagination.js 2.6.0 (MIT).</td>
+</tr>
+<tr>
+<td><code>src/hr-paginationjs.js</code> / <code>.css</code></td>
+<td>Fonte para desenvolvimento (um IIFE, sem imports).</td>
+</tr>
+<tr>
+<td><code>build.mjs</code>, <code>scripts/</code></td>
+<td>Build (esbuild), geração da documentação e pacote zip.</td>
 </tr>
 <tr>
 <td><code>vendor/jquery-1.12.4.min.js</code></td>
@@ -107,14 +115,55 @@ renderização, colunas, preferências e erros pertencem ao hr-paginationjs.</p>
 <p>Leia no navegador: <code>docs/index.html</code> (ex.: <code>http://localhost/paginatorjs/docs/</code>). Funciona também abrindo o
 arquivo direto, sem servidor.</p>
 <p>As páginas <code>.html</code> são geradas a partir de <code>docs/md/*.md</code> (a fonte). Depois de editar um <code>.md</code>, regere:</p>
-<pre><code class="language-bash">npm install --prefix C:\temp\hrpjs-marked marked@12
-set HRPJS_MARKED=C:\temp\hrpjs-marked\node_modules\marked      # PowerShell: $env:HRPJS_MARKED = &#39;...&#39;
-node tools/build-docs.js
+<pre><code class="language-bash">npm install
+npm run docs
 </code></pre>
-<p>O <code>marked</code> não é dependência do projeto (fica numa pasta temporária, como o jsdom dos testes).</p>
+<h2 id="comandos">Comandos <a class="anchor" href="#comandos" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>npm install</code></td>
+<td>Instala as ferramentas de desenvolvimento (esbuild, jsdom, marked). A biblioteca em si não tem dependências npm.</td>
+</tr>
+<tr>
+<td><code>npm run build</code></td>
+<td>Gera <code>dist/</code> (<code>.js</code>, <code>.min.js</code>, <code>.css</code>, <code>.min.css</code>, Pagination.js) e <code>dist/sizes.json</code>.</td>
+</tr>
+<tr>
+<td><code>npm test</code></td>
+<td>35 testes contra <code>src/</code>.</td>
+</tr>
+<tr>
+<td><code>npm run test:dist</code></td>
+<td>Os mesmos 35 testes contra <code>dist/hr-paginationjs.min.js</code>.</td>
+</tr>
+<tr>
+<td><code>npm run test:all</code></td>
+<td>build + os dois acima.</td>
+</tr>
+<tr>
+<td><code>npm run docs</code></td>
+<td>Gera <code>docs/*.html</code> a partir de <code>docs/md/</code>.</td>
+</tr>
+<tr>
+<td><code>npm run pacote</code></td>
+<td>build + <code>pacote/hr-paginationjs-&lt;versão&gt;.zip</code> para levar aos projetos.</td>
+</tr>
+<tr>
+<td><code>npm run serve</code></td>
+<td>Servidor PHP em <code>http://127.0.0.1:8080/</code> (exemplos em <code>/exemplos/</code>, docs em <code>/docs/</code>).</td>
+</tr>
+</tbody>
+</table></div>
 <h2 id="rodar-os-exemplos">Rodar os exemplos <a class="anchor" href="#rodar-os-exemplos" aria-label="Link para esta seção">#</a></h2>
 <p>Com o Laragon: <code>http://localhost/paginatorjs/exemplos/</code> (o <code>index.php</code> precisa de PHP).
-Sem o Laragon: <code>php -S 127.0.0.1:8000 -t C:\laragon\www\paginatorjs</code> e abra <code>http://127.0.0.1:8000/exemplos/</code>.</p>
+Sem o Laragon: <code>npm run serve</code> e abra <code>http://127.0.0.1:8080/exemplos/</code>.</p>
 <h2 id="núcleo-extensões-e-fora-do-escopo">Núcleo, extensões e fora do escopo <a class="anchor" href="#núcleo-extensões-e-fora-do-escopo" aria-label="Link para esta seção">#</a></h2>
 <div class="table-wrap"><table>
 <thead>

@@ -1,0 +1,31 @@
+{
+  "name": "hr-paginationjs",
+  "version": "1.0.0",
+  "description": "Listagens remotas declarativas (data-paginationjs-*) sobre Pagination.js 2.6.0: paginação, busca, filtros, ordenação, colunas, preferências e ações, no contrato do ApiResponseHelper.",
+  "license": "MIT",
+  "main": "dist/hr-paginationjs.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "jquery": ">=1.7"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node tests/run-node.js",
+    "test:dist": "node tests/run-node.js --lib dist/hr-paginationjs.min.js",
+    "test:all": "npm run build && npm test && npm run test:dist",
+    "docs": "node scripts/build-docs.js",
+    "serve": "php -S 127.0.0.1:8080 -t .",
+    "pacote": "node scripts/pacote.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10",
+    "jsdom": "26.1.0",
+    "marked": "12.0.2"
+  }
+}

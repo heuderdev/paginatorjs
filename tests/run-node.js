@@ -14,35 +14,52 @@ function loadJsdom() {
         }
     }
 
-    console.error('jsdom não encontrado. Instale fora do projeto e informe o caminho:');
-    console.error('  npm install --prefix <pasta-temporaria> jsdom');
-    console.error('  HRPJS_JSDOM=<pasta-temporaria>/node_modules/jsdom node tests/run-node.js');
+    console.error('jsdom não encontrado. Rode "npm install" na raiz do projeto.');
+    process.exit(2);
+}
+
+var root = path.resolve(__dirname, '..');
+
+function option(name, envName, fallback) {
+    var index = process.argv.indexOf('--' + name);
+
+    if (index !== -1 && process.argv[index + 1]) {
+        return path.resolve(process.argv[index + 1]);
+    }
+
+    return process.env[envName] ? path.resolve(process.env[envName]) : path.join(root, fallback);
+}
+
+var jqueryFile = option('jquery', 'HRPJS_JQUERY', 'vendor/jquery-1.12.4.min.js');
+var libFile = option('lib', 'HRPJS_LIB', 'src/hr-paginationjs.js');
+
+if (!fs.existsSync(libFile)) {
+    console.error('Arquivo não encontrado: ' + path.relative(root, libFile) + (/dist/.test(libFile) ? ' (rode "npm run build")' : ''));
     process.exit(2);
 }
 
 var JSDOM = loadJsdom().JSDOM;
-var root = path.resolve(__dirname, '..');
 var dom = new JSDOM('<!doctype html><html lang="pt-BR"><head></head><body></body></html>', {
     url: 'http://localhost/tests/runner.html',
     runScripts: 'outside-only',
     pretendToBeVisual: true
 });
 var window = dom.window;
-var jqueryFile = process.env.HRPJS_JQUERY ? path.resolve(process.env.HRPJS_JQUERY) : path.join(root, 'vendor/jquery-1.12.4.min.js');
 
 window.eval(fs.readFileSync(jqueryFile, 'utf8') + '\n//# sourceURL=' + path.basename(jqueryFile));
 console.log('jQuery ' + window.jQuery.fn.jquery + ' (' + path.basename(jqueryFile) + ')');
+console.log('Biblioteca: ' + path.relative(root, libFile).replace(/\\/g, '/'));
 
 [
-    'vendor/pagination-2.6.0.min.js',
-    'src/hr-paginationjs.js',
-    'tests/harness.js',
-    'tests/hr-paginationjs.tests.js'
+    path.join(root, 'vendor/pagination-2.6.0.min.js'),
+    libFile,
+    path.join(root, 'tests/harness.js'),
+    path.join(root, 'tests/hr-paginationjs.tests.js')
 ].forEach(function (file) {
-    window.eval(fs.readFileSync(path.join(root, file), 'utf8') + '\n//# sourceURL=' + file);
+    window.eval(fs.readFileSync(file, 'utf8') + '\n//# sourceURL=' + path.basename(file));
 });
 
-window.HRPJS_RUN(function (result, done, total) {
+window.HRPJS_RUN(function (result) {
     var line = (result.ok ? 'ok    ' : 'FALHOU') + ' ' + result.name + ' (' + result.ms + ' ms)';
 
     console.log(line);

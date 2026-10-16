@@ -64,19 +64,20 @@ dependências, que roda <strong>o mesmo arquivo de testes</strong> no navegador 
 </tbody>
 </table></div>
 <h2 id="rodar-no-node">Rodar no Node <a class="anchor" href="#rodar-no-node" aria-label="Link para esta seção">#</a></h2>
-<p>O jsdom <strong>não</strong> é dependência do projeto. Instale numa pasta temporária fora do repositório:</p>
-<pre><code class="language-bash">npm install --prefix C:\temp\hrpjs-jsdom jsdom@24
-set HRPJS_JSDOM=C:\temp\hrpjs-jsdom\node_modules\jsdom      # PowerShell: $env:HRPJS_JSDOM = &#39;...&#39;
-node tests/run-node.js
+<pre><code class="language-bash">npm install            # jsdom é dependência de desenvolvimento
+npm test               # contra src/hr-paginationjs.js
+npm run test:dist      # contra dist/hr-paginationjs.min.js (rode npm run build antes)
+npm run test:all       # build + os dois
 </code></pre>
-<p>Saída: a versão do jQuery usada, uma linha por teste e o total. Código de saída <code>1</code> se algum falhar.</p>
+<p>Saída: a versão do jQuery e o arquivo testado, uma linha por teste e o total. Código de saída <code>1</code> se algum falhar.
+Opções do <code>tests/run-node.js</code>: <code>--lib &lt;arquivo&gt;</code> (biblioteca a testar) e <code>--jquery &lt;arquivo&gt;</code> (versão do jQuery).</p>
 <h3 id="testar-com-outra-versão-do-jquery">Testar com outra versão do jQuery <a class="anchor" href="#testar-com-outra-versão-do-jquery" aria-label="Link para esta seção">#</a></h3>
-<p>Por padrão é usado <code>vendor/jquery-1.12.4.min.js</code>. Para outra versão, aponte <code>HRPJS_JQUERY</code> para o arquivo
-(baixe numa pasta fora do projeto, ex.: <code>https://code.jquery.com/jquery-3.7.1.slim.min.js</code>):</p>
-<pre><code class="language-bash">set HRPJS_JQUERY=C:\temp\jquery-versions\jquery-3.7.1.slim.min.js   # PowerShell: $env:HRPJS_JQUERY = &#39;...&#39;
-node tests/run-node.js
+<p>Por padrão é usado <code>vendor/jquery-1.12.4.min.js</code>. Para outra versão, baixe o arquivo numa pasta fora do projeto
+(ex.: <code>https://code.jquery.com/jquery-3.7.1.slim.min.js</code>) e:</p>
+<pre><code class="language-bash">node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js
+node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js --lib dist/hr-paginationjs.min.js
 </code></pre>
-<p>Matriz executada em 2026-10-16 (35 testes cada):</p>
+<p>Matriz executada em 2026-10-16 (35 testes cada, tanto com <code>src/</code> quanto com <code>dist/hr-paginationjs.min.js</code>):</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>

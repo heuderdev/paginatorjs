@@ -5,10 +5,27 @@
 | Dependência | Versão | Observação |
 |---|---|---|
 | jQuery | **1.7 ou superior** — qualquer versão de 1.7 a 4.x, inclusive os builds *slim* | Use o que a página já tem e **não** carregue outra cópia. No Joomla 3: `JHtml::_('jquery.framework')` (1.12.4). |
-| Pagination.js | 2.6.0 | `vendor/pagination-2.6.0.min.js`. Usa template strings → navegadores modernos (não roda no IE11). |
+| Pagination.js | 2.6.0 | `dist/pagination-2.6.0.min.js`. Usa template strings → navegadores modernos (não roda no IE11). |
 | Bootstrap | não exigido | A biblioteca não usa modais nem classes do Bootstrap. |
 
 Nenhum bundler, transpiler ou gerenciador de pacotes é necessário.
+
+## Arquivos para produção (`dist/`)
+
+Use sempre os arquivos de `dist/`, gerados por `npm run build` e versionados no repositório:
+
+| Arquivo | Uso | Tamanho (gzip) |
+|---|---|---|
+| `dist/hr-paginationjs.min.js` | **produção** | 51 KiB (17,4 KiB) |
+| `dist/hr-paginationjs.js` | legível, para depurar (o Joomla 3 em modo debug carrega este no lugar da `.min`) | 123 KiB |
+| `dist/hr-paginationjs.min.css` | **produção** | 6,8 KiB (1,7 KiB) |
+| `dist/hr-paginationjs.css` | legível | 8,4 KiB |
+| `dist/pagination-2.6.0.min.js` | dependência (MIT, licença em `dist/pagination-LICENSE.txt`) | 15 KiB |
+
+Os tamanhos exatos de cada build ficam em `dist/sizes.json`. Para levar a outro projeto, `npm run pacote` gera
+`pacote/hr-paginationjs-<versão>.zip` com `js/`, `css/`, o exemplo `joomla3/` e um `LEIAME.md`.
+
+A pasta `src/` é a fonte para desenvolvimento; a `.min.js` passa pelos mesmos testes (`npm run test:dist`).
 
 ## Compatibilidade com versões do jQuery
 
@@ -35,11 +52,11 @@ Com `jQuery.noConflict()` (como no Joomla) tudo funciona, porque a biblioteca us
 ## Ordem obrigatória
 
 ```html
-<link rel="stylesheet" href="hr-paginationjs.css">
+<link rel="stylesheet" href="hr-paginationjs.min.css">
 
 <script src="jquery.min.js"></script>              <!-- 1. jQuery (no Joomla: o do Joomla) -->
 <script src="pagination-2.6.0.min.js"></script>    <!-- 2. Pagination.js -->
-<script src="hr-paginationjs.js"></script>         <!-- 3. hr-paginationjs -->
+<script src="hr-paginationjs.min.js"></script>     <!-- 3. hr-paginationjs -->
 ```
 
 No Joomla 3 (view):
@@ -47,8 +64,8 @@ No Joomla 3 (view):
 ```php
 JHtml::_('jquery.framework');
 JHtml::_('script', 'com_loja/pagination-2.6.0.min.js', array('relative' => true, 'version' => 'auto'));
-JHtml::_('script', 'com_loja/hr-paginationjs.js', array('relative' => true, 'version' => 'auto'));
-JHtml::_('stylesheet', 'com_loja/hr-paginationjs.css', array('relative' => true, 'version' => 'auto'));
+JHtml::_('script', 'com_loja/hr-paginationjs.min.js', array('relative' => true, 'version' => 'auto'));
+JHtml::_('stylesheet', 'com_loja/hr-paginationjs.min.css', array('relative' => true, 'version' => 'auto'));
 ```
 
 ## O que acontece se a ordem estiver errada
@@ -68,7 +85,7 @@ se o documento já estiver pronto) e cria uma instância para cada um.
 
 | Quero… | Faça |
 |---|---|
-| Desligar a inicialização automática da página inteira | `<script src="hr-paginationjs.js" data-paginationjs-autoinit="false"></script>` |
+| Desligar a inicialização automática da página inteira | `<script src="hr-paginationjs.min.js" data-paginationjs-autoinit="false"></script>` |
 | Que uma listagem específica não inicie sozinha | `data-paginationjs="manual"` no elemento e depois `HrPaginationjs.init('id')` |
 | Iniciar listagens inseridas depois (AJAX, aba) | `HrPaginationjs.scan(container)` |
 | Iniciar sem disparar a primeira requisição | `data-paginationjs-autoload="false"` e depois `HrPaginationjs.get('id').reload()` |

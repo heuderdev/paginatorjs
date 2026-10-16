@@ -14,9 +14,7 @@ function loadMarked() {
         }
     }
 
-    console.error('marked não encontrado. Instale fora do projeto e informe o caminho:');
-    console.error('  npm install --prefix <pasta-temporaria> marked@12');
-    console.error('  HRPJS_MARKED=<pasta-temporaria>/node_modules/marked node tools/build-docs.js');
+    console.error('marked não encontrado. Rode "npm install" na raiz do projeto.');
     process.exit(2);
 }
 
