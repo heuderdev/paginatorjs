@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Colunas — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/colunas.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html" aria-current="page">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#atributos-do-th">Atributos do &amp;lt;th&amp;gt;</a></li><li><a href="#formatadores-embutidos">Formatadores embutidos</a></li><li><a href="#templates-template">Templates (&amp;lt;template&amp;gt;)</a></li><li><a href="#seletor-de-colunas">Seletor de colunas</a></li><li><a href="#mudança-de-esquema-o-que-acontece-com-preferências-salvas">Mudança de esquema (o que acontece com preferências salvas)</a></li></ul></nav>
+<h1 id="colunas">Colunas</h1>
+<p>As colunas são os <code>&lt;th&gt;</code> da <strong>última linha</strong> do <code>&lt;thead&gt;</code>. A ordem visual é a ordem dos <code>&lt;th&gt;</code>, mas a
+identidade da coluna é sempre a <code>key</code> — nunca a posição.</p>
+<h2 id="atributos-do-th">Atributos do <code>&lt;th&gt;</code> <a class="anchor" href="#atributos-do-th" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Padrão</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-paginationjs-key</code></td>
+<td><strong>obrigatório</strong> (ou <code>field</code>)</td>
+<td>Identificador estável. Usado na ordenação (<code>sort=&lt;key&gt;</code>), nas preferências e na API JS.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-field</code></td>
+<td>igual à <code>key</code></td>
+<td>Campo da linha a exibir. Aceita caminho: <code>cliente.nome</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-label</code></td>
+<td>texto do <code>&lt;th&gt;</code></td>
+<td>Nome usado no seletor de colunas e em <code>data-label</code> das células.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-sortable</code></td>
+<td>—</td>
+<td>Coluna ordenável (o <code>&lt;th&gt;</code> ganha um botão).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-sort-first</code></td>
+<td><code>asc</code></td>
+<td>Direção do primeiro clique (<code>desc</code> é útil para datas e valores).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-required</code></td>
+<td>—</td>
+<td>Sempre visível; não aparece como opção desmarcável.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-hidden</code></td>
+<td>—</td>
+<td>Começa oculta (o usuário pode exibir).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-actions</code></td>
+<td>—</td>
+<td>Coluna de ações: não conta como “coluna de dados” na regra de mínimo.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-format</code></td>
+<td>texto</td>
+<td>Formatador: <code>text</code>, <code>number</code>, <code>money</code>, <code>date</code>, <code>datetime</code>, <code>bool</code>, <code>link</code>, <code>email</code> ou um registrado.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-template</code></td>
+<td>—</td>
+<td><code>id</code> de um <code>&lt;template&gt;</code> usado para montar a célula.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-align</code></td>
+<td>—</td>
+<td><code>left</code>, <code>center</code> ou <code>right</code> (classe <code>hrpjs-align-*</code> no <code>&lt;th&gt;</code> e nas <code>&lt;td&gt;</code>).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-width</code></td>
+<td>—</td>
+<td>Largura CSS aplicada ao <code>&lt;th&gt;</code> (ex.: <code>80px</code>, <code>10%</code>).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-default</code></td>
+<td>vazio</td>
+<td>Texto quando o valor é <code>null</code>, <code>undefined</code> ou vazio. Ex.: <code>—</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-class</code></td>
+<td>—</td>
+<td>Classes extras em cada <code>&lt;td&gt;</code> da coluna.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Parâmetros de formatadores (no próprio <code>&lt;th&gt;</code>):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Formatador</th>
+<th>Efeito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-paginationjs-decimals</code></td>
+<td><code>number</code></td>
+<td>Casas decimais fixas.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-currency</code></td>
+<td><code>money</code></td>
+<td>Moeda da coluna (padrão: a da listagem).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-true</code> / <code>-false</code></td>
+<td><code>bool</code></td>
+<td>Textos no lugar de Sim/Não.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-link-text</code></td>
+<td><code>link</code></td>
+<td>Texto do link (aceita <code>{campo}</code>); padrão: a própria URL.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-link-target</code></td>
+<td><code>link</code></td>
+<td><code>_blank</code> abre em nova aba com <code>rel=&quot;noopener noreferrer&quot;</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="formatadores-embutidos">Formatadores embutidos <a class="anchor" href="#formatadores-embutidos" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Entrada</th>
+<th>Saída (pt-BR)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td>qualquer</td>
+<td>texto</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>número ou string numérica</td>
+<td><code>1.234,5</code></td>
+</tr>
+<tr>
+<td><code>money</code></td>
+<td>número</td>
+<td><code>R$ 1.234,50</code></td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>YYYY-MM-DD</code> ou <code>YYYY-MM-DD HH:MM:SS</code></td>
+<td><code>31/01/2026</code> (sem conversão de fuso)</td>
+</tr>
+<tr>
+<td><code>datetime</code></td>
+<td><code>YYYY-MM-DD HH:MM(:SS)</code> / ISO</td>
+<td><code>31/01/2026, 14:05</code>. Sem fuso na string = exibido como veio; com <code>Z</code>/<code>±hh:mm</code> = convertido para o fuso do navegador</td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td><code>1/0</code>, <code>true/false</code>, <code>sim/não</code></td>
+<td><code>Sim</code> / <code>Não</code></td>
+</tr>
+<tr>
+<td><code>link</code></td>
+<td>URL <code>http</code>, <code>https</code>, <code>mailto</code>, <code>tel</code> ou relativa</td>
+<td><code>&lt;a href&gt;</code>; outros esquemas viram texto</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>e-mail</td>
+<td><code>&lt;a href=&quot;mailto:...&quot;&gt;</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="formatador-próprio">Formatador próprio <a class="anchor" href="#formatador-próprio" aria-label="Link para esta seção">#</a></h3>
+<pre><code class="language-js">HrPaginationjs.formatter(&#39;cpf&#39;, function (valor, linha, ctx) {
+    var d = String(valor || &#39;&#39;).replace(/\D/g, &#39;&#39;);
+    return d.length === 11 ? d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, &#39;$1.$2.$3-$4&#39;) : valor;
+});
+</code></pre>
+<p><code>ctx</code> = <code>{ key, field, label, th, locale, currency, texts, html }</code>. O retorno pode ser:</p>
+<ul>
+<li><strong>string/número</strong> → inserido como <strong>texto</strong> (seguro);</li>
+<li><strong>Node</strong> (elemento criado com <code>document.createElement</code>) → inserido como está;</li>
+<li><code>HrPaginationjs.html(&#39;&lt;b&gt;…&lt;/b&gt;&#39;)</code> → inserido como <strong>HTML</strong>. É a única forma de inserir HTML e é
+responsabilidade de quem escreve o formatador escapar os dados.</li>
+</ul>
+<p>Formatador que lança exceção não quebra a tabela: a célula mostra o <code>default</code> e um aviso vai para o console.</p>
+<h2 id="templates-template">Templates (<code>&lt;template&gt;</code>) <a class="anchor" href="#templates-template" aria-label="Link para esta seção">#</a></h2>
+<pre><code class="language-html">&lt;th data-paginationjs-key=&quot;status&quot; data-paginationjs-template=&quot;tpl-status&quot;&gt;Status&lt;/th&gt;
+
+&lt;template id=&quot;tpl-status&quot;&gt;
+    &lt;span class=&quot;badge badge-{status}&quot;&gt;{status}&lt;/span&gt;
+    &lt;small data-paginationjs-if=&quot;bloqueado&quot;&gt;bloqueado em {bloqueado_em|date}&lt;/small&gt;
+&lt;/template&gt;
+</code></pre>
+<ul>
+<li><code>{campo}</code> e <code>{a.b}</code> são substituídos <strong>como texto</strong> em nós de texto e atributos.</li>
+<li><code>{campo|formatador}</code> aplica um formatador e usa o resultado como texto.</li>
+<li>Atributos de URL (<code>href</code>, <code>src</code>, <code>action</code>, <code>formaction</code>…) com <code>{}</code> são validados: <code>javascript:</code> e
+esquemas desconhecidos removem o atributo.</li>
+<li>Atributos <code>on*</code>, <code>style</code> e <code>srcdoc</code> que contenham <code>{}</code> são removidos.</li>
+<li><code>data-paginationjs-if</code> remove o elemento quando a condição é falsa:
+<code>campo</code> (verdadeiro), <code>!campo</code> (falso), <code>campo=valor</code>, <code>campo!=valor</code>.</li>
+<li>Campo ausente vira texto vazio.</li>
+</ul>
+<h2 id="seletor-de-colunas">Seletor de colunas <a class="anchor" href="#seletor-de-colunas" aria-label="Link para esta seção">#</a></h2>
+<p>Coloque <code>&lt;div data-paginationjs-columns&gt;&lt;/div&gt;</code> onde quiser (ou use <code>toolbar=&quot;columns&quot;</code>). Ele vira um
+<code>&lt;details&gt;</code> nativo com uma caixa por coluna e o botão “Restaurar padrão”. <code>Esc</code> fecha o painel.</p>
+<p>Regras:</p>
+<ul>
+<li>Colunas <code>required</code> aparecem marcadas e desabilitadas.</li>
+<li>Não é possível ocultar <strong>a última coluna de dados visível</strong> (colunas <code>actions</code> não contam).</li>
+<li>Mudar visibilidade <strong>não faz requisição</strong>: cabeçalhos e células são atualizados na hora, o <code>colspan</code> das
+mensagens é ajustado e a escolha vale para as próximas páginas.</li>
+<li>Com <code>data-paginationjs-persist</code> (inclui <code>columns</code>), a escolha é salva.</li>
+</ul>
+<h2 id="mudança-de-esquema-o-que-acontece-com-preferências-salvas">Mudança de esquema (o que acontece com preferências salvas) <a class="anchor" href="#mudança-de-esquema-o-que-acontece-com-preferências-salvas" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situação</th>
+<th>Comportamento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coluna nova</td>
+<td>Usa o padrão do HTML (<code>hidden</code> ou não).</td>
+</tr>
+<tr>
+<td>Coluna removida</td>
+<td>A preferência dela é ignorada.</td>
+</tr>
+<tr>
+<td><code>key</code> renomeada</td>
+<td>Tratada como removida + nova (volta ao padrão).</td>
+</tr>
+<tr>
+<td>Coluna antes opcional agora <code>required</code></td>
+<td>Sempre visível, a preferência antiga é ignorada.</td>
+</tr>
+<tr>
+<td>Preferência deixaria nenhuma coluna de dados</td>
+<td>A primeira coluna de dados é exibida.</td>
+</tr>
+<tr>
+<td>Mudança grande / incompatível</td>
+<td>Aumente <code>data-paginationjs-version</code>: a chave muda e as preferências antigas deixam de ser lidas.</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="note"><p>Coluna oculta <strong>não é controle de acesso</strong>. Dados que o usuário não pode ver não devem estar na resposta.</p>
+</blockquote>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="atributos.html"><span>Anterior</span>Atributos do elemento raiz</a><a class="next" href="busca-filtros-ordenacao.html"><span>Próxima</span>Busca, filtros e ordenação</a></nav>
+        </main>
+    </div>
+</body>
+</html>

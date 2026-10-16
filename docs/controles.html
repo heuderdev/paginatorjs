@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Controles declarativos — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/controles.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html" aria-current="page">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#toolbar-automática">Toolbar automática</a></li><li><a href="#o-que-a-biblioteca-cria-sozinha">O que a biblioteca cria sozinha</a></li></ul></nav>
+<h1 id="controles-declarativos">Controles declarativos</h1>
+<p>Controles são elementos marcados com atributos. Podem ficar <strong>dentro</strong> do elemento raiz ou <strong>fora</strong> dele com
+<code>data-paginationjs-for=&quot;&lt;id da listagem&gt;&quot;</code> (no próprio controle ou num contêiner que o envolva).</p>
+<pre><code class="language-html">&lt;!-- fora da listagem --&gt;
+&lt;div data-paginationjs-for=&quot;clientes&quot;&gt;
+    &lt;input type=&quot;search&quot; data-paginationjs-search aria-label=&quot;Buscar&quot;&gt;
+    &lt;button type=&quot;button&quot; data-paginationjs-reload&gt;Atualizar&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Elemento</th>
+<th>Efeito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-paginationjs-search</code></td>
+<td><code>input</code></td>
+<td>Campo de busca (<a href="busca-filtros-ordenacao.html">detalhes</a>).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-filters</code></td>
+<td><code>form</code></td>
+<td>Todos os campos com <code>name</code> viram filtros.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-filter</code></td>
+<td>campo</td>
+<td>Campo avulso de filtro (<code>name</code> = nome do parâmetro).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-type</code></td>
+<td>campo</td>
+<td><code>text</code>, <code>number</code>, <code>int</code>, <code>bool</code>, <code>date</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-ignore</code></td>
+<td>campo</td>
+<td>Exclui o campo do formulário de filtros.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-apply=&quot;submit&quot;</code></td>
+<td><code>form</code></td>
+<td>Aplica só no envio do formulário.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-clear</code></td>
+<td>botão</td>
+<td><code>all</code> (padrão), <code>filters</code> ou <code>search</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-reload</code></td>
+<td>botão</td>
+<td>Recarrega a página atual ignorando o cache.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-page-size</code></td>
+<td><code>select</code></td>
+<td>Quantidade por página. Vazio = opções de <code>data-paginationjs-limits</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-columns</code></td>
+<td>contêiner</td>
+<td>Recebe o seletor de colunas.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-summary</code></td>
+<td>qualquer</td>
+<td>Recebe o texto “Exibindo 1 a 20 de 135 registros”. Se não existir, um é criado no rodapé.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-pager</code></td>
+<td>contêiner</td>
+<td>Onde a paginação é desenhada. Se não existir, fica no rodapé.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-table</code></td>
+<td><code>table</code></td>
+<td>Escolhe a tabela quando há mais de uma dentro da raiz.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="toolbar-automática">Toolbar automática <a class="anchor" href="#toolbar-automática" aria-label="Link para esta seção">#</a></h2>
+<p><code>data-paginationjs-toolbar=&quot;search,limit,columns,reload,clear&quot;</code> cria, no topo da raiz e na ordem informada:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Cria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td><code>&lt;label&gt;</code> + <code>&lt;input type=&quot;search&quot; data-paginationjs-search&gt;</code></td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td><code>&lt;label&gt;</code> + <code>&lt;select data-paginationjs-page-size&gt;</code></td>
+</tr>
+<tr>
+<td><code>columns</code></td>
+<td>seletor de colunas</td>
+</tr>
+<tr>
+<td><code>reload</code></td>
+<td>botão Atualizar</td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td>botão Limpar (busca + filtros)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="o-que-a-biblioteca-cria-sozinha">O que a biblioteca cria sozinha <a class="anchor" href="#o-que-a-biblioteca-cria-sozinha" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Classe</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Corpo da tabela</td>
+<td><code>tbody.hrpjs-body</code></td>
+<td>Usa o <code>&lt;tbody&gt;</code> existente ou cria um. O conteúdo original volta no <code>destroy()</code>.</td>
+</tr>
+<tr>
+<td>Estados</td>
+<td><code>tr.hrpjs-message-row</code></td>
+<td><code>--loading</code>, <code>--empty</code>, <code>--error</code> (com “Tentar novamente” e código da requisição).</td>
+</tr>
+<tr>
+<td>Rodapé</td>
+<td><code>.hrpjs-footer</code></td>
+<td>Aviso de ações, resumo e paginação.</td>
+</tr>
+<tr>
+<td>Paginação</td>
+<td><code>.hrpjs-pager</code> (<code>role=&quot;navigation&quot;</code>)</td>
+<td>Desenhada pelo Pagination.js dentro de um elemento exclusivo.</td>
+</tr>
+<tr>
+<td>Região viva</td>
+<td><code>.hrpjs-live</code> (<code>role=&quot;status&quot;</code>)</td>
+<td>Anúncios para leitores de tela (visualmente oculta).</td>
+</tr>
+<tr>
+<td>Aviso</td>
+<td><code>.hrpjs-notice</code></td>
+<td>Mensagens de ações (some sozinho após alguns segundos).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Classes de estado no elemento raiz: <code>.hrpjs</code>, <code>.hrpjs-is-loading</code> (+ <code>aria-busy=&quot;true&quot;</code>), e na tabela <code>.hrpjs-table</code>.</p>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="busca-filtros-ordenacao.html"><span>Anterior</span>Busca, filtros e ordenação</a><a class="next" href="acoes.html"><span>Próxima</span>Ações por linha</a></nav>
+        </main>
+    </div>
+</body>
+</html>

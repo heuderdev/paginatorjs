@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>API JavaScript — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/api-js.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html" aria-current="page">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#objeto-global-hrpaginationjs">Objeto global HrPaginationjs</a></li><li><a href="#métodos-da-instância">Métodos da instância</a></li><li><a href="#erros">Erros</a></li></ul></nav>
+<h1 id="api-javascript">API JavaScript</h1>
+<p>A tela não precisa de JavaScript. A API existe para integrações (modais, botões externos, outras bibliotecas).</p>
+<h2 id="objeto-global-hrpaginationjs">Objeto global <code>HrPaginationjs</code> <a class="anchor" href="#objeto-global-hrpaginationjs" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Retorno</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HrPaginationjs.init(alvo, opcoes?)</code></td>
+<td>instância</td>
+<td>Inicia uma listagem. <code>alvo</code> = id, seletor, elemento ou objeto jQuery. Se já iniciada, devolve a mesma instância. Lança erro claro se faltar dependência ou configuração.</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.get(alvo)</code></td>
+<td>instância ou <code>null</code></td>
+<td>Busca por id do elemento, <code>data-paginationjs-id</code>, seletor ou elemento.</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.scan(contexto?)</code></td>
+<td>lista de instâncias</td>
+<td>Inicia os <code>[data-paginationjs]</code> ainda não iniciados dentro de <code>contexto</code> (padrão: <code>document</code>). Erros vão para o console sem interromper as outras.</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.instances()</code></td>
+<td>lista</td>
+<td>Instâncias ativas.</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.formatter(nome, fn)</code></td>
+<td>—</td>
+<td>Registra um formatador global (<a href="colunas.html">colunas.md</a>).</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.adapter(nome, def)</code></td>
+<td>—</td>
+<td>Registra um adaptador de API (<a href="backend.html">backend.md</a>).</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.html(string)</code></td>
+<td>marcador</td>
+<td>Retorno de formatador que deve ser inserido como HTML.</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.findToken()</code></td>
+<td>string</td>
+<td>Token CSRF descoberto na página.</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.serialize(objeto)</code></td>
+<td>string</td>
+<td>Serializa parâmetros como o PHP espera (<code>uf[]=SP&amp;uf[]=RJ</code>); mesma saída do <code>jQuery.param</code>, sem depender dele.</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.texts</code></td>
+<td>objeto</td>
+<td>Textos padrão (altere antes do <code>DOMContentLoaded</code>).</td>
+</tr>
+<tr>
+<td><code>HrPaginationjs.version</code></td>
+<td>string</td>
+<td><code>1.0.0</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-js">var lista = HrPaginationjs.get(&#39;clientes&#39;);
+</code></pre>
+<h2 id="métodos-da-instância">Métodos da instância <a class="anchor" href="#métodos-da-instância" aria-label="Link para esta seção">#</a></h2>
+<p>Resumo do comportamento:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Faz requisição?</th>
+<th>Página</th>
+<th>Retorno</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reload()</code></td>
+<td>Sim (ignora e limpa o cache)</td>
+<td>preserva</td>
+<td><code>Promise</code></td>
+</tr>
+<tr>
+<td><code>setPage(n)</code></td>
+<td>Sim</td>
+<td><code>n</code></td>
+<td><code>Promise</code></td>
+</tr>
+<tr>
+<td><code>setLimit(n)</code></td>
+<td>Sim</td>
+<td>1</td>
+<td><code>Promise</code></td>
+</tr>
+<tr>
+<td><code>setSearch(termo)</code></td>
+<td>Sim</td>
+<td>1</td>
+<td><code>Promise</code></td>
+</tr>
+<tr>
+<td><code>setFilter(nome, valor)</code></td>
+<td>Sim</td>
+<td>1</td>
+<td><code>Promise</code></td>
+</tr>
+<tr>
+<td><code>setFilters(objeto, substituir?)</code></td>
+<td>Sim</td>
+<td>1</td>
+<td><code>Promise</code></td>
+</tr>
+<tr>
+<td><code>clearFilters()</code></td>
+<td>Sim</td>
+<td>1</td>
+<td><code>Promise</code></td>
+</tr>
+<tr>
+<td><code>setSort(key, direcao?)</code></td>
+<td>Sim</td>
+<td>1</td>
+<td><code>Promise</code></td>
+</tr>
+<tr>
+<td><code>showColumn(key)</code> / <code>hideColumn(key)</code> / <code>toggleColumn(key, forcar?)</code></td>
+<td><strong>Não</strong></td>
+<td>preserva</td>
+<td><code>boolean</code></td>
+</tr>
+<tr>
+<td><code>resetColumns()</code></td>
+<td><strong>Não</strong></td>
+<td>preserva</td>
+<td><code>boolean</code></td>
+</tr>
+<tr>
+<td><code>resetPreferences()</code></td>
+<td>Sim</td>
+<td>1</td>
+<td><code>Promise</code></td>
+</tr>
+<tr>
+<td><code>getState()</code></td>
+<td>Não</td>
+<td>—</td>
+<td>objeto (cópia)</td>
+</tr>
+<tr>
+<td><code>getRows()</code></td>
+<td>Não</td>
+<td>—</td>
+<td>lista (cópia)</td>
+</tr>
+<tr>
+<td><code>destroy()</code></td>
+<td>cancela a pendente</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Todos podem ser chamados durante um carregamento.</strong> A requisição anterior é cancelada e, se a resposta dela
+ainda chegar, é descartada pelo número de sequência. As <code>Promise</code> de chamadas superadas resolvem junto com a
+mais recente.</p>
+<h3 id="promises">Promises <a class="anchor" href="#promises" aria-label="Link para esta seção">#</a></h3>
+<ul>
+<li><strong>Resolvem</strong> com <code>getState()</code> depois que a página foi renderizada.</li>
+<li><strong>Rejeitam</strong> com o erro classificado (veja abaixo). Chamar o método e ignorar o retorno é seguro: a
+biblioteca marca a própria rejeição como tratada. Se você encadear <code>.then(...)</code>, termine com <code>.catch(...)</code>
+(a nova promise criada pelo <code>.then</code> é sua).</li>
+</ul>
+<pre><code class="language-js">lista.setFilter(&#39;status&#39;, &#39;ativo&#39;)
+    .then(function (estado) { console.log(estado.total); })
+    .catch(function (erro) { if (erro.kind === &#39;session&#39;) location.reload(); });
+</code></pre>
+<h3 id="reload"><code>reload()</code> <a class="anchor" href="#reload" aria-label="Link para esta seção">#</a></h3>
+<p>Recarrega a página atual com os mesmos parâmetros, sempre indo ao servidor. Use após salvar um registro num modal.</p>
+<h3 id="setpagen"><code>setPage(n)</code> <a class="anchor" href="#setpagen" aria-label="Link para esta seção">#</a></h3>
+<p>Vai para a página <code>n</code> (≥ 1). Se <code>n</code> passar da última página, o servidor devolve a lista vazia e a biblioteca
+corrige <strong>uma única vez</strong> para a última página válida. <code>n &lt; 1</code> rejeita com <code>kind: &#39;config&#39;</code>.</p>
+<h3 id="setlimitn"><code>setLimit(n)</code> <a class="anchor" href="#setlimitn" aria-label="Link para esta seção">#</a></h3>
+<p>Muda a quantidade por página e volta para a página 1. O servidor pode reduzir o valor (teto do
+<code>InputHelper::pagination</code>); o estado passa a usar o <code>por_pagina</code> devolvido.</p>
+<h3 id="setsearchtermo"><code>setSearch(termo)</code> <a class="anchor" href="#setsearchtermo" aria-label="Link para esta seção">#</a></h3>
+<p>Define a busca imediatamente (sem debounce) e sincroniza os campos <code>data-paginationjs-search</code>. <code>&#39;&#39;</code>/<code>null</code> limpa.</p>
+<h3 id="setfilternome-valor--setfiltersobjeto-substituir"><code>setFilter(nome, valor)</code> / <code>setFilters(objeto, substituir?)</code> <a class="anchor" href="#setfilternome-valor--setfiltersobjeto-substituir" aria-label="Link para esta seção">#</a></h3>
+<p>Normaliza pelo tipo do campo de mesmo nome (<code>number</code>, <code>bool</code>, <code>date</code>…). <code>&#39;&#39;</code>, <code>null</code>, <code>[]</code> removem o filtro.
+<code>setFilters({...})</code> mescla; <code>setFilters({...}, true)</code> substitui todos. Os campos do formulário são atualizados.</p>
+<pre><code class="language-js">lista.setFilters({ status: &#39;ativo&#39;, uf: [&#39;SP&#39;, &#39;RJ&#39;] });
+</code></pre>
+<h3 id="clearfilters"><code>clearFilters()</code> <a class="anchor" href="#clearfilters" aria-label="Link para esta seção">#</a></h3>
+<p>Remove todos os filtros (mantém a busca).</p>
+<h3 id="setsortkey-direcao"><code>setSort(key, direcao?)</code> <a class="anchor" href="#setsortkey-direcao" aria-label="Link para esta seção">#</a></h3>
+<p><code>key</code> precisa ser uma coluna <code>data-paginationjs-sortable</code> (senão rejeita com <code>kind: &#39;config&#39;</code>).
+Sem <code>direcao</code>: alterna se já for a coluna atual; senão usa <code>data-paginationjs-sort-first</code>.
+<code>setSort(&#39;&#39;)</code> remove a ordenação.</p>
+<h3 id="showcolumnkey--hidecolumnkey--togglecolumnkey-forcar"><code>showColumn(key)</code> / <code>hideColumn(key)</code> / <code>toggleColumn(key, forcar?)</code> <a class="anchor" href="#showcolumnkey--hidecolumnkey--togglecolumnkey-forcar" aria-label="Link para esta seção">#</a></h3>
+<p>Alteram só a interface. Retornam <code>false</code> quando a mudança não é permitida (coluna inexistente, obrigatória ou
+última coluna de dados). Disparam <code>hrpaginationjs:columnschange</code> e salvam a preferência (se ligada).</p>
+<h3 id="resetcolumns"><code>resetColumns()</code> <a class="anchor" href="#resetcolumns" aria-label="Link para esta seção">#</a></h3>
+<p>Volta a visibilidade definida no HTML.</p>
+<h3 id="resetpreferences"><code>resetPreferences()</code> <a class="anchor" href="#resetpreferences" aria-label="Link para esta seção">#</a></h3>
+<p>Apaga as preferências salvas e volta colunas, quantidade e ordenação (e busca/filtros, se eram persistidos) ao
+padrão do HTML. Recarrega a partir da página 1.</p>
+<h3 id="getstate"><code>getState()</code> <a class="anchor" href="#getstate" aria-label="Link para esta seção">#</a></h3>
+<pre><code class="language-js">{
+    id: &#39;clientes&#39;,
+    page: 2, limit: 20, search: &#39;ana&#39;,
+    filters: { status: &#39;ativo&#39;, uf: [&#39;SP&#39;] },
+    sort: &#39;nome&#39;, direction: &#39;asc&#39;,
+    columns: [&#39;id&#39;, &#39;nome&#39;, &#39;email&#39;],      // visíveis, na ordem da tabela
+    hiddenColumns: [&#39;site&#39;],
+    loading: false,
+    error: null,                           // ou o objeto de erro
+    total: 135, totalPages: 7,
+    requestId: &#39;5f2c…&#39;
+}
+</code></pre>
+<p>É uma cópia: alterar o objeto não altera a listagem.</p>
+<h3 id="getrows"><code>getRows()</code> <a class="anchor" href="#getrows" aria-label="Link para esta seção">#</a></h3>
+<p>Cópia das linhas da página atual.</p>
+<h3 id="destroy"><code>destroy()</code> <a class="anchor" href="#destroy" aria-label="Link para esta seção">#</a></h3>
+<p>Cancela a requisição pendente, limpa timers, remove todos os listeners (inclusive <code>popstate</code>), destrói o
+Pagination.js, remove tudo o que a biblioteca criou, restaura os <code>&lt;th&gt;</code> e o <code>&lt;tbody&gt;</code> originais e libera o
+registro. Depois disso, <code>HrPaginationjs.init()</code> no mesmo elemento cria uma instância nova, sem duplicações.</p>
+<h2 id="erros">Erros <a class="anchor" href="#erros" aria-label="Link para esta seção">#</a></h2>
+<p>Objeto entregue em rejeições, em <code>getState().error</code> e no evento <code>hrpaginationjs:error</code>:</p>
+<pre><code class="language-js">{ kind: &#39;api&#39;, status: 200, message: &#39;Filtro inválido.&#39;, errors: { status: [&#39;…&#39;] }, requestId: &#39;abc&#39; }
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>kind</code></th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network</code></td>
+<td>Sem conexão / servidor inacessível (status 0).</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>Passou de <code>data-paginationjs-timeout</code>.</td>
+</tr>
+<tr>
+<td><code>http</code></td>
+<td>HTTP ≥ 400 (exceto 401/403).</td>
+</tr>
+<tr>
+<td><code>invalid</code></td>
+<td>Não é JSON, ou JSON fora do contrato (sem <code>success</code>, sem <code>meta.paginacao.total</code>, <code>data</code> não é lista…).</td>
+</tr>
+<tr>
+<td><code>api</code></td>
+<td>Envelope válido com <code>success: false</code> (mesmo com HTTP 200).</td>
+</tr>
+<tr>
+<td><code>session</code></td>
+<td>HTTP 401.</td>
+</tr>
+<tr>
+<td><code>permission</code></td>
+<td>HTTP 403.</td>
+</tr>
+<tr>
+<td><code>abort</code></td>
+<td>Cancelamento voluntário (só aparece se a requisição foi cancelada sem outra no lugar).</td>
+</tr>
+<tr>
+<td><code>config</code></td>
+<td>Uso incorreto da API (ex.: <code>setSort</code> em coluna não ordenável).</td>
+</tr>
+<tr>
+<td><code>destroyed</code></td>
+<td>A instância foi destruída antes da resposta.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>message</code> usa a <code>mensagem</code> do servidor quando existir (o <code>ApiResponseHelper</code> já entrega mensagens públicas);
+caso contrário, um texto padrão. Detalhes internos nunca são exibidos.</p>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="acoes.html"><span>Anterior</span>Ações por linha</a><a class="next" href="eventos.html"><span>Próxima</span>Eventos</a></nav>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Opções do Pagination.js 2.6.0 — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/paginationjs-opcoes.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html" aria-current="page">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#podem-ser-sobrescritas">Podem ser sobrescritas</a></li><li><a href="#são-combinadas">São combinadas</a></li><li><a href="#controladas-exclusivamente-pela-biblioteca-ignoradas-com-aviso-no-console">Controladas exclusivamente pela biblioteca (ignoradas, com aviso no console)</a></li><li><a href="#apis-do-paginationjs-usadas-verificadas-no-código-260">APIs do Pagination.js usadas (verificadas no código 2.6.0)</a></li></ul></nav>
+<h1 id="opções-do-paginationjs-260">Opções do Pagination.js 2.6.0</h1>
+<p>O Pagination.js é usado <strong>somente como renderizador dos botões de página</strong>. A cada resposta, a biblioteca chama
+<code>$(pager).pagination({...})</code> de novo com <code>totalNumber</code>, <code>pageNumber</code> e <code>pageSize</code> vindos do servidor e
+<code>triggerPagingOnInit: false</code> — o plugin nunca faz requisições. Cliques são interceptados pelos hooks <code>before*</code>,
+que devolvem <code>false</code> e repassam a página para o estado do hr-paginationjs (único dono das requisições).</p>
+<p>Opções extras vão em JSON no atributo ou em <code>paginationOptions</code> no <code>init</code>:</p>
+<pre><code class="language-html">&lt;div ... data-paginationjs-options=&#39;{&quot;showGoInput&quot;: true, &quot;showGoButton&quot;: true, &quot;goButtonText&quot;: &quot;Ir&quot;, &quot;pageRange&quot;: 1}&#39;&gt;
+</code></pre>
+<h2 id="podem-ser-sobrescritas">Podem ser sobrescritas <a class="anchor" href="#podem-ser-sobrescritas" aria-label="Link para esta seção">#</a></h2>
+<p><code>pageRange</code>, <code>showPrevious</code>, <code>showNext</code>, <code>showPageNumbers</code>, <code>showNavigator</code>, <code>formatNavigator</code>, <code>showGoInput</code>,
+<code>showGoButton</code>, <code>formatGoInput</code>, <code>formatGoButton</code>, <code>goButtonText</code>, <code>prevText</code>, <code>nextText</code>, <code>ellipsisText</code>,
+<code>activeClassName</code>, <code>disableClassName</code>, <code>ulClassName</code>, <code>pageClassName</code>, <code>prevClassName</code>, <code>nextClassName</code>,
+<code>autoHidePrevious</code>, <code>autoHideNext</code>, <code>hideOnlyOnePage</code>, <code>hideFirstOnEllipsisShow</code>, <code>hideLastOnEllipsisShow</code>,
+<code>header</code>, <code>footer</code>, <code>position</code>.</p>
+<p>Padrões da biblioteca: <code>pageRange: 2</code> (ou <code>data-paginationjs-page-range</code>), <code>prevText: &#39;&amp;lsaquo;&#39;</code>,
+<code>nextText: &#39;&amp;rsaquo;&#39;</code>, <code>hideOnlyOnePage: true</code>.</p>
+<blockquote class="note"><p><code>prevText</code>, <code>nextText</code>, <code>header</code>, <code>footer</code>, <code>formatNavigator</code>, <code>formatGoInput</code> e <code>formatGoButton</code> são
+inseridos <strong>como HTML</strong> pelo Pagination.js. Use apenas texto fixo do desenvolvedor, nunca dados do usuário.</p>
+</blockquote>
+<h2 id="são-combinadas">São combinadas <a class="anchor" href="#são-combinadas" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Opção</th>
+<th>Como combina</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>className</code></td>
+<td><code>hrpjs-paginationjs</code> + a sua.</td>
+</tr>
+<tr>
+<td><code>afterRender</code></td>
+<td>A sua roda primeiro; depois a biblioteca aplica os atributos de acessibilidade.</td>
+</tr>
+<tr>
+<td><code>beforePageOnClick</code>, <code>beforePreviousOnClick</code>, <code>beforeNextOnClick</code>, <code>beforeGoButtonOnClick</code>, <code>beforeGoInputOnEnter</code></td>
+<td>A sua roda primeiro. Se devolver <code>false</code>, a navegação é cancelada. Caso contrário, a biblioteca navega. Em nenhum caso o plugin faz requisição própria.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="controladas-exclusivamente-pela-biblioteca-ignoradas-com-aviso-no-console">Controladas exclusivamente pela biblioteca (ignoradas, com aviso no console) <a class="anchor" href="#controladas-exclusivamente-pela-biblioteca-ignoradas-com-aviso-no-console" aria-label="Link para esta seção">#</a></h2>
+<p><code>dataSource</code>, <code>locator</code>, <code>totalNumber</code>, <code>totalNumberLocator</code>, <code>pageNumber</code>, <code>pageSize</code>, <code>alias</code>, <code>ajax</code>,
+<code>ajaxFunction</code>, <code>callback</code>, <code>formatResult</code>, <code>triggerPagingOnInit</code>, <code>resetPageNumberOnInit</code>, <code>showSizeChanger</code>,
+<code>sizeChangerOptions</code>, <code>formatSizeChanger</code>, <code>beforeSizeSelectorChange</code>, <code>pageLink</code>, <code>classPrefix</code>, <code>disabled</code>,
+<code>beforeInit</code>, <code>beforePaging</code>, <code>onError</code> e qualquer outra não listada acima.</p>
+<p>Motivos: são as opções que fariam o plugin requisitar dados, guardar um total diferente do servidor, navegar por
+link ou mudar os seletores que a biblioteca usa. A quantidade por página tem controle próprio
+(<code>select[data-paginationjs-page-size]</code>) com <code>&lt;label&gt;</code> acessível.</p>
+<p>Se algo externo chamar <code>$(pager).pagination(&#39;go&#39;, n)</code>, a chamada é desviada pelo <code>ajaxFunction</code> protegido para
+<code>setPage(n)</code> — continua havendo uma única requisição. <code>&#39;next&#39;</code>, <code>&#39;previous&#39;</code> e <code>&#39;refresh&#39;</code> não têm efeito nesse
+modo (o plugin não guarda a página atual porque nunca executa o próprio <code>go()</code>); use os métodos da instância
+(<code>setPage</code>, <code>reload</code>).</p>
+<h2 id="apis-do-paginationjs-usadas-verificadas-no-código-260">APIs do Pagination.js usadas (verificadas no código 2.6.0) <a class="anchor" href="#apis-do-paginationjs-usadas-verificadas-no-código-260" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$(el).pagination(opcoes)</code></td>
+<td>Desenha; chamar de novo desinstala a instância anterior (<code>uninstallPlugin</code>).</td>
+</tr>
+<tr>
+<td><code>dataSource</code> string + <code>totalNumber</code></td>
+<td>Modo assíncrono sem <code>totalNumberLocator</code>; exige <code>totalNumber</code> numérico.</td>
+</tr>
+<tr>
+<td><code>triggerPagingOnInit: false</code></td>
+<td>Impede o <code>go()</code> inicial (que faria a requisição).</td>
+</tr>
+<tr>
+<td>hooks <code>before*OnClick</code> / <code>beforeGo*</code></td>
+<td>Retornar <code>false</code> interrompe o <code>go()</code> do plugin.</td>
+</tr>
+<tr>
+<td><code>ajaxFunction</code></td>
+<td>Ponto único por onde o plugin requisitaria — desviado.</td>
+</tr>
+<tr>
+<td><code>afterRender</code></td>
+<td>Acessibilidade.</td>
+</tr>
+<tr>
+<td><code>$(el).pagination(&#39;destroy&#39;)</code></td>
+<td>Remove o elemento e faz <code>container.off()</code> — por isso o contêiner é exclusivo da biblioteca.</td>
+</tr>
+</tbody>
+</table></div>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="preferencias-url-cache.html"><span>Anterior</span>Preferências, estado na URL e cache</a><a class="next" href="acessibilidade-seguranca.html"><span>Próxima</span>Acessibilidade e segurança</a></nav>
+        </main>
+    </div>
+</body>
+</html>

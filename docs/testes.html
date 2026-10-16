@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Testes — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/testes.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html" aria-current="page">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#rodar-no-node">Rodar no Node</a></li><li><a href="#cenários-cobertos">Cenários cobertos</a></li><li><a href="#limites">Limites</a></li></ul></nav>
+<h1 id="testes">Testes</h1>
+<p>O projeto não tinha infraestrutura de testes JavaScript reutilizável; foi criado um harness mínimo, sem
+dependências, que roda <strong>o mesmo arquivo de testes</strong> no navegador e no Node.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/harness.js</code></td>
+<td><code>HRPJS_TEST(nome, fn)</code> / <code>HRPJS_RUN()</code>, asserções, isolamento (sandbox, <code>destroy</code> de tudo, limpa <code>localStorage</code> e URL entre testes).</td>
+</tr>
+<tr>
+<td><code>tests/hr-paginationjs.tests.js</code></td>
+<td>Os cenários, com transporte falso injetado (<code>transport</code>), que controla a ordem e o momento de cada resposta.</td>
+</tr>
+<tr>
+<td><code>tests/runner.html</code></td>
+<td>Executa no navegador (abra pelo Laragon: <code>http://localhost/paginatorjs/tests/runner.html</code>).</td>
+</tr>
+<tr>
+<td><code>tests/run-node.js</code></td>
+<td>Executa no Node com jsdom.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="rodar-no-node">Rodar no Node <a class="anchor" href="#rodar-no-node" aria-label="Link para esta seção">#</a></h2>
+<p>O jsdom <strong>não</strong> é dependência do projeto. Instale numa pasta temporária fora do repositório:</p>
+<pre><code class="language-bash">npm install --prefix C:\temp\hrpjs-jsdom jsdom@24
+set HRPJS_JSDOM=C:\temp\hrpjs-jsdom\node_modules\jsdom      # PowerShell: $env:HRPJS_JSDOM = &#39;...&#39;
+node tests/run-node.js
+</code></pre>
+<p>Saída: a versão do jQuery usada, uma linha por teste e o total. Código de saída <code>1</code> se algum falhar.</p>
+<h3 id="testar-com-outra-versão-do-jquery">Testar com outra versão do jQuery <a class="anchor" href="#testar-com-outra-versão-do-jquery" aria-label="Link para esta seção">#</a></h3>
+<p>Por padrão é usado <code>vendor/jquery-1.12.4.min.js</code>. Para outra versão, aponte <code>HRPJS_JQUERY</code> para o arquivo
+(baixe numa pasta fora do projeto, ex.: <code>https://code.jquery.com/jquery-3.7.1.slim.min.js</code>):</p>
+<pre><code class="language-bash">set HRPJS_JQUERY=C:\temp\jquery-versions\jquery-3.7.1.slim.min.js   # PowerShell: $env:HRPJS_JQUERY = &#39;...&#39;
+node tests/run-node.js
+</code></pre>
+<p>Matriz executada em 2026-10-16 (35 testes cada):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>jQuery</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.6.4</td>
+<td>Recusado com a mensagem “exige jQuery 1.7 ou superior” (esperado: o Pagination.js 2.6.0 não funciona com ele)</td>
+</tr>
+<tr>
+<td>1.7.2, 1.8.3, 1.9.1, 1.10.2, 1.11.3, 1.12.4</td>
+<td>35/35</td>
+</tr>
+<tr>
+<td>2.2.4</td>
+<td>35/35</td>
+</tr>
+<tr>
+<td>3.0.0, 3.3.1, 3.5.1, 3.7.1, 3.7.1 <em>slim</em></td>
+<td>35/35</td>
+</tr>
+<tr>
+<td>4.0.0, 4.0.0 <em>slim</em></td>
+<td>35/35</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="cenários-cobertos">Cenários cobertos <a class="anchor" href="#cenários-cobertos" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Cenário</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>Primeira carga: uma requisição, parâmetros, linhas, resumo, página atual</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Troca de página: exatamente uma requisição (o Pagination.js não requisita)</td>
+</tr>
+<tr>
+<td>03</td>
+<td>Quantidade por página volta para a página 1</td>
+</tr>
+<tr>
+<td>04</td>
+<td>Busca com debounce (várias teclas → uma requisição)</td>
+</tr>
+<tr>
+<td>04b</td>
+<td>Composição de texto (IME) e Enter imediato</td>
+</tr>
+<tr>
+<td>05</td>
+<td>Limpar busca e botão limpar</td>
+</tr>
+<tr>
+<td>06</td>
+<td>Combinação de filtros tipados e serialização <code>uf[]=</code></td>
+</tr>
+<tr>
+<td>07</td>
+<td>Ordenação por key, <code>aria-sort</code>, coluna não ordenável recusada</td>
+</tr>
+<tr>
+<td>08</td>
+<td>Total zero, <code>colspan</code>, paginação oculta</td>
+</tr>
+<tr>
+<td>09</td>
+<td>Última página incompleta</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Página além do limite: uma correção, sem loop</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Respostas fora de ordem: a mais recente prevalece</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Cancelamento da anterior não vira erro</td>
+</tr>
+<tr>
+<td>13</td>
+<td>HTTP de erro, <code>request_id</code>, tentar novamente</td>
+</tr>
+<tr>
+<td>14</td>
+<td>HTTP 200 com <code>success: false</code></td>
+</tr>
+<tr>
+<td>15</td>
+<td>Resposta não JSON e JSON fora do contrato não viram lista vazia</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Sessão expirada (401) e permissão (403)</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Ocultar/reexibir coluna sem requisição, mantida na troca de página</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Coluna obrigatória e mínimo de uma coluna de dados</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Preferência corrompida</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Mudança do esquema de colunas</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Duas instâncias isoladas + controle externo <code>data-paginationjs-for</code></td>
+</tr>
+<tr>
+<td>22</td>
+<td>Destruição completa e reinicialização sem duplicar handlers</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Conteúdo malicioso em células e templates</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Navegação por teclado e foco preservado</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Ausência de jQuery ou Pagination.js</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Adaptador DataTables</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Estado na URL com prefixo e parâmetros alheios</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Ação remota com token CSRF e recarga</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Cache e <code>reload()</code> ignorando o cache</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Templates com condição e formatadores</td>
+</tr>
+<tr>
+<td>31</td>
+<td><code>pagination(&#39;go&#39;, n)</code> externo desviado; <code>next</code>/<code>refresh</code> sem requisição paralela</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Transporte nativo (<code>XMLHttpRequest</code> falso): URL, cabeçalhos, JSON, HTML no lugar de JSON, timeout, abort real e promessa superada resolvendo com a resposta mais recente</td>
+</tr>
+<tr>
+<td>33</td>
+<td>Ação remota pelo transporte nativo: POST urlencoded com token</td>
+</tr>
+<tr>
+<td>34</td>
+<td>jQuery anterior a 1.7 gera mensagem clara</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="limites">Limites <a class="anchor" href="#limites" aria-label="Link para esta seção">#</a></h2>
+<ul>
+<li>jsdom não calcula layout nem foco visual: “foco visível” e responsividade foram conferidos só por CSS.</li>
+<li>Leitores de tela reais não foram testados; os testes verificam os atributos ARIA.</li>
+<li>O controller Joomla (<code>exemplos/joomla3</code>) foi verificado com <code>php -l</code> e revisado contra o código dos helpers,
+mas não executado num Joomla 3 (não há instalação com o componente <code>com_loja</code> neste ambiente).</li>
+<li>As APIs de demonstração (<code>exemplos/api.php</code>, <code>api-datatables.php</code>) e a página <code>exemplos/index.php</code> foram
+exercitadas ponta a ponta (jsdom + servidor <code>php -S</code>, transporte nativo) com jQuery 1.7.2, 1.12.4, 2.2.4,
+3.7.1, 3.7.1 <em>slim</em>, 4.0.0 e 4.0.0 <em>slim</em>.</li>
+</ul>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="acessibilidade-seguranca.html"><span>Anterior</span>Acessibilidade e segurança</a><span></span></nav>
+        </main>
+    </div>
+</body>
+</html>

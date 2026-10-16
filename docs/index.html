@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>hr-paginationjs — documentação</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/README.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html" aria-current="page">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#índice">Índice</a></li><li><a href="#arquivos">Arquivos</a></li><li><a href="#esta-documentação">Esta documentação</a></li><li><a href="#rodar-os-exemplos">Rodar os exemplos</a></li><li><a href="#núcleo-extensões-e-fora-do-escopo">Núcleo, extensões e fora do escopo</a></li></ul></nav>
+<h1 id="hr-paginationjs--documentação">hr-paginationjs — documentação</h1>
+<p>Micro-framework de listagens remotas para Joomla 3 / PHP 7.0. Toda a tela é configurada por atributos
+<code>data-paginationjs-*</code>; JavaScript só é necessário para integrações específicas (eventos e API).</p>
+<p>Pagination.js 2.6.0 desenha <strong>apenas os botões de página</strong>. Requisição, estado, busca, filtros, ordenação,
+renderização, colunas, preferências e erros pertencem ao hr-paginationjs.</p>
+<h2 id="índice">Índice <a class="anchor" href="#índice" aria-label="Link para esta seção">#</a></h2>
+<ol>
+<li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+<li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+<li><a href="atributos.html">Referência de atributos do elemento raiz</a></li>
+<li><a href="colunas.html">Colunas: definição, formatação, templates e visibilidade</a></li>
+<li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+<li><a href="controles.html">Controles declarativos (toolbar, paginação, resumo, seletor de colunas)</a></li>
+<li><a href="acoes.html">Ações por linha (inclusive remotas com token CSRF)</a></li>
+<li><a href="api-js.html">API JavaScript — cada método</a></li>
+<li><a href="eventos.html">Eventos <code>hrpaginationjs:*</code></a></li>
+<li><a href="backend.html">Contrato da API (backend) e adaptadores</a></li>
+<li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+<li><a href="paginationjs-opcoes.html">Opções do Pagination.js (<code>data-paginationjs-options</code>)</a></li>
+<li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+<li><a href="testes.html">Testes</a></li>
+</ol>
+<h2 id="arquivos">Arquivos <a class="anchor" href="#arquivos" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Caminho</th>
+<th>Conteúdo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/hr-paginationjs.js</code></td>
+<td>A biblioteca (um arquivo, sem build).</td>
+</tr>
+<tr>
+<td><code>src/hr-paginationjs.css</code></td>
+<td>Estilos isolados em <code>.hrpjs</code> / <code>.hrpjs-table</code>.</td>
+</tr>
+<tr>
+<td><code>vendor/pagination-2.6.0.min.js</code></td>
+<td>Pagination.js 2.6.0 (MIT).</td>
+</tr>
+<tr>
+<td><code>vendor/jquery-1.12.4.min.js</code></td>
+<td>Só para os exemplos fora do Joomla. No Joomla, ou em qualquer site, use o jQuery que já existe (1.7 ou superior, inclusive <em>slim</em>).</td>
+</tr>
+<tr>
+<td><code>exemplos/minimo.html</code></td>
+<td>Exemplo mínimo.</td>
+</tr>
+<tr>
+<td><code>exemplos/index.php</code></td>
+<td>Exemplo realista (duas listagens, filtros, ações, URL, preferências).</td>
+</tr>
+<tr>
+<td><code>exemplos/api.php</code>, <code>exemplos/api-datatables.php</code></td>
+<td>APIs de demonstração (contrato <code>ApiResponseHelper</code> e DataTables).</td>
+</tr>
+<tr>
+<td><code>exemplos/joomla3/</code></td>
+<td>Controller e view reais usando os helpers do projeto.</td>
+</tr>
+<tr>
+<td><code>tests/</code></td>
+<td>Testes (navegador e Node + jsdom).</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="esta-documentação">Esta documentação <a class="anchor" href="#esta-documentação" aria-label="Link para esta seção">#</a></h2>
+<p>Leia no navegador: <code>docs/index.html</code> (ex.: <code>http://localhost/paginatorjs/docs/</code>). Funciona também abrindo o
+arquivo direto, sem servidor.</p>
+<p>As páginas <code>.html</code> são geradas a partir de <code>docs/md/*.md</code> (a fonte). Depois de editar um <code>.md</code>, regere:</p>
+<pre><code class="language-bash">npm install --prefix C:\temp\hrpjs-marked marked@12
+set HRPJS_MARKED=C:\temp\hrpjs-marked\node_modules\marked      # PowerShell: $env:HRPJS_MARKED = &#39;...&#39;
+node tools/build-docs.js
+</code></pre>
+<p>O <code>marked</code> não é dependência do projeto (fica numa pasta temporária, como o jsdom dos testes).</p>
+<h2 id="rodar-os-exemplos">Rodar os exemplos <a class="anchor" href="#rodar-os-exemplos" aria-label="Link para esta seção">#</a></h2>
+<p>Com o Laragon: <code>http://localhost/paginatorjs/exemplos/</code> (o <code>index.php</code> precisa de PHP).
+Sem o Laragon: <code>php -S 127.0.0.1:8000 -t C:\laragon\www\paginatorjs</code> e abra <code>http://127.0.0.1:8000/exemplos/</code>.</p>
+<h2 id="núcleo-extensões-e-fora-do-escopo">Núcleo, extensões e fora do escopo <a class="anchor" href="#núcleo-extensões-e-fora-do-escopo" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Núcleo (pronto)</th>
+<th>Extensões (por adaptador/formatador/evento)</th>
+<th>Fora do escopo desta versão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paginação remota, busca, filtros tipados, ordenação, colunas, preferências, URL, cache opcional, ações por linha, eventos, estados, múltiplas instâncias, <code>destroy()</code></td>
+<td>Adaptadores de API próprios (<code>HrPaginationjs.adapter</code>), formatadores (<code>HrPaginationjs.formatter</code>), modais próprios via evento <code>action</code></td>
+<td>Exportação, seleção em lote, edição inline, reordenar/redimensionar colunas, virtualização</td>
+</tr>
+</tbody>
+</table></div>
+
+<nav class="pager" aria-label="Navegação entre páginas"><span></span><a class="next" href="instalacao.html"><span>Próxima</span>Instalação e ordem de carregamento</a></nav>
+        </main>
+    </div>
+</body>
+</html>

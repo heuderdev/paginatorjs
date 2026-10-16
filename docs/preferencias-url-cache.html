@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Preferências, estado na URL e cache — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/preferencias-url-cache.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html" aria-current="page">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#preferências-localstorage">Preferências (localStorage)</a></li><li><a href="#estado-na-url">Estado na URL</a></li><li><a href="#cache">Cache</a></li></ul></nav>
+<h1 id="preferências-estado-na-url-e-cache">Preferências, estado na URL e cache</h1>
+<p>Os três são <strong>opcionais</strong> e desligados por padrão. A listagem funciona igual sem nenhum deles.</p>
+<h2 id="preferências-localstorage">Preferências (<code>localStorage</code>) <a class="anchor" href="#preferências-localstorage" aria-label="Link para esta seção">#</a></h2>
+<pre><code class="language-html">&lt;div id=&quot;clientes&quot; data-paginationjs ...
+     data-paginationjs-persist
+     data-paginationjs-namespace=&quot;com_loja&quot;
+     data-paginationjs-user=&quot;&lt;?php echo (int) JFactory::getUser()-&gt;id; ?&gt;&quot;
+     data-paginationjs-version=&quot;1&quot;&gt;
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>data-paginationjs-persist</code></th>
+<th>Salva</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(ausente) ou <code>false</code></td>
+<td>nada</td>
+</tr>
+<tr>
+<td>(sem valor) ou <code>true</code></td>
+<td><code>columns,limit,sort</code></td>
+</tr>
+<tr>
+<td><code>columns,limit</code></td>
+<td>só o que for listado</td>
+</tr>
+<tr>
+<td><code>…,search,filters</code></td>
+<td>também busca e filtros — <strong>decisão explícita</strong>: não use com dados sensíveis (CPF, nomes de pacientes etc.), porque ficam gravados no navegador</td>
+</tr>
+</tbody>
+</table></div>
+<p>Chave: <code>hrpaginationjs:{namespace}:{usuario}:{id}:v{versao}</code> — ex.: <code>hrpaginationjs:com_loja:42:clientes:v1</code>.
+Assim, usuários diferentes no mesmo navegador não compartilham preferências.</p>
+<p>Robustez:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situação</th>
+<th>Comportamento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>localStorage</code> indisponível / bloqueado / cota cheia</td>
+<td>Ignora silenciosamente; a listagem funciona.</td>
+</tr>
+<tr>
+<td>JSON corrompido</td>
+<td>Descarta a chave (aviso no console) e usa o padrão.</td>
+</tr>
+<tr>
+<td>Quantidade salva fora de <code>data-paginationjs-limits</code></td>
+<td>Ignorada.</td>
+</tr>
+<tr>
+<td>Ordenação salva em coluna que não existe / não é ordenável</td>
+<td>Ignorada.</td>
+</tr>
+<tr>
+<td>Colunas mudaram</td>
+<td>Ver <a href="colunas.html#mudança-de-esquema-o-que-acontece-com-preferências-salvas">colunas.md → mudança de esquema</a>.</td>
+</tr>
+<tr>
+<td>Mudança incompatível</td>
+<td>Aumente <code>data-paginationjs-version</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>resetPreferences()</code> apaga a chave e volta ao padrão do HTML.</p>
+<h2 id="estado-na-url">Estado na URL <a class="anchor" href="#estado-na-url" aria-label="Link para esta seção">#</a></h2>
+<pre><code class="language-html">&lt;div id=&quot;clientes&quot; data-paginationjs ... data-paginationjs-url data-paginationjs-url-prefix=&quot;cli_&quot;&gt;
+</code></pre>
+<p>Exemplo: <code>index.php?option=com_loja&amp;view=clientes&amp;cli_page=3&amp;cli_sort=nome&amp;cli_direction=asc&amp;cli_f_status=ativo</code></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parâmetro</th>
+<th>Conteúdo</th>
+<th>Quando aparece</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{prefixo}page</code></td>
+<td>página</td>
+<td>diferente de 1</td>
+</tr>
+<tr>
+<td><code>{prefixo}limit</code></td>
+<td>quantidade</td>
+<td>diferente do padrão</td>
+</tr>
+<tr>
+<td><code>{prefixo}sort</code> + <code>{prefixo}direction</code></td>
+<td>ordenação</td>
+<td>diferente do padrão</td>
+</tr>
+<tr>
+<td><code>{prefixo}search</code></td>
+<td>busca</td>
+<td>não vazia</td>
+</tr>
+<tr>
+<td><code>{prefixo}f_{filtro}</code></td>
+<td>filtros (repetido para listas)</td>
+<td>quando definidos</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Prefixo padrão: <code>{id}_</code> (caracteres fora de <code>[A-Za-z0-9_]</code> viram <code>_</code>). Com duas listagens na página, cada uma
+usa o seu prefixo e não toca nos parâmetros da outra.</li>
+<li>Parâmetros alheios (<code>option</code>, <code>view</code>, <code>Itemid</code>…) e o <code>#hash</code> são preservados.</li>
+<li>A URL só é escrita depois de uma resposta <strong>bem-sucedida</strong>, e só se mudou (sem histórico redundante).</li>
+<li><code>data-paginationjs-url-history=&quot;replace&quot;</code> (padrão): atualiza a URL sem criar entradas.
+<code>push</code>: cada mudança cria uma entrada; voltar/avançar restauram o estado e fazem <strong>uma</strong> requisição, sem
+reescrever a URL (sem loop). A carga inicial nunca cria entrada.</li>
+<li>Precedência na abertura: <strong>URL &gt; preferências &gt; HTML</strong>.</li>
+<li>Valores da URL passam pela mesma validação (página ≥ 1, ordenação só em colunas ordenáveis, filtros tipados).</li>
+</ul>
+<h2 id="cache">Cache <a class="anchor" href="#cache" aria-label="Link para esta seção">#</a></h2>
+<pre><code class="language-html">&lt;div ... data-paginationjs-cache=&quot;60&quot; data-paginationjs-cache-max=&quot;20&quot;&gt;
+</code></pre>
+<ul>
+<li>Desligado por padrão (cada navegação consulta o servidor).</li>
+<li>Validade em segundos (<code>cache</code>) e limite de respostas por instância (<code>cache-max</code>; a mais antiga sai primeiro).</li>
+<li>Chave: endpoint + método + usuário (<code>data-paginationjs-user</code>) + todos os parâmetros (página, quantidade, busca,
+filtros, ordenação, fixos). O <code>draw</code> do DataTables é ignorado na chave.</li>
+<li>Fica só na memória da instância (não vai para <code>localStorage</code>) e some no <code>destroy()</code>.</li>
+<li>Invalidação: <code>reload()</code> e o botão Atualizar limpam o cache e vão ao servidor; ações remotas bem-sucedidas
+limpam o cache antes de recarregar.</li>
+<li>Não há prefetch: só a página pedida é carregada.</li>
+</ul>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="backend.html"><span>Anterior</span>Contrato da API e adaptadores</a><a class="next" href="paginationjs-opcoes.html"><span>Próxima</span>Opções do Pagination.js 2.6.0</a></nav>
+        </main>
+    </div>
+</body>
+</html>

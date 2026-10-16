@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ações por linha — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/acoes.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html" aria-current="page">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#ação-remota-sem-javascript">Ação remota (sem JavaScript)</a></li><li><a href="#modal-próprio-com-um-pouco-de-javascript">Modal próprio (com um pouco de JavaScript)</a></li></ul></nav>
+<h1 id="ações-por-linha">Ações por linha</h1>
+<p>Botões ou links com <code>data-paginationjs-action</code> dentro das células (normalmente num <code>&lt;template&gt;</code>).</p>
+<pre><code class="language-html">&lt;th data-paginationjs-key=&quot;acoes&quot; data-paginationjs-actions data-paginationjs-template=&quot;tpl-acoes&quot;&gt;Ações&lt;/th&gt;
+
+&lt;template id=&quot;tpl-acoes&quot;&gt;
+    &lt;button type=&quot;button&quot; data-paginationjs-action=&quot;editar&quot;&gt;Editar&lt;/button&gt;
+&lt;/template&gt;
+</code></pre>
+<p>Todo clique dispara o evento <strong>cancelável</strong> <code>hrpaginationjs:action</code> no elemento raiz:</p>
+<pre><code class="language-js">document.getElementById(&#39;clientes&#39;).addEventListener(&#39;hrpaginationjs:action&#39;, function (e) {
+    if (e.detail.action === &#39;editar&#39;) {
+        abrirFormulario(e.detail.key, e.detail.row);
+    }
+});
+</code></pre>
+<p><code>detail</code> = <code>{ id, action, key, index, row, element }</code> — <code>row</code> é uma <strong>cópia</strong> da linha; <code>key</code> vem de
+<code>data-paginationjs-row-key</code> (padrão <code>id</code>). O clique tem <code>preventDefault()</code> (um <code>&lt;a href&gt;</code> de ação não navega).
+Para um link comum de navegação, <strong>não</strong> use <code>data-paginationjs-action</code>.</p>
+<h2 id="ação-remota-sem-javascript">Ação remota (sem JavaScript) <a class="anchor" href="#ação-remota-sem-javascript" aria-label="Link para esta seção">#</a></h2>
+<pre><code class="language-html">&lt;button type=&quot;button&quot;
+        data-paginationjs-action=&quot;excluir&quot;
+        data-paginationjs-action-remote=&quot;index.php?option=com_loja&amp;task=clientes.excluir&quot;
+        data-paginationjs-action-confirm=&quot;Excluir o cliente {nome}?&quot;
+        data-paginationjs-param-motivo=&quot;limpeza&quot;&gt;Excluir&lt;/button&gt;
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Padrão</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-paginationjs-action-remote</code></td>
+<td>—</td>
+<td>URL (relativa, <code>http</code> ou <code>https</code>).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-action-method</code></td>
+<td><code>POST</code></td>
+<td><code>POST</code> ou <code>GET</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-action-key</code></td>
+<td><code>id</code></td>
+<td>Nome do parâmetro que leva a chave da linha.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-param-&lt;nome&gt;</code></td>
+<td>—</td>
+<td>Parâmetros extras; aceitam <code>{campo}</code> da linha.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-action-confirm</code></td>
+<td>—</td>
+<td>Texto de <code>window.confirm()</code> (aceita <code>{campo}</code>). Cancelar = nada é enviado.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-action-reload</code></td>
+<td><code>true</code></td>
+<td><code>false</code> = não recarrega a lista após o sucesso.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Fluxo:</p>
+<ol>
+<li>Evento <code>hrpaginationjs:action</code> (se alguém chamar <code>preventDefault()</code>, para aqui — útil para modal próprio).</li>
+<li>Confirmação, se houver.</li>
+<li>Envia <code>id=&lt;chave&gt;&amp;&lt;parâmetros&gt;&amp;&lt;token&gt;=1</code> com o cabeçalho <code>X-CSRF-Token: &lt;token&gt;</code>.
+O token é descoberto como no Vigia.js: <code>Joomla.getOptions(&#39;csrf.token&#39;)</code> → <code>&lt;input type=&quot;hidden&quot; name=&quot;&lt;32 hex&gt;&quot; value=&quot;1&quot;&gt;</code>
+(<code>JHtml::_(&#39;form.token&#39;)</code>) → <code>&lt;meta name=&quot;csrf-token&quot;&gt;</code>. Compatível com <code>PermissionHelper::requireToken()</code>.</li>
+<li>O botão fica <code>disabled</code> + <code>aria-busy</code> durante o envio.</li>
+<li>Resposta com <code>success: true</code> → mensagem do servidor no aviso, cache limpo, evento <code>hrpaginationjs:actiondone</code> e
+recarga da página atual (se a página esvaziar, a biblioteca volta uma única vez para a última página válida).</li>
+<li>Qualquer erro (HTTP, <code>success: false</code>, sessão, permissão, resposta inválida) → mensagem no aviso e evento
+<code>hrpaginationjs:actionerror</code>.</li>
+</ol>
+<p>O backend continua obrigado a validar token, permissão e se o usuário pode agir <strong>naquele registro</strong>.
+Conhecer o ID não dá direito de acesso.</p>
+<h2 id="modal-próprio-com-um-pouco-de-javascript">Modal próprio (com um pouco de JavaScript) <a class="anchor" href="#modal-próprio-com-um-pouco-de-javascript" aria-label="Link para esta seção">#</a></h2>
+<pre><code class="language-js">root.addEventListener(&#39;hrpaginationjs:action&#39;, function (e) {
+    if (e.detail.action !== &#39;excluir&#39;) return;
+    e.preventDefault();
+    meuModal.confirmar(&#39;Excluir &#39; + e.detail.row.nome + &#39;?&#39;).then(function () {
+        var corpo = HrPaginationjs.serialize({ id: e.detail.key });
+        var xhr = new XMLHttpRequest();
+
+        corpo += &#39;&amp;&#39; + encodeURIComponent(HrPaginationjs.findToken()) + &#39;=1&#39;;
+        xhr.open(&#39;POST&#39;, &#39;index.php?option=com_loja&amp;task=clientes.excluir&#39;);
+        xhr.setRequestHeader(&#39;Content-Type&#39;, &#39;application/x-www-form-urlencoded; charset=UTF-8&#39;);
+        xhr.setRequestHeader(&#39;X-Requested-With&#39;, &#39;XMLHttpRequest&#39;);
+        xhr.onloadend = function () { HrPaginationjs.get(&#39;clientes&#39;).reload(); };
+        xhr.send(corpo);
+    });
+});
+</code></pre>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="controles.html"><span>Anterior</span>Controles declarativos</a><a class="next" href="api-js.html"><span>Próxima</span>API JavaScript</a></nav>
+        </main>
+    </div>
+</body>
+</html>

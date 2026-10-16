@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>hr-paginationjs — exemplo mínimo</title>
+    <link rel="stylesheet" href="../src/hr-paginationjs.css">
+</head>
+<body>
+    <h1>Clientes</h1>
+
+    <div id="clientes"
+         data-paginationjs
+         data-paginationjs-remote="api.php"
+         data-paginationjs-toolbar="search,limit,columns,reload">
+        <table>
+            <thead>
+                <tr>
+                    <th data-paginationjs-key="id" data-paginationjs-sortable data-paginationjs-required>ID</th>
+                    <th data-paginationjs-key="nome" data-paginationjs-sortable>Nome</th>
+                    <th data-paginationjs-key="email">E-mail</th>
+                    <th data-paginationjs-key="cidade" data-paginationjs-sortable>Cidade</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <script src="../vendor/jquery-1.12.4.min.js"></script>
+    <script src="../vendor/pagination-2.6.0.min.js"></script>
+    <script src="../src/hr-paginationjs.js"></script>
+</body>
+</html>

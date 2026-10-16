@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Eventos — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/eventos.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html" aria-current="page">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+
+<h1 id="eventos">Eventos</h1>
+<p>Todos são <code>CustomEvent</code> disparados no <strong>elemento raiz</strong>, com <code>bubbles: true</code>. O <code>detail</code> contém <strong>cópias</strong>
+(alterá-las não afeta a listagem). Sempre há <code>detail.id</code> (identificador da listagem).</p>
+<pre><code class="language-js">document.getElementById(&#39;clientes&#39;).addEventListener(&#39;hrpaginationjs:load&#39;, function (e) {
+    console.log(e.detail.total);
+});
+
+// jQuery
+jQuery(document).on(&#39;hrpaginationjs:error&#39;, &#39;#clientes&#39;, function (e) {
+    var erro = e.originalEvent.detail.error;
+});
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Evento</th>
+<th>Cancelável</th>
+<th>Quando</th>
+<th><code>detail</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hrpaginationjs:init</code></td>
+<td>não</td>
+<td>Instância criada (antes da 1ª requisição)</td>
+<td><code>{ id, state }</code></td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:statechange</code></td>
+<td>não</td>
+<td>Busca, filtro, página, quantidade ou ordem mudaram (antes da requisição)</td>
+<td><code>{ id, state }</code></td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:beforeload</code></td>
+<td>não</td>
+<td>Imediatamente antes de cada requisição (ou leitura do cache)</td>
+<td><code>{ id, params, state }</code></td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:load</code></td>
+<td>não</td>
+<td>Página renderizada com sucesso</td>
+<td><code>{ id, rows, total, totalAll, requestId, message, state }</code></td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:error</code></td>
+<td>não</td>
+<td>Falha classificada (exceto cancelamentos)</td>
+<td><code>{ id, error, state }</code></td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:columnschange</code></td>
+<td>não</td>
+<td>Visibilidade de colunas mudou</td>
+<td><code>{ id, visible }</code></td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:action</code></td>
+<td><strong>sim</strong></td>
+<td>Clique em <code>data-paginationjs-action</code></td>
+<td><code>{ id, action, key, index, row, element }</code></td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:actiondone</code></td>
+<td>não</td>
+<td>Ação remota concluída com <code>success: true</code></td>
+<td><code>{ id, action, key, row, response }</code></td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:actionerror</code></td>
+<td>não</td>
+<td>Ação remota falhou</td>
+<td><code>{ id, action, key, row, error }</code></td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:destroy</code></td>
+<td>não</td>
+<td>Início do <code>destroy()</code></td>
+<td><code>{ id }</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>state</code> tem o formato de <a href="api-js.html#getstate"><code>getState()</code></a>. <code>totalAll</code> é <code>recordsTotal</code> no adaptador DataTables
+e igual a <code>total</code> no <code>apiresponse</code>. <code>params</code> é exatamente o que será enviado ao servidor.</p>
+<h2 id="exemplos-úteis">Exemplos úteis <a class="anchor" href="#exemplos-úteis" aria-label="Link para esta seção">#</a></h2>
+<p>Redirecionar quando a sessão expira:</p>
+<pre><code class="language-js">document.addEventListener(&#39;hrpaginationjs:error&#39;, function (e) {
+    if (e.detail.error.kind === &#39;session&#39;) {
+        window.location.href = &#39;index.php?option=com_users&amp;view=login&#39;;
+    }
+});
+</code></pre>
+<p>Atualizar um contador fora da listagem:</p>
+<pre><code class="language-js">document.getElementById(&#39;clientes&#39;).addEventListener(&#39;hrpaginationjs:load&#39;, function (e) {
+    document.getElementById(&#39;total-clientes&#39;).textContent = e.detail.total;
+});
+</code></pre>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="api-js.html"><span>Anterior</span>API JavaScript</a><a class="next" href="backend.html"><span>Próxima</span>Contrato da API e adaptadores</a></nav>
+        </main>
+    </div>
+</body>
+</html>

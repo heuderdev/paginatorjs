@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Busca, filtros e ordenação — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/busca-filtros-ordenacao.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html" aria-current="page">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#busca">Busca</a></li><li><a href="#filtros">Filtros</a></li><li><a href="#ordenação">Ordenação</a></li></ul></nav>
+<h1 id="busca-filtros-e-ordenação">Busca, filtros e ordenação</h1>
+<p>Tudo é executado <strong>no servidor</strong>. A biblioteca só monta os parâmetros, cancela o que ficou velho e redesenha.</p>
+<h2 id="busca">Busca <a class="anchor" href="#busca" aria-label="Link para esta seção">#</a></h2>
+<pre><code class="language-html">&lt;input type=&quot;search&quot; data-paginationjs-search aria-label=&quot;Buscar clientes&quot;&gt;
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Comportamento</th>
+<th>Regra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parâmetro enviado</td>
+<td><code>search</code> (renomeie com <code>data-paginationjs-names=&#39;{&quot;search&quot;:&quot;busca&quot;}&#39;</code>).</td>
+</tr>
+<tr>
+<td>Digitando</td>
+<td>Espera <code>data-paginationjs-debounce</code> ms (padrão 400) sem novas teclas.</td>
+</tr>
+<tr>
+<td><code>Enter</code></td>
+<td>Busca na hora (cancela a espera).</td>
+</tr>
+<tr>
+<td>Composição de texto (IME, acentos em alguns teclados)</td>
+<td>Não busca enquanto compõe; busca ao terminar.</td>
+</tr>
+<tr>
+<td>Termo vazio</td>
+<td>Remove o parâmetro <code>search</code> → lista sem busca.</td>
+</tr>
+<tr>
+<td>Menos que <code>data-paginationjs-min-chars</code></td>
+<td>Não faz requisição e mantém o resultado atual.</td>
+</tr>
+<tr>
+<td>Mesmo termo de antes</td>
+<td>Não faz requisição.</td>
+</tr>
+<tr>
+<td>Página</td>
+<td>Volta para 1.</td>
+</tr>
+<tr>
+<td>Espaços</td>
+<td>Removidos nas pontas (<code>trim</code>).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Acentos e maiúsculas: a biblioteca envia o termo como foi digitado. Se a busca ignora acentos/maiúsculas
+depende do backend (no MySQL, da collation da coluna; <code>utf8mb4_unicode_ci</code> ignora ambos). Não prometa busca
+sem acento se o backend não a implementa.</p>
+<p>Vários campos de busca da mesma listagem ficam sincronizados.</p>
+<h2 id="filtros">Filtros <a class="anchor" href="#filtros" aria-label="Link para esta seção">#</a></h2>
+<p>Duas formas de declarar — podem ser misturadas:</p>
+<pre><code class="language-html">&lt;!-- 1. Formulário: todo campo com name vira filtro --&gt;
+&lt;form data-paginationjs-filters&gt;
+    &lt;select name=&quot;status&quot;&gt;…&lt;/select&gt;
+    &lt;input type=&quot;date&quot; name=&quot;de&quot;&gt;
+&lt;/form&gt;
+
+&lt;!-- 2. Campo avulso --&gt;
+&lt;select name=&quot;categoria&quot; data-paginationjs-filter&gt;…&lt;/select&gt;
+</code></pre>
+<p>Use <code>data-paginationjs-ignore</code> num campo do formulário que não deve ser filtro.</p>
+<h3 id="tipos-e-serialização">Tipos e serialização <a class="anchor" href="#tipos-e-serialização" aria-label="Link para esta seção">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Controle</th>
+<th>Valor enviado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input</code>, <code>textarea</code>, <code>select</code> simples</td>
+<td>string (vazio = filtro não enviado)</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-type=&quot;number&quot;</code></td>
+<td>número (<code>10,5</code> → <code>10.5</code>); inválido = não enviado</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-type=&quot;int&quot;</code></td>
+<td>inteiro</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-type=&quot;bool&quot;</code></td>
+<td><code>1</code> ou <code>0</code> (aceita <code>true/false</code>, <code>sim/não</code>, <code>on/off</code>)</td>
+</tr>
+<tr>
+<td><code>type=&quot;date&quot;</code> ou <code>data-paginationjs-type=&quot;date&quot;</code></td>
+<td><code>YYYY-MM-DD</code> válido; inválido = não enviado</td>
+</tr>
+<tr>
+<td><code>select multiple</code></td>
+<td>lista → <code>nome[]=a&amp;nome[]=b</code></td>
+</tr>
+<tr>
+<td>vários <code>checkbox</code> com o mesmo <code>name</code> (ou <code>name=&quot;x[]&quot;</code>)</td>
+<td>lista → <code>x[]=a&amp;x[]=b</code></td>
+</tr>
+<tr>
+<td>um único <code>checkbox</code></td>
+<td>marcado = <code>value</code> (ou <code>1</code>); desmarcado = filtro não enviado</td>
+</tr>
+<tr>
+<td><code>radio</code></td>
+<td>valor do marcado</td>
+</tr>
+</tbody>
+</table></div>
+<p>O <code>[]</code> do final do <code>name</code> é removido do nome do filtro (<code>uf[]</code> → filtro <code>uf</code>); na hora de enviar, a lista volta ao
+formato <code>uf[]=SP</code>, que o PHP/<code>InputHelper::filters(array(&#39;uf&#39; =&gt; &#39;array&#39;))</code> entende. A serialização é feita por
+<code>HrPaginationjs.serialize()</code>, que gera exatamente a mesma saída do <code>jQuery.param</code> (verificado nos testes), com
+<code>encodeURIComponent</code> em cada nome e valor — nada é concatenado manualmente na URL.</p>
+<h3 id="quando-o-filtro-é-aplicado">Quando o filtro é aplicado <a class="anchor" href="#quando-o-filtro-é-aplicado" aria-label="Link para esta seção">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situação</th>
+<th>Padrão (<code>apply=&quot;change&quot;</code>)</th>
+<th><code>&lt;form data-paginationjs-filters data-paginationjs-apply=&quot;submit&quot;&gt;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>change</code> de select/checkbox/radio/data</td>
+<td>aplica</td>
+<td>não aplica</td>
+</tr>
+<tr>
+<td><code>Enter</code> num campo de texto</td>
+<td>aplica</td>
+<td>envia o formulário → aplica</td>
+</tr>
+<tr>
+<td><code>submit</code> do formulário</td>
+<td>aplica (busca + filtros numa só requisição)</td>
+<td>aplica</td>
+</tr>
+</tbody>
+</table></div>
+<p>Toda mudança de filtro volta para a <strong>página 1</strong> e gera <strong>uma</strong> requisição (as anteriores são canceladas).</p>
+<h3 id="limpar">Limpar <a class="anchor" href="#limpar" aria-label="Link para esta seção">#</a></h3>
+<pre><code class="language-html">&lt;button type=&quot;button&quot; data-paginationjs-clear&gt;Limpar tudo&lt;/button&gt;          &lt;!-- busca + filtros --&gt;
+&lt;button type=&quot;button&quot; data-paginationjs-clear=&quot;filters&quot;&gt;Limpar filtros&lt;/button&gt;
+&lt;button type=&quot;button&quot; data-paginationjs-clear=&quot;search&quot;&gt;Limpar busca&lt;/button&gt;
+</code></pre>
+<p>Filtros definidos só por JavaScript (<code>setFilter</code>) sem campo correspondente são mantidos quando os campos mudam e
+removidos por <code>clearFilters()</code>/<code>data-paginationjs-clear</code>.</p>
+<h2 id="ordenação">Ordenação <a class="anchor" href="#ordenação" aria-label="Link para esta seção">#</a></h2>
+<pre><code class="language-html">&lt;th data-paginationjs-key=&quot;criado&quot; data-paginationjs-field=&quot;created_at&quot;
+    data-paginationjs-sortable data-paginationjs-sort-first=&quot;desc&quot;&gt;Cadastro&lt;/th&gt;
+</code></pre>
+<ul>
+<li>Envia a <strong>key</strong> da coluna (<code>sort=criado&amp;direction=desc</code>), nunca o nome real do campo nem a posição.
+O backend traduz por lista branca (veja <a href="backend.html">backend.md</a>).</li>
+<li>Só colunas <code>data-paginationjs-sortable</code> podem ser ordenadas (inclusive via <code>setSort</code>).</li>
+<li>Clique na mesma coluna alterna <code>asc</code>/<code>desc</code>; em outra coluna usa <code>sort-first</code>.</li>
+<li>O <code>&lt;th&gt;</code> ganha <code>aria-sort=&quot;ascending|descending&quot;</code> e o ícone <code>▲</code>/<code>▼</code> (<code>↕</code> nas demais) — não depende só de cor.</li>
+<li><strong>Mudar a ordenação volta para a página 1</strong> (a página N de outra ordem não tem relação com a atual).</li>
+<li>Ordem inicial: <code>data-paginationjs-sort</code> + <code>data-paginationjs-direction</code>.</li>
+<li>Sem ordenação definida, nenhum <code>sort</code> é enviado e o backend usa o seu padrão (que deve ser determinístico).</li>
+</ul>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="colunas.html"><span>Anterior</span>Colunas</a><a class="next" href="controles.html"><span>Próxima</span>Controles declarativos</a></nav>
+        </main>
+    </div>
+</body>
+</html>

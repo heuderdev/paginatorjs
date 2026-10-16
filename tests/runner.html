@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>hr-paginationjs — testes</title>
+    <link rel="stylesheet" href="../src/hr-paginationjs.css">
+    <style>
+        body { font: 14px/1.5 system-ui, sans-serif; margin: 24px; color: #1d2939; }
+        #resumo { font-weight: 700; margin: 0 0 12px; }
+        #resultados { list-style: none; margin: 0; padding: 0; }
+        #resultados li { padding: 4px 8px; border-bottom: 1px solid #eaecf0; }
+        #resultados .ok::before { content: "✓ "; color: #067647; }
+        #resultados .falha { background: #fef3f2; }
+        #resultados .falha::before { content: "✗ "; color: #b42318; }
+        #resultados small { display: block; color: #b42318; white-space: pre-wrap; }
+        .hrpjs-test-sandbox { position: absolute; left: -10000px; top: 0; width: 900px; }
+    </style>
+</head>
+<body>
+    <h1>hr-paginationjs — testes</h1>
+    <p id="resumo" role="status">Executando…</p>
+    <ul id="resultados"></ul>
+
+    <script src="../vendor/jquery-1.12.4.min.js"></script>
+    <script src="../vendor/pagination-2.6.0.min.js"></script>
+    <script src="../src/hr-paginationjs.js" data-paginationjs-autoinit="false"></script>
+    <script src="harness.js"></script>
+    <script src="hr-paginationjs.tests.js"></script>
+    <script>
+        (function () {
+            var list = document.getElementById('resultados');
+            var summary = document.getElementById('resumo');
+
+            window.HRPJS_RUN(function (result) {
+                var item = document.createElement('li');
+
+                item.className = result.ok ? 'ok' : 'falha';
+                item.textContent = result.name + ' (' + result.ms + ' ms)';
+
+                if (!result.ok) {
+                    var detail = document.createElement('small');
+
+                    detail.textContent = result.error;
+                    item.appendChild(detail);
+                }
+
+                list.appendChild(item);
+            }).then(function (results) {
+                var failed = results.filter(function (r) { return !r.ok; }).length;
+
+                summary.textContent = (results.length - failed) + ' de ' + results.length + ' testes passaram.';
+            });
+        })();
+    </script>
+</body>
+</html>

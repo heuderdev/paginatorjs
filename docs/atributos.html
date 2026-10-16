@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Atributos do elemento raiz — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/atributos.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html" aria-current="page">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#textos-data-paginationjs-text-">Textos (data-paginationjs-text-*)</a></li><li><a href="#precedência-do-estado-inicial">Precedência do estado inicial</a></li></ul></nav>
+<h1 id="atributos-do-elemento-raiz">Atributos do elemento raiz</h1>
+<p>O elemento raiz é o que tem <code>data-paginationjs</code>. Ele deve conter uma <code>&lt;table&gt;</code> com <code>&lt;thead&gt;</code>.
+Todo atributo tem um equivalente em JavaScript (segunda coluna) para quem inicia com
+<code>HrPaginationjs.init(el, opcoes)</code>; a opção JS tem precedência sobre o atributo.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Opção JS</th>
+<th>Padrão</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-paginationjs</code></td>
+<td>—</td>
+<td>—</td>
+<td>Marca a listagem. Valor <code>manual</code> impede a inicialização automática.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-remote</code></td>
+<td><code>remote</code></td>
+<td><strong>obrigatório</strong></td>
+<td>Endpoint. Aceita URL relativa, <code>http</code> ou <code>https</code>. Outros esquemas são recusados.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-id</code></td>
+<td><code>id</code></td>
+<td><code>id</code> do elemento</td>
+<td>Identificador <strong>estável</strong> da listagem (preferências, URL, <code>get()</code>). Obrigatório se o elemento não tiver <code>id</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-method</code></td>
+<td><code>method</code></td>
+<td><code>GET</code></td>
+<td><code>GET</code> ou <code>POST</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-adapter</code></td>
+<td><code>adapter</code></td>
+<td><code>apiresponse</code></td>
+<td><code>apiresponse</code> (contrato do <code>ApiResponseHelper</code>) ou <code>datatables</code>, ou um adaptador registrado.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-names</code></td>
+<td><code>names</code></td>
+<td>ver <a href="backend.html">backend</a></td>
+<td>JSON que renomeia os parâmetros enviados. Ex.: <code>{&quot;search&quot;:&quot;busca&quot;}</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-limit</code></td>
+<td><code>limit</code></td>
+<td><code>20</code></td>
+<td>Registros por página iniciais.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-limits</code></td>
+<td><code>limits</code></td>
+<td><code>10,20,50,100</code></td>
+<td>Opções do seletor de quantidade (o <code>limit</code> é incluído se faltar).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-sort</code></td>
+<td><code>sort</code></td>
+<td>(nenhuma)</td>
+<td>Chave da coluna ordenada inicialmente. Precisa ser <code>data-paginationjs-sortable</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-direction</code></td>
+<td><code>direction</code></td>
+<td><code>asc</code></td>
+<td><code>asc</code> ou <code>desc</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-debounce</code></td>
+<td><code>debounce</code></td>
+<td><code>400</code></td>
+<td>Espera (ms) da busca enquanto se digita.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-min-chars</code></td>
+<td><code>minChars</code></td>
+<td><code>0</code></td>
+<td>Mínimo de caracteres para buscar. Termo vazio sempre limpa a busca.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-timeout</code></td>
+<td><code>timeout</code></td>
+<td><code>30000</code></td>
+<td>Tempo limite (ms) de cada requisição. <code>0</code> = sem limite.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-params</code></td>
+<td><code>params</code></td>
+<td><code>{}</code></td>
+<td>JSON com parâmetros fixos enviados sempre. Ex.: <code>{&quot;categoria&quot;:3}</code>. Nunca coloque segredos.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-row-key</code></td>
+<td><code>rowKey</code></td>
+<td><code>id</code></td>
+<td>Campo (aceita <code>a.b</code>) que identifica a linha nas ações.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-autoload</code></td>
+<td><code>autoload</code></td>
+<td><code>true</code></td>
+<td><code>false</code> = não carrega ao iniciar (use <code>reload()</code>).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-locale</code></td>
+<td><code>locale</code></td>
+<td><code>lang</code> do <code>&lt;html&gt;</code> ou <code>pt-BR</code></td>
+<td>Idioma dos formatadores.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-currency</code></td>
+<td><code>currency</code></td>
+<td><code>BRL</code></td>
+<td>Moeda do formatador <code>money</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-toolbar</code></td>
+<td><code>toolbar</code></td>
+<td>(nenhuma)</td>
+<td>Monta controles prontos no topo: <code>search</code>, <code>limit</code>, <code>columns</code>, <code>reload</code>, <code>clear</code> (na ordem informada).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-persist</code></td>
+<td><code>persist</code></td>
+<td>desligado</td>
+<td>Liga preferências. Sem valor = <code>columns,limit,sort</code>. Lista explícita aceita também <code>search</code> e <code>filters</code>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-namespace</code></td>
+<td><code>namespace</code></td>
+<td><code>app</code></td>
+<td>Parte da chave de preferências.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-user</code></td>
+<td><code>user</code></td>
+<td><code>anon</code></td>
+<td>Identificador do usuário para a chave de preferências (use o id, nunca dados sensíveis).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-version</code></td>
+<td><code>version</code></td>
+<td><code>1</code></td>
+<td>Versão do esquema de preferências. Aumente para descartar preferências antigas.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-url</code></td>
+<td><code>url</code></td>
+<td>desligado</td>
+<td>Guarda página, quantidade, ordem, busca e filtros na URL.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-url-prefix</code></td>
+<td><code>urlPrefix</code></td>
+<td><code>{id}_</code></td>
+<td>Prefixo dos parâmetros na URL (necessário com várias listagens).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-url-history</code></td>
+<td><code>urlHistory</code></td>
+<td><code>replace</code></td>
+<td><code>push</code> cria entradas no histórico (voltar/avançar navegam entre estados).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-cache</code></td>
+<td><code>cache</code></td>
+<td><code>0</code></td>
+<td>Validade do cache em <strong>segundos</strong> (0 = sem cache).</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-cache-max</code></td>
+<td><code>cacheMax</code></td>
+<td><code>20</code></td>
+<td>Máximo de respostas guardadas por instância.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-page-range</code></td>
+<td><code>paginationOptions.pageRange</code></td>
+<td><code>2</code></td>
+<td>Páginas exibidas ao redor da atual.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-options</code></td>
+<td><code>paginationOptions</code></td>
+<td><code>{}</code></td>
+<td>JSON com opções do Pagination.js. Ver <a href="paginationjs-opcoes.html">paginationjs-opcoes.md</a>.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-text-*</code></td>
+<td><code>texts</code></td>
+<td>ver abaixo</td>
+<td>Troca qualquer texto. Ex.: <code>data-paginationjs-text-empty=&quot;Nenhum cliente.&quot;</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Opções só de JavaScript: <code>headers</code> (cabeçalhos extras), <code>token</code> (token CSRF explícito), <code>formatters</code>
+(formatadores locais da instância) e <code>transport</code> (função de transporte; usada nos testes).</p>
+<h2 id="textos-data-paginationjs-text-">Textos (<code>data-paginationjs-text-*</code>) <a class="anchor" href="#textos-data-paginationjs-text-" aria-label="Link para esta seção">#</a></h2>
+<p>O nome do atributo é o nome da chave em minúsculas com hífen (<code>summaryEmpty</code> → <code>data-paginationjs-text-summary-empty</code>).
+Para mudar o padrão de todas as listagens: <code>HrPaginationjs.texts.empty = &#39;...&#39;</code> antes do <code>DOMContentLoaded</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Chave</th>
+<th>Padrão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loading</code></td>
+<td><code>Carregando…</code></td>
+</tr>
+<tr>
+<td><code>empty</code></td>
+<td><code>Nenhum registro encontrado.</code></td>
+</tr>
+<tr>
+<td><code>idle</code></td>
+<td>(vazio) — mostrado quando <code>autoload=false</code></td>
+</tr>
+<tr>
+<td><code>retry</code></td>
+<td><code>Tentar novamente</code></td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td><code>Exibindo {start} a {end} de {total} registros</code> (também <code>{page}</code> e <code>{pages}</code>)</td>
+</tr>
+<tr>
+<td><code>summaryEmpty</code></td>
+<td><code>Nenhum registro</code></td>
+</tr>
+<tr>
+<td><code>search</code>, <code>searchPlaceholder</code>, <code>limit</code>, <code>columns</code>, <code>columnsReset</code>, <code>columnRequired</code>, <code>reload</code>, <code>clear</code></td>
+<td>rótulos dos controles</td>
+</tr>
+<tr>
+<td><code>pagination</code>, <code>page</code>, <code>previous</code>, <code>next</code></td>
+<td>rótulos acessíveis da paginação (<code>page</code> usa <code>{page}</code>)</td>
+</tr>
+<tr>
+<td><code>requestId</code></td>
+<td><code>Código para suporte: {id}</code></td>
+</tr>
+<tr>
+<td><code>yes</code>, <code>no</code></td>
+<td>formatador <code>bool</code></td>
+</tr>
+<tr>
+<td><code>errorNetwork</code>, <code>errorTimeout</code>, <code>errorHttp</code> (<code>{status}</code>), <code>errorInvalid</code>, <code>errorApi</code>, <code>errorSession</code>, <code>errorPermission</code>, <code>errorConfig</code></td>
+<td>mensagens de erro (quando o servidor não enviar <code>mensagem</code>)</td>
+</tr>
+<tr>
+<td><code>actionDone</code>, <code>actionError</code></td>
+<td>ações remotas sem mensagem do servidor</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="precedência-do-estado-inicial">Precedência do estado inicial <a class="anchor" href="#precedência-do-estado-inicial" aria-label="Link para esta seção">#</a></h2>
+<p><strong>URL</strong> (se <code>data-paginationjs-url</code>) <strong>&gt; preferências salvas</strong> (se <code>data-paginationjs-persist</code>) <strong>&gt; HTML</strong>
+(atributos e valores já preenchidos nos campos de filtro/busca).</p>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="primeira-tela.html"><span>Anterior</span>Primeira tela em 2 minutos</a><a class="next" href="colunas.html"><span>Próxima</span>Colunas</a></nav>
+        </main>
+    </div>
+</body>
+</html>

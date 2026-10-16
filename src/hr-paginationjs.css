@@ -1,0 +1,415 @@
+.hrpjs {
+    --hrpjs-border: #d0d5dd;
+    --hrpjs-text: #1d2939;
+    --hrpjs-muted: #667085;
+    --hrpjs-bg: #ffffff;
+    --hrpjs-bg-soft: #f2f4f7;
+    --hrpjs-accent: #1f5fbf;
+    --hrpjs-accent-text: #ffffff;
+    --hrpjs-danger: #b42318;
+    --hrpjs-danger-bg: #fef3f2;
+    --hrpjs-success: #067647;
+    --hrpjs-success-bg: #ecfdf3;
+    --hrpjs-focus: #1f5fbf;
+    --hrpjs-radius: 6px;
+    position: relative;
+    color: var(--hrpjs-text);
+}
+
+.hrpjs .hrpjs-live {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.hrpjs .hrpjs-fatal {
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--hrpjs-danger);
+    border-radius: var(--hrpjs-radius);
+    background: var(--hrpjs-danger-bg);
+    color: var(--hrpjs-danger);
+    font-weight: 600;
+}
+
+.hrpjs .hrpjs-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8px 12px;
+    margin: 0 0 12px;
+}
+
+.hrpjs .hrpjs-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.hrpjs .hrpjs-field--search {
+    flex: 1 1 220px;
+}
+
+.hrpjs .hrpjs-label {
+    font-size: 0.875em;
+    color: var(--hrpjs-muted);
+}
+
+.hrpjs .hrpjs-input,
+.hrpjs .hrpjs-select {
+    box-sizing: border-box;
+    min-height: 36px;
+    margin: 0;
+    padding: 6px 10px;
+    border: 1px solid var(--hrpjs-border);
+    border-radius: var(--hrpjs-radius);
+    background: var(--hrpjs-bg);
+    color: inherit;
+    font: inherit;
+}
+
+.hrpjs .hrpjs-input {
+    width: 100%;
+}
+
+.hrpjs .hrpjs-button,
+.hrpjs .hrpjs-columns-toggle {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    margin: 0;
+    padding: 6px 12px;
+    border: 1px solid var(--hrpjs-border);
+    border-radius: var(--hrpjs-radius);
+    background: var(--hrpjs-bg);
+    color: inherit;
+    font: inherit;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+.hrpjs .hrpjs-button:hover,
+.hrpjs .hrpjs-columns-toggle:hover {
+    background: var(--hrpjs-bg-soft);
+}
+
+.hrpjs .hrpjs-button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.hrpjs .hrpjs-input:focus-visible,
+.hrpjs .hrpjs-select:focus-visible,
+.hrpjs .hrpjs-button:focus-visible,
+.hrpjs .hrpjs-columns-toggle:focus-visible,
+.hrpjs .hrpjs-sort:focus-visible,
+.hrpjs .hrpjs-pager a:focus-visible,
+.hrpjs .hrpjs-columns-item input:focus-visible,
+.hrpjs-table [data-paginationjs-action]:focus-visible {
+    outline: 2px solid var(--hrpjs-focus);
+    outline-offset: 2px;
+}
+
+.hrpjs .hrpjs-columns {
+    position: relative;
+}
+
+.hrpjs .hrpjs-columns-toggle {
+    list-style: none;
+}
+
+.hrpjs .hrpjs-columns-toggle::-webkit-details-marker {
+    display: none;
+}
+
+.hrpjs .hrpjs-columns-toggle::after {
+    content: "▾";
+    margin-left: 6px;
+}
+
+.hrpjs .hrpjs-columns[open] > .hrpjs-columns-toggle::after {
+    content: "▴";
+}
+
+.hrpjs .hrpjs-columns-panel {
+    position: absolute;
+    z-index: 20;
+    right: 0;
+    min-width: 220px;
+    max-height: 320px;
+    margin-top: 4px;
+    padding: 8px;
+    overflow: auto;
+    border: 1px solid var(--hrpjs-border);
+    border-radius: var(--hrpjs-radius);
+    background: var(--hrpjs-bg);
+    box-shadow: 0 8px 24px rgba(16, 24, 40, 0.12);
+}
+
+.hrpjs .hrpjs-columns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0 0 8px;
+}
+
+.hrpjs .hrpjs-columns-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.hrpjs .hrpjs-columns-item:hover {
+    background: var(--hrpjs-bg-soft);
+}
+
+.hrpjs .hrpjs-columns-reset {
+    width: 100%;
+    justify-content: center;
+}
+
+.hrpjs-table {
+    transition: opacity 0.15s ease;
+}
+
+.hrpjs.hrpjs-is-loading .hrpjs-table .hrpjs-body {
+    opacity: 0.55;
+}
+
+.hrpjs-table th[aria-sort] {
+    white-space: nowrap;
+}
+
+.hrpjs-table .hrpjs-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: inherit;
+    text-align: inherit;
+    cursor: pointer;
+}
+
+.hrpjs-table .hrpjs-sort-icon {
+    font-size: 0.75em;
+    opacity: 0.45;
+}
+
+.hrpjs-table .hrpjs-sorted-asc .hrpjs-sort-icon,
+.hrpjs-table .hrpjs-sorted-desc .hrpjs-sort-icon {
+    opacity: 1;
+}
+
+.hrpjs-table .hrpjs-align-left {
+    text-align: left;
+}
+
+.hrpjs-table .hrpjs-align-center {
+    text-align: center;
+}
+
+.hrpjs-table .hrpjs-align-right {
+    text-align: right;
+}
+
+.hrpjs-table .hrpjs-message-row > td {
+    padding: 0;
+}
+
+.hrpjs-table .hrpjs-message {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--hrpjs-muted);
+}
+
+.hrpjs-table .hrpjs-message p {
+    margin: 0 0 8px;
+}
+
+.hrpjs-table .hrpjs-message--error {
+    color: var(--hrpjs-danger);
+}
+
+.hrpjs-table .hrpjs-message--error .hrpjs-message-text::before {
+    content: "⚠ ";
+}
+
+.hrpjs-table .hrpjs-message-id {
+    font-size: 0.8125em;
+    color: var(--hrpjs-muted);
+}
+
+.hrpjs-table .hrpjs-message--loading .hrpjs-message-text::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    vertical-align: -1px;
+    border: 2px solid var(--hrpjs-border);
+    border-top-color: var(--hrpjs-accent);
+    border-radius: 50%;
+    animation: hrpjs-spin 0.8s linear infinite;
+}
+
+@keyframes hrpjs-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.hrpjs .hrpjs-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    margin: 12px 0 0;
+    min-height: 36px;
+}
+
+.hrpjs .hrpjs-summary {
+    color: var(--hrpjs-muted);
+    font-size: 0.9375em;
+}
+
+.hrpjs .hrpjs-notice {
+    flex: 1 1 100%;
+    order: -1;
+    padding: 8px 12px;
+    border: 1px solid var(--hrpjs-success);
+    border-radius: var(--hrpjs-radius);
+    background: var(--hrpjs-success-bg);
+    color: var(--hrpjs-success);
+}
+
+.hrpjs .hrpjs-notice::before {
+    content: "✓ ";
+}
+
+.hrpjs .hrpjs-notice--error {
+    border-color: var(--hrpjs-danger);
+    background: var(--hrpjs-danger-bg);
+    color: var(--hrpjs-danger);
+}
+
+.hrpjs .hrpjs-notice--error::before {
+    content: "⚠ ";
+}
+
+.hrpjs .hrpjs-pager .paginationjs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    line-height: 1;
+}
+
+.hrpjs .hrpjs-pager .paginationjs-pages ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.hrpjs .hrpjs-pager .paginationjs-pages li {
+    margin: 0;
+    padding: 0;
+}
+
+.hrpjs .hrpjs-pager .paginationjs-pages li > a {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid var(--hrpjs-border);
+    border-radius: var(--hrpjs-radius);
+    background: var(--hrpjs-bg);
+    color: var(--hrpjs-text);
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+.hrpjs .hrpjs-pager .paginationjs-pages li > a:hover {
+    background: var(--hrpjs-bg-soft);
+}
+
+.hrpjs .hrpjs-pager .paginationjs-pages li.active > a,
+.hrpjs .hrpjs-pager .paginationjs-pages li > a[aria-current="page"] {
+    border-color: var(--hrpjs-accent);
+    background: var(--hrpjs-accent);
+    color: var(--hrpjs-accent-text);
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: default;
+}
+
+.hrpjs .hrpjs-pager .paginationjs-pages li.disabled > a,
+.hrpjs .hrpjs-pager .paginationjs-pages li > a[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.hrpjs .hrpjs-pager .paginationjs-pages li.paginationjs-ellipsis > a {
+    border-color: transparent;
+    background: transparent;
+    cursor: default;
+}
+
+.hrpjs .hrpjs-pager .paginationjs-go-input input,
+.hrpjs .hrpjs-pager .paginationjs-go-button input {
+    box-sizing: border-box;
+    height: 36px;
+    margin: 0;
+    padding: 0 8px;
+    border: 1px solid var(--hrpjs-border);
+    border-radius: var(--hrpjs-radius);
+    background: var(--hrpjs-bg);
+    color: inherit;
+    font: inherit;
+}
+
+.hrpjs .hrpjs-pager .paginationjs-go-input input {
+    width: 56px;
+}
+
+@media (max-width: 640px) {
+    .hrpjs .hrpjs-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hrpjs .hrpjs-columns-panel {
+        right: auto;
+        left: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hrpjs-table,
+    .hrpjs-table .hrpjs-message--loading .hrpjs-message-text::before {
+        transition: none;
+        animation: none;
+    }
+}

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Acessibilidade e segurança — hr-paginationjs</title>
+    <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/acessibilidade-seguranca.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
+                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
+                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
+                <li><a href="colunas.html">Colunas</a></li>
+                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
+                <li><a href="controles.html">Controles declarativos</a></li>
+                <li><a href="acoes.html">Ações por linha</a></li>
+                <li><a href="api-js.html">API JavaScript</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
+                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
+                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
+                <li><a href="acessibilidade-seguranca.html" aria-current="page">Acessibilidade e segurança</a></li>
+                <li><a href="testes.html">Testes</a></li>
+            </ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#acessibilidade">Acessibilidade</a></li><li><a href="#estilos-isolados">Estilos isolados</a></li><li><a href="#segurança--frontend">Segurança — frontend</a></li><li><a href="#segurança--backend-obrigatório-em-cada-endpoint">Segurança — backend (obrigatório em cada endpoint)</a></li></ul></nav>
+<h1 id="acessibilidade-e-segurança">Acessibilidade e segurança</h1>
+<h2 id="acessibilidade">Acessibilidade <a class="anchor" href="#acessibilidade" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requisito</th>
+<th>Como é atendido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Busca e controles com rótulo</td>
+<td>A toolbar automática cria <code>&lt;label for&gt;</code>. Nos seus controles, use <code>&lt;label&gt;</code> ou <code>aria-label</code>.</td>
+</tr>
+<tr>
+<td>Navegação por teclado</td>
+<td>Paginação: links viram <code>role=&quot;button&quot;</code> com <code>tabindex=&quot;0&quot;</code>; <code>Enter</code> e <code>Espaço</code> acionam. Ordenação: <code>&lt;button&gt;</code> real no <code>&lt;th&gt;</code>. Seletor de colunas: <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> nativos + <code>Esc</code> fecha.</td>
+</tr>
+<tr>
+<td>Foco visível</td>
+<td><code>:focus-visible</code> com contorno de 2px em todos os controles da biblioteca.</td>
+</tr>
+<tr>
+<td>Foco estável</td>
+<td>Se o foco estava na paginação, depois do redesenho ele volta para o mesmo botão (anterior/próxima) ou para a página atual. Nenhum outro movimento de foco é feito.</td>
+</tr>
+<tr>
+<td>Página atual identificada</td>
+<td><code>aria-current=&quot;page&quot;</code> + destaque + sublinhado (não só cor).</td>
+</tr>
+<tr>
+<td>Estado desabilitado</td>
+<td><code>aria-disabled=&quot;true&quot;</code> + <code>tabindex=&quot;-1&quot;</code> (anterior/próxima nas pontas). Botões de ação ficam <code>disabled</code> + <code>aria-busy</code> durante o envio.</td>
+</tr>
+<tr>
+<td>Carregamento</td>
+<td><code>aria-busy=&quot;true&quot;</code> no elemento raiz e na tabela; linhas atuais ficam esmaecidas (sem salto de layout) e só a primeira carga mostra “Carregando…”.</td>
+</tr>
+<tr>
+<td>Anúncios</td>
+<td>Região <code>role=&quot;status&quot;</code> / <code>aria-live=&quot;polite&quot;</code>: anuncia o resumo após cada interação do usuário (não na carga inicial), erros e mensagens de ações — um anúncio por resposta.</td>
+</tr>
+<tr>
+<td>Ordenação</td>
+<td>`aria-sort=&quot;ascending</td>
+</tr>
+<tr>
+<td>Estados vazio/erro</td>
+<td>Linha única com <code>colspan</code> = colunas visíveis; erro com ícone ⚠, texto e botão “Tentar novamente”.</td>
+</tr>
+<tr>
+<td>Paginação</td>
+<td>Contêiner <code>role=&quot;navigation&quot;</code> com <code>aria-label=&quot;Paginação&quot;</code>; rótulos “Página N”, “Página anterior”, “Próxima página”; reticências <code>aria-hidden</code>.</td>
+</tr>
+<tr>
+<td>Movimento reduzido</td>
+<td><code>prefers-reduced-motion</code> desliga o spinner e transições.</td>
+</tr>
+<tr>
+<td>Responsivo</td>
+<td>Toolbar e rodapé quebram linha; as células recebem <code>data-label</code> (nome da coluna) para layouts em cartão.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="estilos-isolados">Estilos isolados <a class="anchor" href="#estilos-isolados" aria-label="Link para esta seção">#</a></h2>
+<p>Todas as regras ficam sob <code>.hrpjs</code> (raiz) ou <code>.hrpjs-table</code> (tabela). Nada altera <code>table</code>, <code>button</code>, <code>input</code>,
+<code>.row</code> ou outras classes globais. O visual da tabela continua sendo o do projeto; a biblioteca só estiliza o que
+ela cria. Cores via variáveis CSS (<code>--hrpjs-accent</code>, <code>--hrpjs-border</code>, …) sobrescrevíveis no <code>.hrpjs</code>.</p>
+<h2 id="segurança--frontend">Segurança — frontend <a class="anchor" href="#segurança--frontend" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>Implementação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Texto comum é texto</td>
+<td>Células, placeholders de template e mensagens usam <code>textContent</code>/<code>nodeValue</code>. Nunca <code>innerHTML</code> com dados.</td>
+</tr>
+<tr>
+<td>HTML só por API explícita</td>
+<td><code>HrPaginationjs.html()</code> num formatador. Documentado como responsabilidade de quem o usa.</td>
+</tr>
+<tr>
+<td>URLs validadas</td>
+<td><code>data-paginationjs-remote</code> e ações remotas: só relativa, <code>http</code>, <code>https</code>. Links (<code>link</code>, atributos <code>href</code>/<code>src</code>/<code>action</code>… em templates): também <code>mailto</code> e <code>tel</code>. <code>javascript:</code>, <code>data:</code> e similares são descartados.</td>
+</tr>
+<tr>
+<td>Atributos perigosos em templates</td>
+<td><code>on*</code>, <code>style</code> e <code>srcdoc</code> com <code>{campo}</code> são removidos.</td>
+</tr>
+<tr>
+<td>Sem detalhes internos</td>
+<td>Mensagens vêm da <code>mensagem</code> pública do helper ou de textos padrão. Só o <code>request_id</code> é exibido (para suporte).</td>
+</tr>
+<tr>
+<td>Console</td>
+<td>Só avisos de configuração (nomes de opções/colunas). Nenhum dado de linha, parâmetro ou resposta é registrado.</td>
+</tr>
+<tr>
+<td>Sem segredos em atributos</td>
+<td>Nada sensível deve ir em <code>data-paginationjs-params</code>. O token CSRF é descoberto na página (já presente via <code>JHtml::_(&#39;form.token&#39;)</code>), não em atributo da listagem.</td>
+</tr>
+<tr>
+<td>CSP</td>
+<td>Nenhum <code>eval</code>, <code>new Function</code> ou script inline gerado.</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="note"><p>Escapar não é autorizar: esconder um botão ou uma coluna no navegador não impede ninguém de chamar o endpoint.</p>
+</blockquote>
+<h2 id="segurança--backend-obrigatório-em-cada-endpoint">Segurança — backend (obrigatório em cada endpoint) <a class="anchor" href="#segurança--backend-obrigatório-em-cada-endpoint" aria-label="Link para esta seção">#</a></h2>
+<ul>
+<li>Autenticação e autorização em <strong>toda</strong> task (<code>PermissionHelper::require</code>), inclusive na listagem.</li>
+<li>Ações que alteram dados: <code>PermissionHelper::requireToken()</code> + permissão específica.</li>
+<li>Ordenação só por lista branca <code>key pública → coluna real</code>; direção validada (<code>InputHelper::sorting</code>).</li>
+<li>Teto de registros por página (<code>InputHelper::pagination($padrao, $maximo)</code>).</li>
+<li>Consultas parametrizadas (<code>OrmBase</code>/<code>whereLike</code> escapam os valores).</li>
+<li>Mesmos filtros de autorização na contagem e na consulta (<code>OrmBase::paginate()</code> faz o <code>count()</code> com o mesmo clone).</li>
+<li>O <code>select</code> devolve só colunas que o usuário pode ver.</li>
+<li>Não confie em filtros, colunas ou IDs vindos do navegador; verifique se o usuário pode acessar <strong>aquele</strong> registro.</li>
+<li>Não altere o <code>ApiResponseHelper</code> para acomodar a interface.</li>
+</ul>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="paginationjs-opcoes.html"><span>Anterior</span>Opções do Pagination.js 2.6.0</a><a class="next" href="testes.html"><span>Próxima</span>Testes</a></nav>
+        </main>
+    </div>
+</body>
+</html>
