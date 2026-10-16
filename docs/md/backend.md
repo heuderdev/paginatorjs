@@ -91,6 +91,20 @@ que ele devolve é descartado pelo `paginated()` (não é serializado).
 `data` vazio + `total > 0` + página > última e faz **uma** nova requisição para a última página. Se essa ainda
 vier vazia (registros apagados no meio), mostra o estado vazio — nunca entra em ciclo.
 
+## Adaptador `laravel`
+
+`data-paginationjs-adapter="laravel"` — envia os mesmos parâmetros do padrão (`page`, `limit`, `sort`,
+`direction`, `search`, filtros) e aceita três respostas:
+
+| Resposta | Lido |
+|---|---|
+| `paginate()` puro | `data`, `total`, `per_page`, `current_page`, `last_page` |
+| API Resource (`Resource::collection($paginator)`) | `data` e `meta.total`, `meta.per_page`, `meta.current_page`, `meta.last_page` |
+| `ResponseService::paginated()` | igual ao adaptador `apiresponse` |
+
+Sem `total` numérico (ex.: `simplePaginate()`, `cursorPaginate()`) a resposta é tratada como inválida.
+Guia completo: [Laravel](laravel.md).
+
 ## Adaptador `datatables` (APIs legadas)
 
 `data-paginationjs-adapter="datatables"`

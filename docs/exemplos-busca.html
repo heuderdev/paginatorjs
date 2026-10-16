@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Busca — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/exemplos-busca.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html" aria-current="page">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#campo-de-busca">Campo de busca</a></li><li><a href="#ajustar-a-espera-debounce">Ajustar a espera (debounce)</a></li><li><a href="#mínimo-de-caracteres">Mínimo de caracteres</a></li><li><a href="#nome-do-parâmetro-diferente">Nome do parâmetro diferente</a></li><li><a href="#busca-pronta-da-toolbar">Busca pronta da toolbar</a></li><li><a href="#busca-no-cabeçalho-fora-da-listagem">Busca no cabeçalho, fora da listagem</a></li><li><a href="#dois-campos-ligados-à-mesma-busca">Dois campos ligados à mesma busca</a></li><li><a href="#busca-já-preenchida-ao-abrir">Busca já preenchida ao abrir</a></li><li><a href="#botões-de-limpar">Botões de limpar</a></li><li><a href="#busca-junto-com-filtros-num-formulário">Busca junto com filtros num formulário</a></li></ul></nav>
+<h1 id="busca">Busca</h1>
+<p>A busca é sempre feita no servidor. A biblioteca espera o usuário parar de digitar, cancela a requisição anterior
+e descarta respostas atrasadas.</p>
+<h2 id="campo-de-busca">Campo de busca <a class="anchor" href="#campo-de-busca" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Buscar por nome ou e-mail
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">data-paginationjs-search</span> <span class="hljs-attr">autocomplete</span>=<span class="hljs-string">&quot;off&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada <span class="code-file">Usuário digitou &quot;ana&quot;</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;page=1&amp;limit=20&amp;search=ana&amp;_=...</code></pre></div>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">No controller</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-variable">$filtros</span> = <span class="hljs-title class_">InputHelper</span>::<span class="hljs-title function_ invoke__">filters</span>(<span class="hljs-keyword">array</span>(<span class="hljs-string">&#x27;search&#x27;</span> =&gt; <span class="hljs-string">&#x27;string&#x27;</span>));
+
+<span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>(<span class="hljs-variable">$filtros</span>[<span class="hljs-string">&#x27;search&#x27;</span>])) {
+    <span class="hljs-variable">$busca</span> = <span class="hljs-variable">$filtros</span>[<span class="hljs-string">&#x27;search&#x27;</span>];
+
+    <span class="hljs-variable">$query</span>-&gt;<span class="hljs-title function_ invoke__">whereGroup</span>(function (<span class="hljs-variable">$g</span>) <span class="hljs-keyword">use</span> ($<span class="hljs-title">busca</span>) {
+        $<span class="hljs-title">g</span>-&gt;<span class="hljs-title">whereLike</span>(&#x27;<span class="hljs-title">nome</span>&#x27;, $<span class="hljs-title">busca</span>)-&gt;<span class="hljs-title">orWhereLike</span>(&#x27;<span class="hljs-title">email</span>&#x27;, $<span class="hljs-title">busca</span>);
+    });
+}</code></pre></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>O usuário…</th>
+<th>Acontece</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>digita <code>a</code>, <code>an</code>, <code>ana</code> rápido</td>
+<td><strong>uma</strong> requisição, 400 ms depois da última tecla</td>
+</tr>
+<tr>
+<td>aperta <code>Enter</code></td>
+<td>busca na hora</td>
+</tr>
+<tr>
+<td>apaga tudo</td>
+<td>requisição sem <code>search</code> (lista completa)</td>
+</tr>
+<tr>
+<td>digita o mesmo termo de novo</td>
+<td>nada (sem requisição)</td>
+</tr>
+<tr>
+<td>usa teclado com composição (acentos, IME)</td>
+<td>espera terminar de compor</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> toda nova busca volta para a página 1.</p>
+</blockquote>
+<h2 id="ajustar-a-espera-debounce">Ajustar a espera (debounce) <a class="anchor" href="#ajustar-a-espera-debounce" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-debounce</span>=<span class="hljs-string">&quot;700&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> <code>data-paginationjs-debounce=&quot;0&quot;</code> busca a cada tecla — evite em listas grandes.</p>
+</blockquote>
+<h2 id="mínimo-de-caracteres">Mínimo de caracteres <a class="anchor" href="#mínimo-de-caracteres" aria-label="Link para esta seção">#</a></h2>
+<p>Com 3, digitar <code>a</code> ou <code>an</code> não consulta o servidor (o resultado atual fica na tela). Apagar tudo continua
+limpando a busca.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-min-chars</span>=<span class="hljs-string">&quot;3&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">data-paginationjs-search</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Buscar (mínimo 3 letras)&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="nome-do-parâmetro-diferente">Nome do parâmetro diferente <a class="anchor" href="#nome-do-parâmetro-diferente" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-names</span>=<span class="hljs-string">&#x27;{&quot;search&quot;: &quot;busca&quot;}&#x27;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">data-paginationjs-search</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Buscar&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;page=1&amp;limit=20&amp;busca=ana&amp;_=...</code></pre></div>
+<h2 id="busca-pronta-da-toolbar">Busca pronta da toolbar <a class="anchor" href="#busca-pronta-da-toolbar" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-toolbar</span>=<span class="hljs-string">&quot;search&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-search</span>=<span class="hljs-string">&quot;Pesquisar clientes&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-search-placeholder</span>=<span class="hljs-string">&quot;Nome ou e-mail&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="busca-no-cabeçalho-fora-da-listagem">Busca no cabeçalho, fora da listagem <a class="anchor" href="#busca-no-cabeçalho-fora-da-listagem" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;busca-global&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;search&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">data-paginationjs-for</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs-search</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Buscar clientes&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="dois-campos-ligados-à-mesma-busca">Dois campos ligados à mesma busca <a class="anchor" href="#dois-campos-ligados-à-mesma-busca" aria-label="Link para esta seção">#</a></h2>
+<p>Os campos da mesma listagem ficam sincronizados (útil com um campo no topo e outro numa barra lateral).</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">data-paginationjs-search</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Buscar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">aside</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">data-paginationjs-search</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Buscar novamente&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">aside</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="busca-já-preenchida-ao-abrir">Busca já preenchida ao abrir <a class="anchor" href="#busca-já-preenchida-ao-abrir" aria-label="Link para esta seção">#</a></h2>
+<p>O valor do campo no HTML vira a busca inicial (útil quando o PHP repassa um termo).</p>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php">&lt;input type=<span class="hljs-string">&quot;search&quot;</span> data-paginationjs-search aria-label=<span class="hljs-string">&quot;Buscar&quot;</span>
+       value=<span class="hljs-string">&quot;&lt;?php echo htmlspecialchars(InputHelper::string(&#x27;q&#x27;), ENT_QUOTES, &#x27;UTF-8&#x27;); ?&gt;&quot;</span>&gt;</code></pre></div>
+<h2 id="botões-de-limpar">Botões de limpar <a class="anchor" href="#botões-de-limpar" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-clear</span>=<span class="hljs-string">&quot;search&quot;</span>&gt;</span>Limpar busca<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-clear</span>=<span class="hljs-string">&quot;filters&quot;</span>&gt;</span>Limpar filtros<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-clear</span>&gt;</span>Limpar tudo<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre></div>
+<h2 id="busca-junto-com-filtros-num-formulário">Busca junto com filtros num formulário <a class="anchor" href="#busca-junto-com-filtros-num-formulário" aria-label="Link para esta seção">#</a></h2>
+<p>Dentro de <code>&lt;form data-paginationjs-filters&gt;</code>, <code>Enter</code> na busca aplica busca e filtros numa só requisição.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">data-paginationjs-filters</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">data-paginationjs-search</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Buscar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Status&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>Todos<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;ativo&quot;</span>&gt;</span>Ativos<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;status=ativo&amp;page=1&amp;limit=20&amp;search=ana&amp;_=...</code></pre></div>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="exemplos-colunas.html"><span>Anterior</span>Colunas</a><a class="next" href="exemplos-filtros.html"><span>Próxima</span>Filtros</a></nav>
+        </main>
+    </div>
+</body>
+</html>

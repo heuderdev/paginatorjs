@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laravel — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/laravel.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html" aria-current="page">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#layout-blade">Layout Blade</a></li><li><a href="#a-com-responseservice-mesmo-contrato-do-joomla">A. Com ResponseService (mesmo contrato do Joomla)</a></li><li><a href="#b-com-paginate-puro-ou-api-resource">B. Com paginate() puro ou API Resource</a></li><li><a href="#a-view">A view</a></li><li><a href="#token-csrf-no-laravel">Token CSRF no Laravel</a></li><li><a href="#put-patch-e-delete">PUT, PATCH e DELETE</a></li><li><a href="#respostas-de-erro">Respostas de erro</a></li></ul></nav>
+<h1 id="laravel">Laravel</h1>
+<p>A biblioteca funciona igual no Laravel (Blade). O navegador não depende do framework; o que muda é <strong>o que o
+endpoint devolve</strong> e <strong>como o token CSRF é enviado</strong>. Há dois caminhos para o endpoint:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Caminho</th>
+<th>Quando usar</th>
+<th>Na view</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A.</strong> <code>ResponseService::paginated()</code></td>
+<td>Projetos que já usam o <code>ResponseService.php</code> (mesmo contrato do <code>ApiResponseHelper</code> do Joomla)</td>
+<td>nada a configurar</td>
+</tr>
+<tr>
+<td><strong>B.</strong> <code>paginate()</code> puro ou API Resource</td>
+<td>Projetos Laravel comuns</td>
+<td><code>data-paginationjs-adapter=&quot;laravel&quot;</code></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout callout-result"><p><strong>Resultado:</strong> verificado num Laravel 13.37 real (SQLite, <code>VerifyCsrfToken</code> ativo): listagem, paginação,
+ordenação, filtros <code>uf[]</code>, busca, ações <code>POST</code> e <code>DELETE</code> (via <code>_method</code>), validação 422, 401, token vencido
+(419), <code>paginate()</code> puro e API Resource — 16 de 16 verificações.</p>
+</blockquote>
+<h2 id="layout-blade">Layout Blade <a class="anchor" href="#layout-blade" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML <span class="code-file">resources/views/layouts/app.blade.php</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;csrf-token&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;{{ csrf_token() }}&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;{{ asset(&#x27;vendor/hr-paginationjs/hr-paginationjs.min.css&#x27;) }}&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    @yield(&#x27;content&#x27;)
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;{{ asset(&#x27;js/jquery.min.js&#x27;) }}&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;{{ asset(&#x27;vendor/hr-paginationjs/pagination-2.6.0.min.js&#x27;) }}&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;{{ asset(&#x27;vendor/hr-paginationjs/hr-paginationjs.min.js&#x27;) }}&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre></div>
+<p>Copie <code>dist/hr-paginationjs.min.js</code>, <code>dist/hr-paginationjs.min.css</code> e <code>dist/pagination-2.6.0.min.js</code> para
+<code>public/vendor/hr-paginationjs/</code>. O jQuery pode ser qualquer versão de 1.7 a 4.x (inclusive <em>slim</em>), inclusive o
+que já vem no seu <code>vite</code>/<code>app.js</code> — desde que esteja em <code>window.jQuery</code> antes do Pagination.js.</p>
+<h2 id="a-com-responseservice-mesmo-contrato-do-joomla">A. Com ResponseService (mesmo contrato do Joomla) <a class="anchor" href="#a-com-responseservice-mesmo-contrato-do-joomla" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">routes/web.php</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">App</span>\<span class="hljs-title">Http</span>\<span class="hljs-title">Controllers</span>\<span class="hljs-title">ClienteController</span>;
+
+<span class="hljs-title class_">Route</span>::<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;/clientes&#x27;</span>, [<span class="hljs-title class_">ClienteController</span>::<span class="hljs-variable language_">class</span>, <span class="hljs-string">&#x27;index&#x27;</span>])-&gt;<span class="hljs-title function_ invoke__">name</span>(<span class="hljs-string">&#x27;clientes.index&#x27;</span>);
+<span class="hljs-title class_">Route</span>::<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;/clientes/dados&#x27;</span>, [<span class="hljs-title class_">ClienteController</span>::<span class="hljs-variable language_">class</span>, <span class="hljs-string">&#x27;listar&#x27;</span>])-&gt;<span class="hljs-title function_ invoke__">name</span>(<span class="hljs-string">&#x27;clientes.listar&#x27;</span>);
+<span class="hljs-title class_">Route</span>::<span class="hljs-title function_ invoke__">post</span>(<span class="hljs-string">&#x27;/clientes/{cliente}/status&#x27;</span>, [<span class="hljs-title class_">ClienteController</span>::<span class="hljs-variable language_">class</span>, <span class="hljs-string">&#x27;status&#x27;</span>])-&gt;<span class="hljs-title function_ invoke__">name</span>(<span class="hljs-string">&#x27;clientes.status&#x27;</span>);
+<span class="hljs-title class_">Route</span>::<span class="hljs-title function_ invoke__">delete</span>(<span class="hljs-string">&#x27;/clientes/{cliente}&#x27;</span>, [<span class="hljs-title class_">ClienteController</span>::<span class="hljs-variable language_">class</span>, <span class="hljs-string">&#x27;destroy&#x27;</span>])-&gt;<span class="hljs-title function_ invoke__">name</span>(<span class="hljs-string">&#x27;clientes.destroy&#x27;</span>);</code></pre></div>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">app/Http/Controllers/ClienteController.php</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-meta">&lt;?php</span>
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title class_">App</span>\<span class="hljs-title class_">Http</span>\<span class="hljs-title class_">Controllers</span>;
+
+<span class="hljs-keyword">use</span> <span class="hljs-title">App</span>\<span class="hljs-title">Models</span>\<span class="hljs-title">Cliente</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">App</span>\<span class="hljs-title">Services</span>\<span class="hljs-title">ResponseService</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Http</span>\<span class="hljs-title">Request</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Validation</span>\<span class="hljs-title">Rule</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ClienteController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Controller</span>
+</span>{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ORDENAVEIS</span> = [<span class="hljs-string">&#x27;id&#x27;</span> =&gt; <span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;nome&#x27;</span> =&gt; <span class="hljs-string">&#x27;nome&#x27;</span>, <span class="hljs-string">&#x27;limite&#x27;</span> =&gt; <span class="hljs-string">&#x27;limite_credito&#x27;</span>, <span class="hljs-string">&#x27;criado&#x27;</span> =&gt; <span class="hljs-string">&#x27;created_at&#x27;</span>];
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">index</span>(<span class="hljs-params"></span>)
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">view</span>(<span class="hljs-string">&#x27;clientes.index&#x27;</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">listar</span>(<span class="hljs-params">Request <span class="hljs-variable">$request</span></span>)
+    </span>{
+        <span class="hljs-variable language_">$this</span>-&gt;<span class="hljs-title function_ invoke__">authorize</span>(<span class="hljs-string">&#x27;viewAny&#x27;</span>, <span class="hljs-title class_">Cliente</span>::<span class="hljs-variable language_">class</span>);
+
+        <span class="hljs-variable">$limite</span> = <span class="hljs-title function_ invoke__">min</span>(<span class="hljs-number">100</span>, <span class="hljs-title function_ invoke__">max</span>(<span class="hljs-number">1</span>, <span class="hljs-variable">$request</span>-&gt;<span class="hljs-keyword">integer</span>(<span class="hljs-string">&#x27;limit&#x27;</span>, <span class="hljs-number">20</span>)));
+        <span class="hljs-variable">$sort</span> = <span class="hljs-title function_ invoke__">array_key_exists</span>((<span class="hljs-keyword">string</span>) <span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">input</span>(<span class="hljs-string">&#x27;sort&#x27;</span>), <span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">ORDENAVEIS</span>) ? (<span class="hljs-keyword">string</span>) <span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">input</span>(<span class="hljs-string">&#x27;sort&#x27;</span>) : <span class="hljs-string">&#x27;criado&#x27;</span>;
+        <span class="hljs-variable">$direcao</span> = <span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">input</span>(<span class="hljs-string">&#x27;direction&#x27;</span>) === <span class="hljs-string">&#x27;asc&#x27;</span> ? <span class="hljs-string">&#x27;asc&#x27;</span> : <span class="hljs-string">&#x27;desc&#x27;</span>;
+        <span class="hljs-variable">$busca</span> = <span class="hljs-title function_ invoke__">trim</span>((<span class="hljs-keyword">string</span>) <span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">input</span>(<span class="hljs-string">&#x27;search&#x27;</span>));
+
+        <span class="hljs-variable">$query</span> = <span class="hljs-title class_">Cliente</span>::<span class="hljs-title function_ invoke__">query</span>()
+            -&gt;<span class="hljs-title function_ invoke__">select</span>(<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;nome&#x27;</span>, <span class="hljs-string">&#x27;email&#x27;</span>, <span class="hljs-string">&#x27;uf&#x27;</span>, <span class="hljs-string">&#x27;limite_credito&#x27;</span>, <span class="hljs-string">&#x27;status&#x27;</span>, <span class="hljs-string">&#x27;created_at&#x27;</span>)
+            -&gt;<span class="hljs-title function_ invoke__">when</span>(<span class="hljs-variable">$busca</span> !== <span class="hljs-string">&#x27;&#x27;</span>, fn (<span class="hljs-variable">$q</span>) =&gt; <span class="hljs-variable">$q</span>-&gt;<span class="hljs-title function_ invoke__">where</span>(fn (<span class="hljs-variable">$g</span>) =&gt; <span class="hljs-variable">$g</span>
+                -&gt;<span class="hljs-title function_ invoke__">where</span>(<span class="hljs-string">&#x27;nome&#x27;</span>, <span class="hljs-string">&#x27;like&#x27;</span>, <span class="hljs-string">&quot;%<span class="hljs-subst">{$busca}</span>%&quot;</span>)
+                -&gt;<span class="hljs-title function_ invoke__">orWhere</span>(<span class="hljs-string">&#x27;email&#x27;</span>, <span class="hljs-string">&#x27;like&#x27;</span>, <span class="hljs-string">&quot;%<span class="hljs-subst">{$busca}</span>%&quot;</span>)))
+            -&gt;<span class="hljs-title function_ invoke__">when</span>(<span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">filled</span>(<span class="hljs-string">&#x27;status&#x27;</span>), fn (<span class="hljs-variable">$q</span>) =&gt; <span class="hljs-variable">$q</span>-&gt;<span class="hljs-title function_ invoke__">whereIn</span>(<span class="hljs-string">&#x27;status&#x27;</span>,
+                <span class="hljs-title function_ invoke__">array_intersect</span>((<span class="hljs-keyword">array</span>) <span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">input</span>(<span class="hljs-string">&#x27;status&#x27;</span>), [<span class="hljs-string">&#x27;ativo&#x27;</span>, <span class="hljs-string">&#x27;inativo&#x27;</span>])))
+            -&gt;<span class="hljs-title function_ invoke__">when</span>(<span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">filled</span>(<span class="hljs-string">&#x27;uf&#x27;</span>), fn (<span class="hljs-variable">$q</span>) =&gt; <span class="hljs-variable">$q</span>-&gt;<span class="hljs-title function_ invoke__">whereIn</span>(<span class="hljs-string">&#x27;uf&#x27;</span>, (<span class="hljs-keyword">array</span>) <span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">input</span>(<span class="hljs-string">&#x27;uf&#x27;</span>)))
+            -&gt;<span class="hljs-title function_ invoke__">orderBy</span>(<span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">ORDENAVEIS</span>[<span class="hljs-variable">$sort</span>], <span class="hljs-variable">$direcao</span>)
+            -&gt;<span class="hljs-title function_ invoke__">orderBy</span>(<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;desc&#x27;</span>);
+
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">ResponseService</span>::<span class="hljs-title function_ invoke__">paginated</span>(<span class="hljs-variable">$query</span>-&gt;<span class="hljs-title function_ invoke__">paginate</span>(<span class="hljs-variable">$limite</span>));
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">status</span>(<span class="hljs-params">Request <span class="hljs-variable">$request</span>, Cliente <span class="hljs-variable">$cliente</span></span>)
+    </span>{
+        <span class="hljs-variable language_">$this</span>-&gt;<span class="hljs-title function_ invoke__">authorize</span>(<span class="hljs-string">&#x27;update&#x27;</span>, <span class="hljs-variable">$cliente</span>);
+
+        <span class="hljs-variable">$dados</span> = <span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">validate</span>([<span class="hljs-string">&#x27;status&#x27;</span> =&gt; [<span class="hljs-string">&#x27;required&#x27;</span>, <span class="hljs-title class_">Rule</span>::<span class="hljs-title function_ invoke__">in</span>([<span class="hljs-string">&#x27;ativo&#x27;</span>, <span class="hljs-string">&#x27;inativo&#x27;</span>])]]);
+        <span class="hljs-variable">$cliente</span>-&gt;<span class="hljs-title function_ invoke__">update</span>(<span class="hljs-variable">$dados</span>);
+
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">ResponseService</span>::<span class="hljs-title function_ invoke__">updated</span>(<span class="hljs-variable">$dados</span>[<span class="hljs-string">&#x27;status&#x27;</span>] === <span class="hljs-string">&#x27;ativo&#x27;</span> ? <span class="hljs-string">&#x27;Cliente ativado.&#x27;</span> : <span class="hljs-string">&#x27;Cliente desativado.&#x27;</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">destroy</span>(<span class="hljs-params">Cliente <span class="hljs-variable">$cliente</span></span>)
+    </span>{
+        <span class="hljs-variable language_">$this</span>-&gt;<span class="hljs-title function_ invoke__">authorize</span>(<span class="hljs-string">&#x27;delete&#x27;</span>, <span class="hljs-variable">$cliente</span>);
+        <span class="hljs-variable">$cliente</span>-&gt;<span class="hljs-title function_ invoke__">delete</span>();
+
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">ResponseService</span>::<span class="hljs-title function_ invoke__">deleted</span>(<span class="hljs-string">&#x27;Cliente excluído.&#x27;</span>);
+    }
+}</code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> o <code>paginate()</code> do Laravel já lê o parâmetro <code>page</code> sozinho; você só lê <code>limit</code>, <code>sort</code>, <code>direction</code>,
+<code>search</code> e os filtros.</p>
+</blockquote>
+<p>Para que validação (422), <code>abort(401/403)</code>, token vencido (419) e exceções também saiam no envelope, registre o
+<code>ResponseService::fromThrowable()</code>:</p>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">bootstrap/app.php (Laravel 11+)</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php">-&gt;<span class="hljs-title function_ invoke__">withExceptions</span>(function (Exceptions <span class="hljs-variable">$exceptions</span>): <span class="hljs-keyword">void</span> {
+    <span class="hljs-variable">$exceptions</span>-&gt;<span class="hljs-title function_ invoke__">render</span>(function (\<span class="hljs-built_in">Throwable</span> <span class="hljs-variable">$e</span>, \Illuminate\Http\Request <span class="hljs-variable">$request</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">expectsJson</span>()) {
+            <span class="hljs-keyword">return</span> <span class="hljs-title class_">\App\Services\ResponseService</span>::<span class="hljs-title function_ invoke__">fromThrowable</span>(<span class="hljs-variable">$e</span>);
+        }
+    });
+})</code></pre></div>
+<h2 id="b-com-paginate-puro-ou-api-resource">B. Com <code>paginate()</code> puro ou API Resource <a class="anchor" href="#b-com-paginate-puro-ou-api-resource" aria-label="Link para esta seção">#</a></h2>
+<p>Sem <code>ResponseService</code>, basta indicar o adaptador <code>laravel</code>:</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-adapter</span>=<span class="hljs-string">&quot;laravel&quot;</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;{{ route(&#x27;clientes.listar&#x27;) }}&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">O controller pode devolver qualquer um destes</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-keyword">return</span> <span class="hljs-title class_">Cliente</span>::<span class="hljs-title function_ invoke__">query</span>()-&gt;<span class="hljs-title function_ invoke__">orderBy</span>(<span class="hljs-string">&#x27;id&#x27;</span>)-&gt;<span class="hljs-title function_ invoke__">paginate</span>(<span class="hljs-variable">$limite</span>);                     <span class="hljs-comment">// paginate() puro</span>
+
+<span class="hljs-keyword">return</span> <span class="hljs-title class_">ClienteResource</span>::<span class="hljs-title function_ invoke__">collection</span>(<span class="hljs-title class_">Cliente</span>::<span class="hljs-title function_ invoke__">query</span>()-&gt;<span class="hljs-title function_ invoke__">paginate</span>(<span class="hljs-variable">$limite</span>));       <span class="hljs-comment">// API Resource</span>
+
+<span class="hljs-keyword">return</span> <span class="hljs-title class_">ResponseService</span>::<span class="hljs-title function_ invoke__">paginated</span>(<span class="hljs-title class_">Cliente</span>::<span class="hljs-title function_ invoke__">query</span>()-&gt;<span class="hljs-title function_ invoke__">paginate</span>(<span class="hljs-variable">$limite</span>));        <span class="hljs-comment">// envelope (também aceito)</span></code></pre></div>
+<div class="code-block code-json"><div class="code-head"><span class="code-lang">JSON <span class="code-file">paginate() puro — o que o adaptador lê</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;current_page&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> ... <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;per_page&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;total&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">137</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;last_page&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">7</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;...&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span> <span class="hljs-punctuation">}</span></code></pre></div>
+<div class="code-block code-json"><div class="code-head"><span class="code-lang">JSON <span class="code-file">API Resource — o que o adaptador lê</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> ... <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;links&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> ... <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;meta&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;current_page&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;per_page&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;total&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">137</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;last_page&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">7</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span></code></pre></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> use <code>paginate()</code>. <code>simplePaginate()</code> e <code>cursorPaginate()</code> não informam o total, então a listagem
+mostra “resposta inválida” em vez de uma lista incompleta.</p>
+</blockquote>
+<h2 id="a-view">A view <a class="anchor" href="#a-view" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML <span class="code-file">resources/views/clientes/index.blade.php</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml">@extends(&#x27;layouts.app&#x27;)
+
+@section(&#x27;content&#x27;)
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span>
+     <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;{{ route(&#x27;clientes.listar&#x27;) }}&quot;</span>
+     <span class="hljs-attr">data-paginationjs-csrf</span>=<span class="hljs-string">&quot;header&quot;</span>
+     <span class="hljs-attr">data-paginationjs-sort</span>=<span class="hljs-string">&quot;criado&quot;</span>
+     <span class="hljs-attr">data-paginationjs-direction</span>=<span class="hljs-string">&quot;desc&quot;</span>
+     <span class="hljs-attr">data-paginationjs-persist</span>
+     <span class="hljs-attr">data-paginationjs-user</span>=<span class="hljs-string">&quot;{{ auth()-&gt;id() }}&quot;</span>
+     <span class="hljs-attr">data-paginationjs-toolbar</span>=<span class="hljs-string">&quot;search,limit,columns,reload&quot;</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">data-paginationjs-filters</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Status&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>Todos<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;ativo&quot;</span>&gt;</span>Ativos<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;inativo&quot;</span>&gt;</span>Inativos<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;uf[]&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;SP&quot;</span>&gt;</span> SP<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;uf[]&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;RJ&quot;</span>&gt;</span> RJ<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;table&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;id&quot;</span> <span class="hljs-attr">data-paginationjs-sortable</span> <span class="hljs-attr">data-paginationjs-required</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span> <span class="hljs-attr">data-paginationjs-sortable</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;limite&quot;</span> <span class="hljs-attr">data-paginationjs-field</span>=<span class="hljs-string">&quot;limite_credito&quot;</span>
+                    <span class="hljs-attr">data-paginationjs-sortable</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;money&quot;</span>&gt;</span>Limite<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;criado&quot;</span> <span class="hljs-attr">data-paginationjs-field</span>=<span class="hljs-string">&quot;created_at&quot;</span>
+                    <span class="hljs-attr">data-paginationjs-sortable</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;datetime&quot;</span>&gt;</span>Cadastro<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;acoes&quot;</span> <span class="hljs-attr">data-paginationjs-actions</span> <span class="hljs-attr">data-paginationjs-template</span>=<span class="hljs-string">&quot;tpl-acoes&quot;</span>&gt;</span>Ações<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-acoes&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-if</span>=<span class="hljs-string">&quot;status=ativo&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;desativar&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;{{ url(&#x27;/clientes&#x27;) }}/{id}/status&quot;</span>
+            <span class="hljs-attr">data-paginationjs-param-status</span>=<span class="hljs-string">&quot;inativo&quot;</span>&gt;</span>Desativar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;excluir&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;{{ url(&#x27;/clientes&#x27;) }}/{id}&quot;</span>
+            <span class="hljs-attr">data-paginationjs-param-_method</span>=<span class="hljs-string">&quot;DELETE&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action-confirm</span>=<span class="hljs-string">&quot;Excluir {nome}?&quot;</span>&gt;</span>Excluir<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+@endsection</code></pre></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> no Blade, <code>{{ }}</code> é do Laravel e <code>{id}</code> / <code>{nome}</code> (chave simples) são da biblioteca — os dois
+convivem sem conflito. Se precisar escrever <code>{{</code> literal dentro de um template, use <code>@{{</code>.</p>
+</blockquote>
+<h2 id="token-csrf-no-laravel">Token CSRF no Laravel <a class="anchor" href="#token-csrf-no-laravel" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Na página</th>
+<th>O que a biblioteca envia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;meta name=&quot;csrf-token&quot; content=&quot;{{ csrf_token() }}&quot;&gt;</code></td>
+<td>cabeçalho <code>X-CSRF-Token</code> (o <code>VerifyCsrfToken</code> aceita)</td>
+</tr>
+<tr>
+<td><code>@csrf</code> (campo <code>_token</code>) na página</td>
+<td>cabeçalho <code>X-CSRF-Token</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada <span class="code-file">Ação &quot;Desativar&quot; com data-paginationjs-csrf=&quot;header&quot;</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">POST /clientes/42/status
+<span class="hljs-attribute">X-CSRF-Token</span><span class="hljs-punctuation">: </span>m3Jq…Yv0a
+<span class="hljs-attribute">X-Requested-With</span><span class="hljs-punctuation">: </span>XMLHttpRequest
+
+id=42&amp;status=inativo</code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> use <code>data-paginationjs-csrf=&quot;header&quot;</code> nas listagens do Laravel. Sem ele, quando o token vem só da
+<code>&lt;meta&gt;</code>, a biblioteca também acrescenta o campo <code>&lt;token&gt;=1</code> no corpo (formato do Joomla) — o Laravel ignora,
+mas o campo aparece em <code>$request-&gt;all()</code>. Com <code>@csrf</code> na página, só o cabeçalho é enviado automaticamente.</p>
+</blockquote>
+<h2 id="put-patch-e-delete">PUT, PATCH e DELETE <a class="anchor" href="#put-patch-e-delete" aria-label="Link para esta seção">#</a></h2>
+<p>As ações saem como <code>POST</code> (ou <code>GET</code>). Para rotas <code>Route::delete</code>/<code>put</code>/<code>patch</code>, envie <code>_method</code>:</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;excluir&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;{{ url(&#x27;/clientes&#x27;) }}/{id}&quot;</span>
+        <span class="hljs-attr">data-paginationjs-param-_method</span>=<span class="hljs-string">&quot;DELETE&quot;</span>&gt;</span>Excluir<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre></div>
+<h2 id="respostas-de-erro">Respostas de erro <a class="anchor" href="#respostas-de-erro" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>O Laravel responde</th>
+<th>A listagem mostra / <code>kind</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>401 (não autenticado)</td>
+<td><code>session</code> — mensagem do servidor</td>
+</tr>
+<tr>
+<td>419 (token/sessão vencidos)</td>
+<td><code>session</code> — mensagem do servidor</td>
+</tr>
+<tr>
+<td>403 (<code>authorize</code>)</td>
+<td><code>permission</code></td>
+</tr>
+<tr>
+<td>422 (<code>validate</code>)</td>
+<td><code>http</code> — com <code>ResponseService</code>, a primeira mensagem de validação; sem ele, o <code>message</code> do Laravel</td>
+</tr>
+<tr>
+<td>500</td>
+<td><code>http</code> — mensagem pública (nunca o stack trace)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript <span class="code-file">Levar ao login quando a sessão acabar (401 ou 419)</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:error&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">if</span> (e.<span class="hljs-property">detail</span>.<span class="hljs-property">error</span>.<span class="hljs-property">kind</span> === <span class="hljs-string">&#x27;session&#x27;</span>) {
+        <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span> = <span class="hljs-string">&#x27;/login&#x27;</span>;
+    }
+});</code></pre></div>
+<p>Ações aceitam como sucesso: envelope com <code>success: true</code>, qualquer JSON 2xx sem <code>success</code> (ex.:
+<code>response()-&gt;json([&#39;message&#39; =&gt; &#39;Excluído.&#39;])</code>, a mensagem aparece no aviso) e <code>204 No Content</code>
+(<code>response()-&gt;noContent()</code>).</p>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="primeira-tela.html"><span>Anterior</span>Primeira tela em 2 minutos</a><a class="next" href="exemplos.html"><span>Próxima</span>Exemplos</a></nav>
+        </main>
+    </div>
+</body>
+</html>

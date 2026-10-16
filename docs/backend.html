@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Contrato da API e adaptadores — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
     <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
 </head>
 <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -14,26 +17,12 @@
     </header>
     <div class="layout">
         <nav class="sidebar" aria-label="Documentação">
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
-                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
-                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
-                <li><a href="colunas.html">Colunas</a></li>
-                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
-                <li><a href="controles.html">Controles declarativos</a></li>
-                <li><a href="acoes.html">Ações por linha</a></li>
-                <li><a href="api-js.html">API JavaScript</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="backend.html" aria-current="page">Contrato da API e adaptadores</a></li>
-                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
-                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
-                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
-                <li><a href="testes.html">Testes</a></li>
-            </ul>
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html" aria-current="page">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
         </nav>
         <main id="conteudo" class="content">
-<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#adaptador-padrão-apiresponse--apiresponsehelperpaginated">Adaptador padrão apiresponse — ApiResponseHelper::paginated()</a></li><li><a href="#adaptador-datatables-apis-legadas">Adaptador datatables (APIs legadas)</a></li><li><a href="#adaptador-próprio">Adaptador próprio</a></li><li><a href="#exportação">Exportação</a></li></ul></nav>
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#adaptador-padrão-apiresponse--apiresponsehelperpaginated">Adaptador padrão apiresponse — ApiResponseHelper::paginated()</a></li><li><a href="#adaptador-laravel">Adaptador laravel</a></li><li><a href="#adaptador-datatables-apis-legadas">Adaptador datatables (APIs legadas)</a></li><li><a href="#adaptador-próprio">Adaptador próprio</a></li><li><a href="#exportação">Exportação</a></li></ul></nav>
 <h1 id="contrato-da-api-e-adaptadores">Contrato da API e adaptadores</h1>
 <h2 id="adaptador-padrão-apiresponse--apiresponsehelperpaginated">Adaptador padrão <code>apiresponse</code> — <code>ApiResponseHelper::paginated()</code> <a class="anchor" href="#adaptador-padrão-apiresponse--apiresponsehelperpaginated" aria-label="Link para esta seção">#</a></h2>
 <p>O contrato oficial é o retorno real de <code>ApiResponseHelper::paginated($resultadoDoOrmBasePaginate)</code>.
@@ -96,18 +85,17 @@ do jQuery). <code>InputHelper</code> ignora esse parâmetro.</li>
 <li>Um filtro com o mesmo nome de um parâmetro reservado é ignorado (aviso no console).</li>
 </ul>
 <h3 id="resposta-esperada">Resposta esperada <a class="anchor" href="#resposta-esperada" aria-label="Link para esta seção">#</a></h3>
-<pre><code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;status&quot;: &quot;sucesso&quot;,
-    &quot;mensagem&quot;: &quot;Registros carregados.&quot;,
-    &quot;data&quot;: [ { &quot;id&quot;: 1, &quot;nome&quot;: &quot;Ana&quot; } ],
-    &quot;errors&quot;: [],
-    &quot;request_id&quot;: &quot;6bf735c3d97b99f4&quot;,
-    &quot;meta&quot;: {
-        &quot;paginacao&quot;: { &quot;total&quot;: 135, &quot;por_pagina&quot;: 20, &quot;pagina_atual&quot;: 1, &quot;total_paginas&quot;: 7 }
-    }
-}
-</code></pre>
+<div class="code-block code-json"><div class="code-head"><span class="code-lang">JSON</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;success&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;sucesso&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;mensagem&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Registros carregados.&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;nome&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Ana&quot;</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;errors&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;request_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6bf735c3d97b99f4&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;meta&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-attr">&quot;paginacao&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;total&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">135</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;por_pagina&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;pagina_atual&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;total_paginas&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">7</span> <span class="hljs-punctuation">}</span>
+    <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre></div>
 <p>Validação feita pela biblioteca:</p>
 <div class="table-wrap"><table>
 <thead>
@@ -139,35 +127,61 @@ do jQuery). <code>InputHelper</code> ignora esse parâmetro.</li>
 <code>X-Request-Id</code>) é guardado e mostrado na mensagem de erro para diagnóstico. <code>errors</code> é repassado como veio
 (o helper normaliza para <code>{ &quot;campo&quot;: [&quot;msg&quot;] }</code>, ou <code>[]</code> quando vazio).</p>
 <h3 id="controller-de-referência-php-70--joomla-3">Controller de referência (PHP 7.0 / Joomla 3) <a class="anchor" href="#controller-de-referência-php-70--joomla-3" aria-label="Link para esta seção">#</a></h3>
-<pre><code class="language-php">public function listar()
-{
-    try {
-        if (!PermissionHelper::require(&#39;core.manage&#39;, &#39;com_loja&#39;)) {
-            return;
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">listar</span>(<span class="hljs-params"></span>)
+</span>{
+    <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">PermissionHelper</span>::<span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;core.manage&#x27;</span>, <span class="hljs-string">&#x27;com_loja&#x27;</span>)) {
+            <span class="hljs-keyword">return</span>;
         }
 
-        // key pública -&gt; coluna real (lista branca). Nada do navegador vira SQL.
-        $mapa = array(&#39;id&#39; =&gt; &#39;id&#39;, &#39;nome&#39; =&gt; &#39;nome&#39;, &#39;criado&#39; =&gt; &#39;created_at&#39;);
+        <span class="hljs-comment">// key pública -&gt; coluna real (lista branca). Nada do navegador vira SQL.</span>
+        <span class="hljs-variable">$mapa</span> = <span class="hljs-keyword">array</span>(<span class="hljs-string">&#x27;id&#x27;</span> =&gt; <span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;nome&#x27;</span> =&gt; <span class="hljs-string">&#x27;nome&#x27;</span>, <span class="hljs-string">&#x27;criado&#x27;</span> =&gt; <span class="hljs-string">&#x27;created_at&#x27;</span>);
 
-        $pagina = InputHelper::pagination(20, 100);                              // teto de 100 por página
-        $ordem = InputHelper::sorting(array_keys($mapa), &#39;criado&#39;, &#39;DESC&#39;);
+        <span class="hljs-variable">$pagina</span> = <span class="hljs-title class_">InputHelper</span>::<span class="hljs-title function_ invoke__">pagination</span>(<span class="hljs-number">20</span>, <span class="hljs-number">100</span>);                              <span class="hljs-comment">// teto de 100 por página</span>
+        <span class="hljs-variable">$ordem</span> = <span class="hljs-title class_">InputHelper</span>::<span class="hljs-title function_ invoke__">sorting</span>(<span class="hljs-title function_ invoke__">array_keys</span>(<span class="hljs-variable">$mapa</span>), <span class="hljs-string">&#x27;criado&#x27;</span>, <span class="hljs-string">&#x27;DESC&#x27;</span>);
 
-        $query = $this-&gt;filtrar(OrmTables::table(&#39;#__loja_clientes&#39;)-&gt;select(&#39;id, nome, created_at&#39;))
-            -&gt;orderBy($mapa[$ordem[&#39;field&#39;]], $ordem[&#39;direction&#39;])
-            -&gt;orderBy(&#39;id&#39;, &#39;DESC&#39;);                                              // desempate estável
+        <span class="hljs-variable">$query</span> = <span class="hljs-variable language_">$this</span>-&gt;<span class="hljs-title function_ invoke__">filtrar</span>(<span class="hljs-title class_">OrmTables</span>::<span class="hljs-title function_ invoke__">table</span>(<span class="hljs-string">&#x27;#__loja_clientes&#x27;</span>)-&gt;<span class="hljs-title function_ invoke__">select</span>(<span class="hljs-string">&#x27;id, nome, created_at&#x27;</span>))
+            -&gt;<span class="hljs-title function_ invoke__">orderBy</span>(<span class="hljs-variable">$mapa</span>[<span class="hljs-variable">$ordem</span>[<span class="hljs-string">&#x27;field&#x27;</span>]], <span class="hljs-variable">$ordem</span>[<span class="hljs-string">&#x27;direction&#x27;</span>])
+            -&gt;<span class="hljs-title function_ invoke__">orderBy</span>(<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;DESC&#x27;</span>);                                              <span class="hljs-comment">// desempate estável</span>
 
-        return ApiResponseHelper::paginated($query-&gt;paginate($pagina[&#39;limit&#39;], $pagina[&#39;page&#39;]));
-    } catch (Throwable $e) {
-        return ApiResponseHelper::exception($e);
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">ApiResponseHelper</span>::<span class="hljs-title function_ invoke__">paginated</span>(<span class="hljs-variable">$query</span>-&gt;<span class="hljs-title function_ invoke__">paginate</span>(<span class="hljs-variable">$pagina</span>[<span class="hljs-string">&#x27;limit&#x27;</span>], <span class="hljs-variable">$pagina</span>[<span class="hljs-string">&#x27;page&#x27;</span>]));
+    } <span class="hljs-keyword">catch</span> (<span class="hljs-built_in">Throwable</span> <span class="hljs-variable">$e</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">ApiResponseHelper</span>::<span class="hljs-title function_ invoke__">exception</span>(<span class="hljs-variable">$e</span>);
     }
-}
-</code></pre>
+}</code></pre></div>
 <p><code>OrmBase::paginate()</code> conta com <strong>os mesmos filtros</strong> e aplica <code>LIMIT/OFFSET</code> no banco. O objeto <code>JPagination</code>
 que ele devolve é descartado pelo <code>paginated()</code> (não é serializado).</p>
 <h3 id="página-além-da-última">Página além da última <a class="anchor" href="#página-além-da-última" aria-label="Link para esta seção">#</a></h3>
 <p><code>OrmBase::paginate()</code> não corrige a página: devolve <code>data: []</code> com o <code>total</code> real. A biblioteca detecta
 <code>data</code> vazio + <code>total &gt; 0</code> + página &gt; última e faz <strong>uma</strong> nova requisição para a última página. Se essa ainda
 vier vazia (registros apagados no meio), mostra o estado vazio — nunca entra em ciclo.</p>
+<h2 id="adaptador-laravel">Adaptador <code>laravel</code> <a class="anchor" href="#adaptador-laravel" aria-label="Link para esta seção">#</a></h2>
+<p><code>data-paginationjs-adapter=&quot;laravel&quot;</code> — envia os mesmos parâmetros do padrão (<code>page</code>, <code>limit</code>, <code>sort</code>,
+<code>direction</code>, <code>search</code>, filtros) e aceita três respostas:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Resposta</th>
+<th>Lido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>paginate()</code> puro</td>
+<td><code>data</code>, <code>total</code>, <code>per_page</code>, <code>current_page</code>, <code>last_page</code></td>
+</tr>
+<tr>
+<td>API Resource (<code>Resource::collection($paginator)</code>)</td>
+<td><code>data</code> e <code>meta.total</code>, <code>meta.per_page</code>, <code>meta.current_page</code>, <code>meta.last_page</code></td>
+</tr>
+<tr>
+<td><code>ResponseService::paginated()</code></td>
+<td>igual ao adaptador <code>apiresponse</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Sem <code>total</code> numérico (ex.: <code>simplePaginate()</code>, <code>cursorPaginate()</code>) a resposta é tratada como inválida.
+Guia completo: <a href="laravel.html">Laravel</a>.</p>
 <h2 id="adaptador-datatables-apis-legadas">Adaptador <code>datatables</code> (APIs legadas) <a class="anchor" href="#adaptador-datatables-apis-legadas" aria-label="Link para esta seção">#</a></h2>
 <p><code>data-paginationjs-adapter=&quot;datatables&quot;</code></p>
 <div class="table-wrap"><table>
@@ -236,25 +250,24 @@ vier vazia (registros apagados no meio), mostra o estado vazio — nunca entra e
 </table></div>
 <p>Os nomes podem ser trocados com <code>data-paginationjs-names</code> (chaves: <code>draw</code>, <code>start</code>, <code>length</code>, <code>search</code>, <code>sort</code>, <code>direction</code>).</p>
 <h2 id="adaptador-próprio">Adaptador próprio <a class="anchor" href="#adaptador-próprio" aria-label="Link para esta seção">#</a></h2>
-<pre><code class="language-js">HrPaginationjs.adapter(&#39;legado-xyz&#39;, {
-    names: { page: &#39;pg&#39;, limit: &#39;qtd&#39;, search: &#39;q&#39;, sort: &#39;ord&#39;, direction: &#39;dir&#39; },
-    cacheExclude: [],
-    params: function (state, ctx) {
-        // state: { page, limit, search, sort, direction, filters } — devolve só os parâmetros de controle;
-        // os filtros e os params fixos são acrescentados pela biblioteca.
-        var p = {};
-        p[ctx.names.page] = state.page;
-        p[ctx.names.limit] = state.limit;
-        if (state.search) p[ctx.names.search] = state.search;
-        return p;
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">adapter</span>(<span class="hljs-string">&#x27;legado-xyz&#x27;</span>, {
+    <span class="hljs-attr">names</span>: { <span class="hljs-attr">page</span>: <span class="hljs-string">&#x27;pg&#x27;</span>, <span class="hljs-attr">limit</span>: <span class="hljs-string">&#x27;qtd&#x27;</span>, <span class="hljs-attr">search</span>: <span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-attr">sort</span>: <span class="hljs-string">&#x27;ord&#x27;</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;dir&#x27;</span> },
+    <span class="hljs-attr">cacheExclude</span>: [],
+    <span class="hljs-attr">params</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">state, ctx</span>) {
+        <span class="hljs-comment">// state: { page, limit, search, sort, direction, filters } — devolve só os parâmetros de controle;</span>
+        <span class="hljs-comment">// os filtros e os params fixos são acrescentados pela biblioteca.</span>
+        <span class="hljs-keyword">var</span> p = {};
+        p[ctx.<span class="hljs-property">names</span>.<span class="hljs-property">page</span>] = state.<span class="hljs-property">page</span>;
+        p[ctx.<span class="hljs-property">names</span>.<span class="hljs-property">limit</span>] = state.<span class="hljs-property">limit</span>;
+        <span class="hljs-keyword">if</span> (state.<span class="hljs-property">search</span>) p[ctx.<span class="hljs-property">names</span>.<span class="hljs-property">search</span>] = state.<span class="hljs-property">search</span>;
+        <span class="hljs-keyword">return</span> p;
     },
-    parse: function (body, ctx) {
-        if (!body || !Array.isArray(body.itens)) throw ctx.error(&#39;invalid&#39;);
-        if (body.ok === false) throw ctx.error(&#39;api&#39;, body.msg);
-        return { rows: body.itens, total: body.quantidade, page: ctx.state.page, limit: ctx.state.limit };
+    <span class="hljs-attr">parse</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">body, ctx</span>) {
+        <span class="hljs-keyword">if</span> (!body || !<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(body.<span class="hljs-property">itens</span>)) <span class="hljs-keyword">throw</span> ctx.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;invalid&#x27;</span>);
+        <span class="hljs-keyword">if</span> (body.<span class="hljs-property">ok</span> === <span class="hljs-literal">false</span>) <span class="hljs-keyword">throw</span> ctx.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;api&#x27;</span>, body.<span class="hljs-property">msg</span>);
+        <span class="hljs-keyword">return</span> { <span class="hljs-attr">rows</span>: body.<span class="hljs-property">itens</span>, <span class="hljs-attr">total</span>: body.<span class="hljs-property">quantidade</span>, <span class="hljs-attr">page</span>: ctx.<span class="hljs-property">state</span>.<span class="hljs-property">page</span>, <span class="hljs-attr">limit</span>: ctx.<span class="hljs-property">state</span>.<span class="hljs-property">limit</span> };
     }
-});
-</code></pre>
+});</code></pre></div>
 <p><code>parse</code> deve devolver <code>{ rows, total }</code> (e opcionalmente <code>page</code>, <code>limit</code>, <code>totalPages</code>, <code>totalAll</code>, <code>message</code>,
 <code>requestId</code>) ou lançar <code>ctx.error(kind, mensagem?, errors?)</code>. O núcleo não conhece nenhum formato legado.</p>
 <h2 id="exportação">Exportação <a class="anchor" href="#exportação" aria-label="Link para esta seção">#</a></h2>

@@ -1026,6 +1026,139 @@
         }
     });
 
+    test('35 adaptador laravel: paginate(), API Resource, envelope do ResponseService e simplePaginate', function (assert, sandbox) {
+        var html = FIXTURE.replace('data-paginationjs-limit="10"', 'data-paginationjs-limit="10" data-paginationjs-adapter="laravel"');
+        var ctx = start(sandbox, null, html);
+
+        assert.deepEqual(ctx.s.calls[0].params, { page: 1, limit: 10 }, 'mesmos parâmetros do padrão');
+        ctx.s.reply(ctx.s.calls[0], { current_page: 1, data: makeRows(1, 10, 42), per_page: 10, total: 42, last_page: 5, from: 1, to: 10 });
+
+        return tick().then(function () {
+            assert.equal(ctx.instance.getState().total, 42, 'paginate() puro');
+
+            var p = ctx.instance.setPage(2);
+
+            ctx.s.reply(ctx.s.last(), { data: makeRows(2, 10, 42), links: {}, meta: { current_page: 2, per_page: 10, total: 42, last_page: 5 } });
+
+            return p;
+        }).then(function (state) {
+            assert.equal(state.page, 2, 'API Resource (data + meta)');
+            assert.equal(firstCell(ctx.root, 'id').textContent, '11');
+
+            var p = ctx.instance.setPage(3);
+
+            ctx.s.reply(ctx.s.last(), envelope(makeRows(3, 10, 42), 42, 3, 10));
+
+            return p;
+        }).then(function (state) {
+            assert.equal(state.page, 3, 'envelope do ResponseService');
+
+            var p = ctx.instance.setPage(4);
+
+            ctx.s.reply(ctx.s.last(), { current_page: 4, data: [], per_page: 10, next_page_url: null });
+
+            return p.then(null, function (e) {
+                return e;
+            });
+        }).then(function (error) {
+            assert.equal(error.kind, 'invalid', 'simplePaginate (sem total) não vira lista vazia');
+        });
+    });
+
+    test('36 HTTP 419 (token/sessão do Laravel) e mensagem em "message"', function (assert, sandbox) {
+        return loaded(sandbox).then(function (ctx) {
+            var p = ctx.instance.reload();
+
+            ctx.s.fail(ctx.s.last(), 419, 'error', { message: 'CSRF token mismatch.' });
+
+            return p.then(null, function (error) {
+                assert.equal(error.kind, 'session');
+                assert.equal(error.message, 'CSRF token mismatch.');
+
+                var p2 = ctx.instance.reload();
+
+                ctx.s.fail(ctx.s.last(), 422, 'error', { message: 'The given data was invalid.', errors: { status: ['Inválido.'] } });
+
+                return p2;
+            }).then(null, function (error) {
+                assert.equal(error.kind, 'http');
+                assert.equal(error.message, 'The given data was invalid.', 'lê "message" do Laravel');
+                assert.deepEqual(error.errors, { status: ['Inválido.'] });
+            });
+        });
+    });
+
+    test('37 token CSRF: @csrf do Laravel e data-paginationjs-csrf="header" enviam só o cabeçalho', function (assert, sandbox) {
+        var tpl = '<template id="tpl-acoes"><button type="button" data-paginationjs-action="excluir" data-paginationjs-action-remote="/clientes/{id}" data-paginationjs-param-_method="DELETE">Excluir</button></template>';
+        var base = FIXTURE.replace('<template id="tpl-acoes"><a href="{url}" data-paginationjs-action="ver">Ver {nome}</a></template>', tpl);
+        var meta = document.createElement('meta');
+
+        meta.name = 'csrf-token';
+        meta.content = 'LaravelToken40CharsAbcdefghijklmnopqrstuv';
+        document.head.appendChild(meta);
+
+        function acionar(html, opts) {
+            sandbox.innerHTML = '';
+
+            var c = start(sandbox, opts, html);
+
+            c.s.replyPage(c.s.calls[0], 35);
+
+            return tick().then(function () {
+                c.root.querySelector('tbody button[data-paginationjs-action]').click();
+
+                var call = c.s.last();
+
+                c.instance.destroy();
+
+                return call;
+            });
+        }
+
+        return acionar(base + '<input type="hidden" name="_token" value="TokenDoBlade123">').then(function (call) {
+            assert.deepEqual(call.params, { id: 1, _method: 'DELETE' }, '@csrf: corpo sem campo extra');
+            assert.equal(call.request.headers['X-CSRF-Token'], 'TokenDoBlade123');
+
+            return acionar(base.replace('data-paginationjs-limit="10"', 'data-paginationjs-limit="10" data-paginationjs-csrf="header"'));
+        }).then(function (call) {
+            assert.deepEqual(call.params, { id: 1, _method: 'DELETE' }, 'csrf="header": só cabeçalho');
+            assert.equal(call.request.headers['X-CSRF-Token'], 'LaravelToken40CharsAbcdefghijklmnopqrstuv');
+
+            return acionar(base);
+        }).then(function (call) {
+            assert.equal(call.params.LaravelToken40CharsAbcdefghijklmnopqrstuv, '1', 'padrão (auto) mantém o campo do Joomla');
+            document.head.removeChild(meta);
+        }, function (error) {
+            document.head.removeChild(meta);
+            throw error;
+        });
+    });
+
+    test('38 ação remota: 204 No Content e JSON sem envelope com "message"', function (assert, sandbox) {
+        var tpl = '<template id="tpl-acoes"><button type="button" data-paginationjs-action="excluir" data-paginationjs-action-remote="/clientes/{id}">Excluir</button></template>';
+        var html = FIXTURE.replace('<template id="tpl-acoes"><a href="{url}" data-paginationjs-action="ver">Ver {nome}</a></template>', tpl);
+        var done = [];
+
+        return loaded(sandbox, null, html).then(function (ctx) {
+            ctx.root.addEventListener('hrpaginationjs:actiondone', function (e) {
+                done.push(e.detail);
+            });
+
+            ctx.root.querySelector('tbody button[data-paginationjs-action]').click();
+            ctx.s.fail(ctx.s.last(), 204, 'parsererror', undefined);
+            assert.equal(done.length, 1, '204 conta como sucesso');
+            assert.equal(ctx.root.querySelector('.hrpjs-notice').textContent, 'Operação concluída.');
+            ctx.s.replyPage(ctx.s.last(), 35);
+
+            return tick().then(function () {
+                ctx.root.querySelector('tbody button[data-paginationjs-action]').click();
+                ctx.s.reply(ctx.s.last(), { message: 'Cliente removido.' });
+                assert.equal(done.length, 2, 'JSON sem "success" conta como sucesso');
+                assert.equal(ctx.root.querySelector('.hrpjs-notice').textContent, 'Cliente removido.');
+            });
+        });
+    });
+
     test('30 template com condição e formatadores', function (assert, sandbox) {
         var html = '<div id="t" data-paginationjs data-paginationjs-remote="/t" data-paginationjs-locale="pt-BR"><table><thead><tr>' +
             '<th data-paginationjs-key="valor" data-paginationjs-format="money">Valor</th>' +

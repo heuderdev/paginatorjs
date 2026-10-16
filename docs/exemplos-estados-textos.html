@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Estados e textos — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/exemplos-estados-textos.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html" aria-current="page">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#carregando">Carregando</a></li><li><a href="#nenhum-registro">Nenhum registro</a></li><li><a href="#erro">Erro</a></li><li><a href="#sessão-expirada-levar-para-o-login">Sessão expirada: levar para o login</a></li><li><a href="#todos-os-textos-de-uma-vez-página-inteira">Todos os textos de uma vez (página inteira)</a></li><li><a href="#textos-por-atributo--referência-rápida">Textos por atributo — referência rápida</a></li><li><a href="#não-carregar-ao-abrir">Não carregar ao abrir</a></li><li><a href="#mensagens-de-dependência-faltando">Mensagens de dependência faltando</a></li><li><a href="#cores-do-tema">Cores do tema</a></li></ul></nav>
+<h1 id="estados-e-textos">Estados e textos</h1>
+<p>A biblioteca desenha sozinha os estados de carregamento, vazio e erro. Nada disso precisa de código; aqui está o
+que aparece em cada situação e como trocar os textos.</p>
+<h2 id="carregando">Carregando <a class="anchor" href="#carregando" aria-label="Link para esta seção">#</a></h2>
+<figure class="preview"><figcaption>Primeira carga</figcaption><div class="preview-body"><div class="hrpjs"><table class="hrpjs-table"><thead><tr><th>ID</th><th>Nome</th><th>E-mail</th></tr></thead><tbody class="hrpjs-body"><tr class="hrpjs-message-row"><td colspan="3"><div class="hrpjs-message hrpjs-message--loading"><p class="hrpjs-message-text">Carregando…</p></div></td></tr></tbody></table></div></div></figure>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> só a <strong>primeira</strong> carga mostra “Carregando…”. Nas seguintes, as linhas atuais ficam esmaecidas
+(sem pular a tela) e o elemento recebe <code>aria-busy=&quot;true&quot;</code> e a classe <code>hrpjs-is-loading</code>.</p>
+</blockquote>
+<div class="code-block code-css"><div class="code-head"><span class="code-lang">CSS <span class="code-file">Destacar o carregamento com a classe da listagem</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-css"><span class="hljs-selector-id">#clientes</span><span class="hljs-selector-class">.hrpjs-is-loading</span> { <span class="hljs-attribute">cursor</span>: progress; }</code></pre></div>
+<h2 id="nenhum-registro">Nenhum registro <a class="anchor" href="#nenhum-registro" aria-label="Link para esta seção">#</a></h2>
+<figure class="preview"><figcaption>Busca sem resultados</figcaption><div class="preview-body"><div class="hrpjs"><table class="hrpjs-table"><thead><tr><th>ID</th><th>Nome</th><th>E-mail</th></tr></thead><tbody class="hrpjs-body"><tr class="hrpjs-message-row"><td colspan="3"><div class="hrpjs-message hrpjs-message--empty"><p class="hrpjs-message-text">Nenhum cliente encontrado com esses filtros.</p></div></td></tr></tbody></table><div class="hrpjs-footer"><div class="hrpjs-summary">Nenhum registro</div></div></div></div></figure>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-empty</span>=<span class="hljs-string">&quot;Nenhum cliente encontrado com esses filtros.&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-summary-empty</span>=<span class="hljs-string">&quot;Nenhum registro&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="erro">Erro <a class="anchor" href="#erro" aria-label="Link para esta seção">#</a></h2>
+<figure class="preview"><figcaption>HTTP 500, success false, sem conexão…</figcaption><div class="preview-body"><div class="hrpjs"><table class="hrpjs-table"><thead><tr><th>ID</th><th>Nome</th><th>E-mail</th></tr></thead><tbody class="hrpjs-body"><tr class="hrpjs-message-row"><td colspan="3"><div class="hrpjs-message hrpjs-message--error"><p class="hrpjs-message-text">Ocorreu um erro interno ao processar a solicitação.</p><p class="hrpjs-message-id">Código para suporte: 6bf735c3d97b99f4</p><button type="button" class="hrpjs-button hrpjs-retry">Tentar novamente</button></div></td></tr></tbody></table></div></div></figure>
+<p>O texto vem da <code>mensagem</code> do <code>ApiResponseHelper</code>; quando não há mensagem, usa o texto padrão do tipo de erro:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situação</th>
+<th>Tipo (<code>kind</code>)</th>
+<th>Texto padrão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sem conexão</td>
+<td><code>network</code></td>
+<td>Não foi possível conectar ao servidor. Verifique sua conexão.</td>
+</tr>
+<tr>
+<td>Passou do tempo limite</td>
+<td><code>timeout</code></td>
+<td>O servidor demorou demais para responder.</td>
+</tr>
+<tr>
+<td>HTTP 4xx/5xx</td>
+<td><code>http</code></td>
+<td>O servidor retornou um erro ({status}).</td>
+</tr>
+<tr>
+<td>HTML/JSON fora do contrato</td>
+<td><code>invalid</code></td>
+<td>O servidor enviou uma resposta inválida.</td>
+</tr>
+<tr>
+<td><code>success: false</code></td>
+<td><code>api</code></td>
+<td>Não foi possível carregar os registros.</td>
+</tr>
+<tr>
+<td>HTTP 401</td>
+<td><code>session</code></td>
+<td>Sua sessão expirou. Entre novamente para continuar.</td>
+</tr>
+<tr>
+<td>HTTP 403</td>
+<td><code>permission</code></td>
+<td>Você não tem permissão para esta operação.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML <span class="code-file">Trocando os textos padrão desta listagem</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-timeout</span>=<span class="hljs-string">&quot;15000&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-error-timeout</span>=<span class="hljs-string">&quot;A consulta está demorando. Tente filtrar por um período menor.&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-error-session</span>=<span class="hljs-string">&quot;Sua sessão terminou. Recarregue a página e entre de novo.&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-retry</span>=<span class="hljs-string">&quot;Recarregar lista&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="sessão-expirada-levar-para-o-login">Sessão expirada: levar para o login <a class="anchor" href="#sessão-expirada-levar-para-o-login" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:error&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">if</span> (e.<span class="hljs-property">detail</span>.<span class="hljs-property">error</span>.<span class="hljs-property">kind</span> === <span class="hljs-string">&#x27;session&#x27;</span>) {
+        <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span> = <span class="hljs-string">&#x27;index.php?option=com_users&amp;view=login&amp;return=&#x27;</span> + <span class="hljs-title function_">btoa</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span>);
+    }
+});</code></pre></div>
+<h2 id="todos-os-textos-de-uma-vez-página-inteira">Todos os textos de uma vez (página inteira) <a class="anchor" href="#todos-os-textos-de-uma-vez-página-inteira" aria-label="Link para esta seção">#</a></h2>
+<p>Altere <code>HrPaginationjs.texts</code> logo depois de carregar a biblioteca. Vale para todas as listagens da página.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/assets/hr-paginationjs/hr-paginationjs.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+    <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-property">texts</span>.<span class="hljs-property">loading</span> = <span class="hljs-string">&#x27;Buscando dados…&#x27;</span>;
+    <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-property">texts</span>.<span class="hljs-property">empty</span> = <span class="hljs-string">&#x27;Nada por aqui.&#x27;</span>;
+    <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-property">texts</span>.<span class="hljs-property">summary</span> = <span class="hljs-string">&#x27;{start} a {end} de {total}&#x27;</span>;
+    <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-property">texts</span>.<span class="hljs-property">previous</span> = <span class="hljs-string">&#x27;Voltar uma página&#x27;</span>;
+    <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-property">texts</span>.<span class="hljs-property">next</span> = <span class="hljs-string">&#x27;Avançar uma página&#x27;</span>;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre></div>
+<h2 id="textos-por-atributo--referência-rápida">Textos por atributo — referência rápida <a class="anchor" href="#textos-por-atributo--referência-rápida" aria-label="Link para esta seção">#</a></h2>
+<p>O nome do atributo é a chave em minúsculas com hífen:</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-toolbar</span>=<span class="hljs-string">&quot;search,limit,columns,reload,clear&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-loading</span>=<span class="hljs-string">&quot;Carregando clientes…&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-empty</span>=<span class="hljs-string">&quot;Nenhum cliente.&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-summary</span>=<span class="hljs-string">&quot;{start}–{end} de {total}&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-summary-empty</span>=<span class="hljs-string">&quot;0 clientes&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-search</span>=<span class="hljs-string">&quot;Pesquisar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-search-placeholder</span>=<span class="hljs-string">&quot;Nome ou e-mail&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-limit</span>=<span class="hljs-string">&quot;Itens&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-columns</span>=<span class="hljs-string">&quot;Exibir colunas&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-columns-reset</span>=<span class="hljs-string">&quot;Padrão&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-column-required</span>=<span class="hljs-string">&quot;Esta coluna não pode ser ocultada&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-reload</span>=<span class="hljs-string">&quot;Recarregar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-clear</span>=<span class="hljs-string">&quot;Limpar tudo&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-pagination</span>=<span class="hljs-string">&quot;Páginas de clientes&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-page</span>=<span class="hljs-string">&quot;Ir para a página {page}&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-request-id</span>=<span class="hljs-string">&quot;Protocolo: {id}&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-yes</span>=<span class="hljs-string">&quot;✔&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-no</span>=<span class="hljs-string">&quot;✘&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-action-done</span>=<span class="hljs-string">&quot;Pronto!&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-action-error</span>=<span class="hljs-string">&quot;Não deu certo.&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="não-carregar-ao-abrir">Não carregar ao abrir <a class="anchor" href="#não-carregar-ao-abrir" aria-label="Link para esta seção">#</a></h2>
+<p>Útil para telas que pedem um filtro antes de listar.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;relatorio&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=relatorio.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-autoload</span>=<span class="hljs-string">&quot;false&quot;</span>
+     <span class="hljs-attr">data-paginationjs-text-idle</span>=<span class="hljs-string">&quot;Escolha o período e clique em Filtrar.&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">data-paginationjs-filters</span> <span class="hljs-attr">data-paginationjs-apply</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;de&quot;</span> <span class="hljs-attr">required</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;De&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;ate&quot;</span> <span class="hljs-attr">required</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Até&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>Filtrar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<figure class="preview"><figcaption>Antes do primeiro filtro</figcaption><div class="preview-body"><div class="hrpjs"><table class="hrpjs-table"><thead><tr><th>Data</th><th>Pedidos</th><th>Total</th></tr></thead><tbody class="hrpjs-body"><tr class="hrpjs-message-row"><td colspan="3"><div class="hrpjs-message hrpjs-message--idle"><p class="hrpjs-message-text">Escolha o período e clique em Filtrar.</p></div></td></tr></tbody></table></div></div></figure>
+<h2 id="mensagens-de-dependência-faltando">Mensagens de dependência faltando <a class="anchor" href="#mensagens-de-dependência-faltando" aria-label="Link para esta seção">#</a></h2>
+<p>Se a ordem dos scripts estiver errada, a listagem mostra o problema no lugar da tabela:</p>
+<figure class="preview"><figcaption>jQuery não carregado</figcaption><div class="preview-body"><div class="hrpjs"><div class="hrpjs-fatal" role="alert">hr-paginationjs: jQuery não foi encontrado. Carregue nesta ordem: jQuery -&gt; pagination.js -&gt; hr-paginationjs.js.</div></div></div></figure>
+<h2 id="cores-do-tema">Cores do tema <a class="anchor" href="#cores-do-tema" aria-label="Link para esta seção">#</a></h2>
+<p>Sobrescreva as variáveis no elemento da listagem (ou em <code>.hrpjs</code> para todas):</p>
+<div class="code-block code-css"><div class="code-head"><span class="code-lang">CSS</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-css"><span class="hljs-selector-class">.hrpjs</span> {
+    <span class="hljs-attr">--hrpjs-accent</span>: <span class="hljs-number">#0b7a75</span>;
+    <span class="hljs-attr">--hrpjs-accent-text</span>: <span class="hljs-number">#ffffff</span>;
+    <span class="hljs-attr">--hrpjs-border</span>: <span class="hljs-number">#c9d4d3</span>;
+    <span class="hljs-attr">--hrpjs-radius</span>: <span class="hljs-number">4px</span>;
+}
+
+<span class="hljs-selector-id">#clientes</span> {
+    <span class="hljs-attr">--hrpjs-danger</span>: <span class="hljs-number">#a4161a</span>;
+}</code></pre></div>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="exemplos-acoes.html"><span>Anterior</span>Ações por linha</a><a class="next" href="exemplos-preferencias-url-cache.html"><span>Próxima</span>Preferências, URL e cache</a></nav>
+        </main>
+    </div>
+</body>
+</html>

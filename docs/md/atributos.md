@@ -10,7 +10,8 @@ Todo atributo tem um equivalente em JavaScript (segunda coluna) para quem inicia
 | `data-paginationjs-remote` | `remote` | **obrigatório** | Endpoint. Aceita URL relativa, `http` ou `https`. Outros esquemas são recusados. |
 | `data-paginationjs-id` | `id` | `id` do elemento | Identificador **estável** da listagem (preferências, URL, `get()`). Obrigatório se o elemento não tiver `id`. |
 | `data-paginationjs-method` | `method` | `GET` | `GET` ou `POST`. |
-| `data-paginationjs-adapter` | `adapter` | `apiresponse` | `apiresponse` (contrato do `ApiResponseHelper`) ou `datatables`, ou um adaptador registrado. |
+| `data-paginationjs-adapter` | `adapter` | `apiresponse` | `apiresponse` (contrato do `ApiResponseHelper`/`ResponseService`), `laravel` (`paginate()` puro, API Resource ou envelope), `datatables`, ou um adaptador registrado. |
+| `data-paginationjs-csrf` | `csrf` | `auto` | `auto`: cabeçalho `X-CSRF-Token` + campo `<token>=1` (Joomla). `header`: só o cabeçalho (recomendado no Laravel). Com `@csrf` (`_token`) na página, só o cabeçalho é enviado mesmo em `auto`. |
 | `data-paginationjs-names` | `names` | ver [backend](backend.md) | JSON que renomeia os parâmetros enviados. Ex.: `{"search":"busca"}`. |
 | `data-paginationjs-limit` | `limit` | `20` | Registros por página iniciais. |
 | `data-paginationjs-limits` | `limits` | `10,20,50,100` | Opções do seletor de quantidade (o `limit` é incluído se faltar). |

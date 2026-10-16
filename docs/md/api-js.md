@@ -155,11 +155,11 @@ Objeto entregue em rejeições, em `getState().error` e no evento `hrpaginationj
 | `http` | HTTP ≥ 400 (exceto 401/403). |
 | `invalid` | Não é JSON, ou JSON fora do contrato (sem `success`, sem `meta.paginacao.total`, `data` não é lista…). |
 | `api` | Envelope válido com `success: false` (mesmo com HTTP 200). |
-| `session` | HTTP 401. |
+| `session` | HTTP 401 ou 419 (token/sessão vencidos no Laravel). |
 | `permission` | HTTP 403. |
 | `abort` | Cancelamento voluntário (só aparece se a requisição foi cancelada sem outra no lugar). |
 | `config` | Uso incorreto da API (ex.: `setSort` em coluna não ordenável). |
 | `destroyed` | A instância foi destruída antes da resposta. |
 
-`message` usa a `mensagem` do servidor quando existir (o `ApiResponseHelper` já entrega mensagens públicas);
+`message` usa a `mensagem` do servidor (ou o `message` do Laravel) quando existir (o `ApiResponseHelper` já entrega mensagens públicas);
 caso contrário, um texto padrão. Detalhes internos nunca são exibidos.

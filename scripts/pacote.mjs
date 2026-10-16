@@ -86,6 +86,10 @@ JHtml::_('stylesheet', 'com_seucomponente/hr-paginationjs.min.css', array('relat
 
 Depois disso a tela é só HTML (\`data-paginationjs-*\`). Documentação completa: \`docs/index.html\` no repositório.
 
+No Laravel, copie \`js/\` e \`css/\` para \`public/vendor/hr-paginationjs/\`, tenha \`<meta name="csrf-token" content="{{ csrf_token() }}">\`
+no layout e use \`ResponseService::paginated()\` ou, com \`paginate()\` puro / API Resource,
+\`data-paginationjs-adapter="laravel"\`. Guia: \`docs/laravel.html\` no repositório.
+
 Toda regra precisa ser revalidada no servidor: coluna oculta ou botão escondido não é controle de acesso.
 `
 entradas.push(['LEIAME.md', Buffer.from(leiame.replace(/\n/g, '\r\n'), 'utf8')])

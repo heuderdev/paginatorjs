@@ -3,31 +3,53 @@
 var fs = require('fs');
 var path = require('path');
 
-function loadMarked() {
-    var candidates = [process.env.HRPJS_MARKED, 'marked'].filter(Boolean);
-
-    for (var i = 0; i < candidates.length; i++) {
-        try {
-            return require(candidates[i]);
-        } catch (e) {
-            continue;
-        }
+function load(name) {
+    try {
+        return require(name);
+    } catch (e) {
+        console.error(name + ' não encontrado. Rode "npm install" na raiz do projeto.');
+        process.exit(2);
     }
-
-    console.error('marked não encontrado. Rode "npm install" na raiz do projeto.');
-    process.exit(2);
 }
 
-var marked = loadMarked().marked;
+var marked = load('marked').marked;
+var hljs = load('highlight.js');
+
 var root = path.resolve(__dirname, '..');
 var srcDir = path.join(root, 'docs', 'md');
 var outDir = path.join(root, 'docs');
 
-var ORDER = [
-    'README', 'instalacao', 'primeira-tela', 'atributos', 'colunas', 'busca-filtros-ordenacao', 'controles',
-    'acoes', 'api-js', 'eventos', 'backend', 'preferencias-url-cache', 'paginationjs-opcoes',
-    'acessibilidade-seguranca', 'testes'
+var NAV = [
+    { group: 'Guia', pages: ['README', 'instalacao', 'primeira-tela', 'laravel'] },
+    {
+        group: 'Exemplos',
+        pages: [
+            'exemplos', 'exemplos-telas', 'exemplos-colunas', 'exemplos-busca', 'exemplos-filtros', 'exemplos-ordenacao-paginacao',
+            'exemplos-acoes', 'exemplos-estados-textos', 'exemplos-preferencias-url-cache', 'exemplos-javascript', 'exemplos-integracoes'
+        ]
+    },
+    {
+        group: 'Referência',
+        pages: [
+            'atributos', 'colunas', 'busca-filtros-ordenacao', 'controles', 'acoes', 'api-js', 'eventos', 'backend',
+            'preferencias-url-cache', 'paginationjs-opcoes', 'acessibilidade-seguranca', 'testes'
+        ]
+    }
 ];
+
+var LANGS = {
+    html: { hl: 'xml', label: 'HTML' },
+    xml: { hl: 'xml', label: 'HTML' },
+    js: { hl: 'javascript', label: 'JavaScript' },
+    javascript: { hl: 'javascript', label: 'JavaScript' },
+    php: { hl: 'php', label: 'PHP' },
+    css: { hl: 'css', label: 'CSS' },
+    json: { hl: 'json', label: 'JSON' },
+    bash: { hl: 'bash', label: 'Terminal' },
+    sql: { hl: 'sql', label: 'SQL' },
+    http: { hl: 'http', label: 'Requisição gerada' },
+    text: { hl: 'plaintext', label: 'Texto' }
+};
 
 function htmlName(base) {
     return base === 'README' ? 'index.html' : base + '.html';
@@ -55,26 +77,71 @@ function rewriteHref(href) {
     });
 }
 
-var files = fs.readdirSync(srcDir).filter(function (f) {
-    return /\.md$/.test(f);
-}).map(function (f) {
-    return f.replace(/\.md$/, '');
-}).sort(function (a, b) {
-    var ia = ORDER.indexOf(a);
-    var ib = ORDER.indexOf(b);
+function highlightCss() {
+    var stylesDir = path.join(path.dirname(require.resolve('highlight.js/package.json')), 'styles');
+    var light = fs.readFileSync(path.join(stylesDir, 'github.css'), 'utf8');
+    var dark = fs.readFileSync(path.join(stylesDir, 'github-dark.css'), 'utf8');
 
-    return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib) || a.localeCompare(b);
+    return '/* highlight.js 11 — temas github e github-dark (BSD-3-Clause) */\n' + light +
+        '\n@media (prefers-color-scheme: dark) {\n' + dark + '\n}\n';
+}
+
+var sources = {};
+
+fs.readdirSync(srcDir).filter(function (f) {
+    return /\.md$/.test(f);
+}).forEach(function (f) {
+    sources[f.replace(/\.md$/, '')] = fs.readFileSync(path.join(srcDir, f), 'utf8');
 });
 
-var pages = files.map(function (base) {
-    var source = fs.readFileSync(path.join(srcDir, base + '.md'), 'utf8');
-    var title = (/^#\s+(.+)$/m.exec(source) || [null, base])[1].trim();
+var ordered = [];
 
-    return { base: base, source: source, title: title, file: htmlName(base) };
+NAV.forEach(function (g) {
+    g.pages.forEach(function (base) {
+        if (!sources[base]) {
+            console.error('Página do menu sem arquivo: docs/md/' + base + '.md');
+            process.exit(1);
+        }
+
+        ordered.push(base);
+    });
+});
+
+Object.keys(sources).forEach(function (base) {
+    if (ordered.indexOf(base) === -1) {
+        console.error('Arquivo fora do menu: docs/md/' + base + '.md (adicione em NAV no scripts/build-docs.js)');
+        process.exit(1);
+    }
+});
+
+var pages = ordered.map(function (base) {
+    var title = (/^#\s+(.+)$/m.exec(sources[base]) || [null, base])[1].trim();
+
+    return { base: base, title: title, file: htmlName(base), source: sources[base] };
 });
 
 function navTitle(page) {
     return page.base === 'README' ? 'Início' : page.title.replace(/^hr-paginationjs\s+—\s+/, '');
+}
+
+function codeBlock(code, info) {
+    var parts = String(info || '').trim().split(/\s+/);
+    var lang = (parts.shift() || 'text').toLowerCase();
+    var title = parts.join(' ');
+
+    if (lang === 'preview') {
+        return '<figure class="preview"><figcaption>' + escapeHtml(title || 'Como fica na tela') + '</figcaption>' +
+            '<div class="preview-body">' + code + '</div></figure>\n';
+    }
+
+    var def = LANGS[lang] || { hl: hljs.getLanguage(lang) ? lang : 'plaintext', label: lang.toUpperCase() };
+    var html = hljs.highlight(code, { language: def.hl, ignoreIllegals: true }).value;
+    var label = escapeHtml(def.label) + (title ? ' <span class="code-file">' + escapeHtml(title) + '</span>' : '');
+
+    return '<div class="code-block code-' + escapeHtml(lang) + '">' +
+        '<div class="code-head"><span class="code-lang">' + label + '</span>' +
+        '<button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div>' +
+        '<pre><code class="hljs language-' + escapeHtml(def.hl) + '">' + html + '</code></pre></div>\n';
 }
 
 function render(page, index) {
@@ -111,17 +178,34 @@ function render(page, index) {
         return '<div class="table-wrap"><table>\n<thead>\n' + header + '</thead>\n<tbody>\n' + body + '</tbody>\n</table></div>\n';
     };
 
+    renderer.code = function (code, info) {
+        return codeBlock(code, info);
+    };
+
     renderer.blockquote = function (quote) {
-        return '<blockquote class="note">' + quote + '</blockquote>\n';
+        var kind = 'note';
+        var m = /^\s*<p><strong>(Dica|Atenção|Importante|Resultado|Como funciona)/.exec(quote);
+
+        if (m) {
+            kind = { 'Dica': 'tip', 'Atenção': 'warn', 'Importante': 'warn', 'Resultado': 'result', 'Como funciona': 'info' }[m[1]];
+        }
+
+        return '<blockquote class="callout callout-' + kind + '">' + quote + '</blockquote>\n';
     };
 
     var body = marked.parse(page.source, { renderer: renderer, gfm: true });
     var prev = pages[index - 1];
     var next = pages[index + 1];
 
-    var nav = pages.map(function (p) {
-        return '<li><a href="' + p.file + '"' + (p === page ? ' aria-current="page"' : '') + '>' + escapeHtml(navTitle(p)) + '</a></li>';
-    }).join('\n                ');
+    var nav = NAV.map(function (g) {
+        return '<p class="nav-group">' + g.group + '</p><ul>' + g.pages.map(function (base) {
+            var p = pages.filter(function (x) {
+                return x.base === base;
+            })[0];
+
+            return '<li><a href="' + p.file + '"' + (p === page ? ' aria-current="page"' : '') + '>' + escapeHtml(navTitle(p)) + '</a></li>';
+        }).join('') + '</ul>';
+    }).join('\n');
 
     var toc = headings.length > 1 ? '<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul>' + headings.map(function (h) {
         return '<li><a href="#' + h.id + '">' + escapeHtml(h.text) + '</a></li>';
@@ -138,7 +222,10 @@ function render(page, index) {
         '    <meta charset="utf-8">\n' +
         '    <meta name="viewport" content="width=device-width, initial-scale=1">\n' +
         '    <title>' + escapeHtml(page.base === 'README' ? 'hr-paginationjs — documentação' : page.title + ' — hr-paginationjs') + '</title>\n' +
+        '    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">\n' +
+        '    <link rel="stylesheet" href="assets/highlight.css">\n' +
         '    <link rel="stylesheet" href="assets/docs.css">\n' +
+        '    <script src="assets/docs.js" defer></script>\n' +
         '</head>\n' +
         '<body>\n' +
         '    <a class="skip" href="#conteudo">Pular para o conteúdo</a>\n' +
@@ -147,9 +234,7 @@ function render(page, index) {
         '        <span class="source">Fonte: <code>docs/md/' + page.base + '.md</code></span>\n' +
         '    </header>\n' +
         '    <div class="layout">\n' +
-        '        <nav class="sidebar" aria-label="Documentação">\n' +
-        '            <ul>\n                ' + nav + '\n            </ul>\n' +
-        '        </nav>\n' +
+        '        <nav class="sidebar" aria-label="Documentação">\n' + nav + '\n        </nav>\n' +
         '        <main id="conteudo" class="content">\n' +
         toc + '\n' + body + '\n' + pager + '\n' +
         '        </main>\n' +
@@ -157,6 +242,19 @@ function render(page, index) {
         '</body>\n' +
         '</html>\n';
 }
+
+fs.writeFileSync(path.join(outDir, 'assets', 'highlight.css'), highlightCss(), 'utf8');
+
+fs.readdirSync(outDir).filter(function (f) {
+    return /\.html$/.test(f);
+}).forEach(function (f) {
+    if (!pages.some(function (p) {
+        return p.file === f;
+    })) {
+        fs.unlinkSync(path.join(outDir, f));
+        console.log('removido docs/' + f + ' (sem fonte em docs/md)');
+    }
+});
 
 pages.forEach(function (page, index) {
     fs.writeFileSync(path.join(outDir, page.file), render(page, index), 'utf8');

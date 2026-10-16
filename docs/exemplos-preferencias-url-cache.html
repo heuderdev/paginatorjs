@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Preferências, URL e cache — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/exemplos-preferencias-url-cache.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html" aria-current="page">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#lembrar-colunas-quantidade-e-ordenação">Lembrar colunas, quantidade e ordenação</a></li><li><a href="#escolher-o-que-é-lembrado">Escolher o que é lembrado</a></li><li><a href="#mudou-as-colunas-da-tela">Mudou as colunas da tela?</a></li><li><a href="#botão-restaurar-preferências">Botão “restaurar preferências”</a></li><li><a href="#estado-na-url-link-compartilhável">Estado na URL (link compartilhável)</a></li><li><a href="#voltar-e-avançar-do-navegador">Voltar e avançar do navegador</a></li><li><a href="#duas-listagens-com-url-na-mesma-página">Duas listagens com URL na mesma página</a></li><li><a href="#precedência-ao-abrir-a-tela">Precedência ao abrir a tela</a></li><li><a href="#cache-de-respostas">Cache de respostas</a></li></ul></nav>
+<h1 id="preferências-url-e-cache">Preferências, URL e cache</h1>
+<h2 id="lembrar-colunas-quantidade-e-ordenação">Lembrar colunas, quantidade e ordenação <a class="anchor" href="#lembrar-colunas-quantidade-e-ordenação" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php">&lt;div id=<span class="hljs-string">&quot;clientes&quot;</span> data-paginationjs
+     data-paginationjs-remote=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     data-paginationjs-persist
+     data-paginationjs-<span class="hljs-keyword">namespace</span>=&quot;<span class="hljs-title class_">com_loja</span>&quot;
+     <span class="hljs-title class_">data</span>-<span class="hljs-title class_">paginationjs</span>-<span class="hljs-title class_">user</span>=&quot;&lt;?<span class="hljs-title class_">php</span> <span class="hljs-title class_">echo</span> (<span class="hljs-title class_">int</span>) <span class="hljs-title class_">JFactory</span>::<span class="hljs-title class_">getUser</span>()-&gt;<span class="hljs-title class_">id</span>; <span class="hljs-meta">?&gt;</span><span class="hljs-string">&quot;
+     data-paginationjs-version=&quot;</span><span class="hljs-number">1</span><span class="hljs-string">&quot;
+     data-paginationjs-toolbar=&quot;</span>search,limit,columns<span class="hljs-string">&quot;&gt;
+    ...
+&lt;/div&gt;</span></code></pre></div>
+<div class="code-block code-json"><div class="code-head"><span class="code-lang">JSON <span class="code-file">Gravado no localStorage em &quot;hrpaginationjs:com_loja:42:clientes:v1&quot;</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;saved&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1760630400000</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;columns&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;email&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;telefone&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;cidade&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;limit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">50</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;sort&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;nome&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;direction&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;asc&quot;</span>
+<span class="hljs-punctuation">}</span></code></pre></div>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> ao reabrir a tela, o usuário 42 encontra as mesmas colunas, 50 por página e ordem por nome.
+Outro usuário no mesmo navegador tem a própria chave. Se o <code>localStorage</code> estiver bloqueado, a tela funciona
+normalmente, só não lembra.</p>
+</blockquote>
+<h2 id="escolher-o-que-é-lembrado">Escolher o que é lembrado <a class="anchor" href="#escolher-o-que-é-lembrado" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">...</span> <span class="hljs-attr">data-paginationjs-persist</span>=<span class="hljs-string">&quot;columns&quot;</span>&gt;</span>                       <span class="hljs-comment">&lt;!-- só colunas --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">...</span> <span class="hljs-attr">data-paginationjs-persist</span>=<span class="hljs-string">&quot;columns,limit&quot;</span>&gt;</span>                 <span class="hljs-comment">&lt;!-- colunas e quantidade --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">...</span> <span class="hljs-attr">data-paginationjs-persist</span>=<span class="hljs-string">&quot;columns,limit,sort,filters&quot;</span>&gt;</span>    <span class="hljs-comment">&lt;!-- também os filtros --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">...</span> <span class="hljs-attr">data-paginationjs-persist</span>=<span class="hljs-string">&quot;columns,limit,sort,search,filters&quot;</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> busca e filtros ficam gravados no navegador. Não use <code>search</code>/<code>filters</code> em telas com dados
+sensíveis (CPF, nomes de pacientes etc.).</p>
+</blockquote>
+<h2 id="mudou-as-colunas-da-tela">Mudou as colunas da tela? <a class="anchor" href="#mudou-as-colunas-da-tela" aria-label="Link para esta seção">#</a></h2>
+<p>Colunas novas usam o padrão do HTML e colunas removidas são ignoradas automaticamente. Para uma mudança grande,
+aumente a versão — as preferências antigas deixam de ser lidas:</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">...</span> <span class="hljs-attr">data-paginationjs-persist</span> <span class="hljs-attr">data-paginationjs-version</span>=<span class="hljs-string">&quot;2&quot;</span>&gt;</span></code></pre></div>
+<h2 id="botão-restaurar-preferências">Botão “restaurar preferências” <a class="anchor" href="#botão-restaurar-preferências" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;restaurar&quot;</span>&gt;</span>Restaurar visualização padrão<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;restaurar&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+        <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">resetPreferences</span>();
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> para restaurar só as colunas, o seletor de colunas já tem o botão “Restaurar padrão”.</p>
+</blockquote>
+<h2 id="estado-na-url-link-compartilhável">Estado na URL (link compartilhável) <a class="anchor" href="#estado-na-url-link-compartilhável" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-url</span>
+     <span class="hljs-attr">data-paginationjs-url-prefix</span>=<span class="hljs-string">&quot;cli_&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada <span class="code-file">Endereço da página depois de filtrar, ordenar e ir para a página 3</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">index.php?option=com_loja&amp;view=clientes&amp;cli_page=3&amp;cli_sort=nome&amp;cli_direction=asc&amp;cli_search=ana&amp;cli_f_status=ativo&amp;cli_f_uf=SP&amp;cli_f_uf=RJ</code></pre></div>
+<blockquote class="callout callout-result"><p><strong>Resultado:</strong> quem abrir esse link vê exatamente a mesma lista. Os parâmetros do Joomla (<code>option</code>, <code>view</code>,
+<code>Itemid</code>) são preservados; a página 1 e os valores padrão não poluem a URL.</p>
+</blockquote>
+<h2 id="voltar-e-avançar-do-navegador">Voltar e avançar do navegador <a class="anchor" href="#voltar-e-avançar-do-navegador" aria-label="Link para esta seção">#</a></h2>
+<p>Com <code>push</code>, cada mudança vira uma entrada no histórico.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">...</span> <span class="hljs-attr">data-paginationjs-url</span> <span class="hljs-attr">data-paginationjs-url-history</span>=<span class="hljs-string">&quot;push&quot;</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> o botão Voltar restaura página, filtros e busca anteriores com <strong>uma</strong> requisição.</p>
+</blockquote>
+<h2 id="duas-listagens-com-url-na-mesma-página">Duas listagens com URL na mesma página <a class="anchor" href="#duas-listagens-com-url-na-mesma-página" aria-label="Link para esta seção">#</a></h2>
+<p>Cada uma com seu prefixo; uma não mexe nos parâmetros da outra.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-url</span> <span class="hljs-attr">data-paginationjs-url-prefix</span>=<span class="hljs-string">&quot;cli_&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;pedidos&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=pedidos.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-url</span> <span class="hljs-attr">data-paginationjs-url-prefix</span>=<span class="hljs-string">&quot;ped_&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">index.php?option=com_loja&amp;view=painel&amp;cli_page=2&amp;ped_f_status=aberto</code></pre></div>
+<h2 id="precedência-ao-abrir-a-tela">Precedência ao abrir a tela <a class="anchor" href="#precedência-ao-abrir-a-tela" aria-label="Link para esta seção">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ordem</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1º</td>
+<td>Parâmetros da URL (<code>data-paginationjs-url</code>)</td>
+</tr>
+<tr>
+<td>2º</td>
+<td>Preferências salvas (<code>data-paginationjs-persist</code>)</td>
+</tr>
+<tr>
+<td>3º</td>
+<td>HTML (atributos e valores já preenchidos nos campos)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="cache-de-respostas">Cache de respostas <a class="anchor" href="#cache-de-respostas" aria-label="Link para esta seção">#</a></h2>
+<p>Volta instantaneamente às páginas já vistas no último minuto.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-cache</span>=<span class="hljs-string">&quot;60&quot;</span>
+     <span class="hljs-attr">data-paginationjs-cache-max</span>=<span class="hljs-string">&quot;30&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situação</th>
+<th>Vai ao servidor?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Página 1 → 2 → 1 (dentro de 60 s)</td>
+<td>1 e 2 sim; a volta para a 1, não</td>
+</tr>
+<tr>
+<td>Botão “Atualizar” / <code>reload()</code></td>
+<td>sim (limpa o cache)</td>
+</tr>
+<tr>
+<td>Depois de uma ação remota com sucesso</td>
+<td>sim (limpa o cache)</td>
+</tr>
+<tr>
+<td>Outro usuário (<code>data-paginationjs-user</code>)</td>
+<td>chave diferente, nunca compartilha</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> só ligue o cache em listas que podem ficar alguns segundos desatualizadas.</p>
+</blockquote>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="exemplos-estados-textos.html"><span>Anterior</span>Estados e textos</a><a class="next" href="exemplos-javascript.html"><span>Próxima</span>JavaScript</a></nav>
+        </main>
+    </div>
+</body>
+</html>

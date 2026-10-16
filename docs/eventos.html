@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Eventos — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
     <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
 </head>
 <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -14,38 +17,23 @@
     </header>
     <div class="layout">
         <nav class="sidebar" aria-label="Documentação">
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
-                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
-                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
-                <li><a href="colunas.html">Colunas</a></li>
-                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
-                <li><a href="controles.html">Controles declarativos</a></li>
-                <li><a href="acoes.html">Ações por linha</a></li>
-                <li><a href="api-js.html">API JavaScript</a></li>
-                <li><a href="eventos.html" aria-current="page">Eventos</a></li>
-                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
-                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
-                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
-                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
-                <li><a href="testes.html">Testes</a></li>
-            </ul>
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html" aria-current="page">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
         </nav>
         <main id="conteudo" class="content">
 
 <h1 id="eventos">Eventos</h1>
 <p>Todos são <code>CustomEvent</code> disparados no <strong>elemento raiz</strong>, com <code>bubbles: true</code>. O <code>detail</code> contém <strong>cópias</strong>
 (alterá-las não afeta a listagem). Sempre há <code>detail.id</code> (identificador da listagem).</p>
-<pre><code class="language-js">document.getElementById(&#39;clientes&#39;).addEventListener(&#39;hrpaginationjs:load&#39;, function (e) {
-    console.log(e.detail.total);
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:load&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">detail</span>.<span class="hljs-property">total</span>);
 });
 
-// jQuery
-jQuery(document).on(&#39;hrpaginationjs:error&#39;, &#39;#clientes&#39;, function (e) {
-    var erro = e.originalEvent.detail.error;
-});
-</code></pre>
+<span class="hljs-comment">// jQuery</span>
+<span class="hljs-title function_">jQuery</span>(<span class="hljs-variable language_">document</span>).<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;hrpaginationjs:error&#x27;</span>, <span class="hljs-string">&#x27;#clientes&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">var</span> erro = e.<span class="hljs-property">originalEvent</span>.<span class="hljs-property">detail</span>.<span class="hljs-property">error</span>;
+});</code></pre></div>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -122,17 +110,15 @@ jQuery(document).on(&#39;hrpaginationjs:error&#39;, &#39;#clientes&#39;, functio
 e igual a <code>total</code> no <code>apiresponse</code>. <code>params</code> é exatamente o que será enviado ao servidor.</p>
 <h2 id="exemplos-úteis">Exemplos úteis <a class="anchor" href="#exemplos-úteis" aria-label="Link para esta seção">#</a></h2>
 <p>Redirecionar quando a sessão expira:</p>
-<pre><code class="language-js">document.addEventListener(&#39;hrpaginationjs:error&#39;, function (e) {
-    if (e.detail.error.kind === &#39;session&#39;) {
-        window.location.href = &#39;index.php?option=com_users&amp;view=login&#39;;
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:error&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">if</span> (e.<span class="hljs-property">detail</span>.<span class="hljs-property">error</span>.<span class="hljs-property">kind</span> === <span class="hljs-string">&#x27;session&#x27;</span>) {
+        <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span> = <span class="hljs-string">&#x27;index.php?option=com_users&amp;view=login&#x27;</span>;
     }
-});
-</code></pre>
+});</code></pre></div>
 <p>Atualizar um contador fora da listagem:</p>
-<pre><code class="language-js">document.getElementById(&#39;clientes&#39;).addEventListener(&#39;hrpaginationjs:load&#39;, function (e) {
-    document.getElementById(&#39;total-clientes&#39;).textContent = e.detail.total;
-});
-</code></pre>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:load&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;total-clientes&#x27;</span>).<span class="hljs-property">textContent</span> = e.<span class="hljs-property">detail</span>.<span class="hljs-property">total</span>;
+});</code></pre></div>
 
 <nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="api-js.html"><span>Anterior</span>API JavaScript</a><a class="next" href="backend.html"><span>Próxima</span>Contrato da API e adaptadores</a></nav>
         </main>

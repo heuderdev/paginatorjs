@@ -32,15 +32,15 @@ node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js
 node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js --lib dist/hr-paginationjs.min.js
 ```
 
-Matriz executada em 2026-10-16 (35 testes cada, tanto com `src/` quanto com `dist/hr-paginationjs.min.js`):
+Matriz executada em 2026-10-16 (39 testes cada, tanto com `src/` quanto com `dist/hr-paginationjs.min.js`):
 
 | jQuery | Resultado |
 |---|---|
 | 1.6.4 | Recusado com a mensagem “exige jQuery 1.7 ou superior” (esperado: o Pagination.js 2.6.0 não funciona com ele) |
-| 1.7.2, 1.8.3, 1.9.1, 1.10.2, 1.11.3, 1.12.4 | 35/35 |
-| 2.2.4 | 35/35 |
-| 3.0.0, 3.3.1, 3.5.1, 3.7.1, 3.7.1 *slim* | 35/35 |
-| 4.0.0, 4.0.0 *slim* | 35/35 |
+| 1.7.2, 1.8.3, 1.9.1, 1.10.2, 1.11.3, 1.12.4 | 39/39 |
+| 2.2.4 | 39/39 |
+| 3.0.0, 3.3.1, 3.5.1, 3.7.1, 3.7.1 *slim* | 39/39 |
+| 4.0.0, 4.0.0 *slim* | 39/39 |
 
 ## Cenários cobertos
 
@@ -81,6 +81,18 @@ Matriz executada em 2026-10-16 (35 testes cada, tanto com `src/` quanto com `dis
 | 32 | Transporte nativo (`XMLHttpRequest` falso): URL, cabeçalhos, JSON, HTML no lugar de JSON, timeout, abort real e promessa superada resolvendo com a resposta mais recente |
 | 33 | Ação remota pelo transporte nativo: POST urlencoded com token |
 | 34 | jQuery anterior a 1.7 gera mensagem clara |
+| 35 | Adaptador `laravel`: `paginate()` puro, API Resource, envelope do `ResponseService`, `simplePaginate` recusado |
+| 36 | HTTP 419 vira `session`; mensagem lida de `message` (Laravel) |
+| 37 | Token CSRF: `@csrf` e `data-paginationjs-csrf="header"` enviam só o cabeçalho; `auto` mantém o campo do Joomla |
+| 38 | Ação remota: `204 No Content` e JSON sem envelope com `message` contam como sucesso |
+
+## Laravel real
+
+Executado em 2026-10-16 num Laravel 13.37 criado do zero (SQLite, `VerifyCsrfToken` ativo, `ResponseService.php` do
+projeto e `ResponseService::fromThrowable` registrado), com `dist/hr-paginationjs.min.js` e jsdom contra
+`php artisan serve`: listagem, `money` em decimal do Eloquent, XSS, paginação, ordenação, filtros `status` + `uf[]`,
+busca, ação `POST` com token, corpo sem campo extra (`csrf="header"`), 422, `DELETE` via `_method`, 419, 401,
+`paginate()` puro, troca de página nele e API Resource — 16 de 16.
 
 ## Limites
 

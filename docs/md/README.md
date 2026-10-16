@@ -6,6 +6,9 @@ Micro-framework de listagens remotas para Joomla 3 / PHP 7.0. Toda a tela é con
 Pagination.js 2.6.0 desenha **apenas os botões de página**. Requisição, estado, busca, filtros, ordenação,
 renderização, colunas, preferências e erros pertencem ao hr-paginationjs.
 
+> **Dica:** procurando como fazer algo? Comece pelos **[Exemplos](exemplos.md)** — receitas prontas para copiar,
+> organizadas por recurso.
+
 ## Índice
 
 1. [Instalação e ordem de carregamento](instalacao.md)
@@ -57,8 +60,8 @@ npm run docs
 |---|---|
 | `npm install` | Instala as ferramentas de desenvolvimento (esbuild, jsdom, marked). A biblioteca em si não tem dependências npm. |
 | `npm run build` | Gera `dist/` (`.js`, `.min.js`, `.css`, `.min.css`, Pagination.js) e `dist/sizes.json`. |
-| `npm test` | 35 testes contra `src/`. |
-| `npm run test:dist` | Os mesmos 35 testes contra `dist/hr-paginationjs.min.js`. |
+| `npm test` | 39 testes contra `src/`. |
+| `npm run test:dist` | Os mesmos 39 testes contra `dist/hr-paginationjs.min.js`. |
 | `npm run test:all` | build + os dois acima. |
 | `npm run docs` | Gera `docs/*.html` a partir de `docs/md/`. |
 | `npm run pacote` | build + `pacote/hr-paginationjs-<versão>.zip` para levar aos projetos. |

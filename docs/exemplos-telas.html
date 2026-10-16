@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Montando a tela — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/exemplos-telas.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html" aria-current="page">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#carregando-os-arquivos-uma-vez-por-página">Carregando os arquivos (uma vez por página)</a></li><li><a href="#tela-mínima">Tela mínima</a></li><li><a href="#tela-com-toolbar-automática">Tela com toolbar automática</a></li><li><a href="#controles-posicionados-por-você">Controles posicionados por você</a></li><li><a href="#controles-fora-do-elemento-da-listagem">Controles fora do elemento da listagem</a></li><li><a href="#identificador-estável-diferente-do-id">Identificador estável diferente do id</a></li><li><a href="#quantidade-inicial-e-opções-de-quantidade">Quantidade inicial e opções de quantidade</a></li><li><a href="#parâmetros-fixos-em-toda-requisição">Parâmetros fixos em toda requisição</a></li><li><a href="#renomear-os-parâmetros-enviados">Renomear os parâmetros enviados</a></li><li><a href="#listagem-por-post">Listagem por POST</a></li><li><a href="#campo-que-identifica-a-linha">Campo que identifica a linha</a></li><li><a href="#idioma-e-moeda-dos-formatadores">Idioma e moeda dos formatadores</a></li><li><a href="#escolher-a-tabela-quando-há-mais-de-uma">Escolher a tabela quando há mais de uma</a></li><li><a href="#conteúdo-antes-da-primeira-carga">Conteúdo antes da primeira carga</a></li></ul></nav>
+<h1 id="montando-a-tela">Montando a tela</h1>
+<h2 id="carregando-os-arquivos-uma-vez-por-página">Carregando os arquivos (uma vez por página) <a class="anchor" href="#carregando-os-arquivos-uma-vez-por-página" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML <span class="code-file">Fora do Joomla</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/assets/hr-paginationjs/hr-paginationjs.min.css&quot;</span>&gt;</span>
+
+<span class="hljs-comment">&lt;!-- ... conteúdo da página ... --&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/assets/js/jquery.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/assets/hr-paginationjs/pagination-2.6.0.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/assets/hr-paginationjs/hr-paginationjs.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre></div>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">views/clientes/tmpl/default.php (Joomla 3)</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-meta">&lt;?php</span>
+<span class="hljs-title function_ invoke__">defined</span>(<span class="hljs-string">&#x27;_JEXEC&#x27;</span>) <span class="hljs-keyword">or</span> <span class="hljs-keyword">die</span>;
+
+<span class="hljs-title class_">JHtml</span>::<span class="hljs-title function_ invoke__">_</span>(<span class="hljs-string">&#x27;jquery.framework&#x27;</span>);
+<span class="hljs-title class_">JHtml</span>::<span class="hljs-title function_ invoke__">_</span>(<span class="hljs-string">&#x27;script&#x27;</span>, <span class="hljs-string">&#x27;com_loja/pagination-2.6.0.min.js&#x27;</span>, <span class="hljs-keyword">array</span>(<span class="hljs-string">&#x27;relative&#x27;</span> =&gt; <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;version&#x27;</span> =&gt; <span class="hljs-string">&#x27;auto&#x27;</span>));
+<span class="hljs-title class_">JHtml</span>::<span class="hljs-title function_ invoke__">_</span>(<span class="hljs-string">&#x27;script&#x27;</span>, <span class="hljs-string">&#x27;com_loja/hr-paginationjs.min.js&#x27;</span>, <span class="hljs-keyword">array</span>(<span class="hljs-string">&#x27;relative&#x27;</span> =&gt; <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;version&#x27;</span> =&gt; <span class="hljs-string">&#x27;auto&#x27;</span>));
+<span class="hljs-title class_">JHtml</span>::<span class="hljs-title function_ invoke__">_</span>(<span class="hljs-string">&#x27;stylesheet&#x27;</span>, <span class="hljs-string">&#x27;com_loja/hr-paginationjs.min.css&#x27;</span>, <span class="hljs-keyword">array</span>(<span class="hljs-string">&#x27;relative&#x27;</span> =&gt; <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;version&#x27;</span> =&gt; <span class="hljs-string">&#x27;auto&#x27;</span>));</code></pre></div>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> ao terminar de carregar a página, a biblioteca procura todo elemento com <code>data-paginationjs</code>
+e cria uma listagem para cada um. Não é preciso chamar nada.</p>
+</blockquote>
+<h2 id="tela-mínima">Tela mínima <a class="anchor" href="#tela-mínima" aria-label="Link para esta seção">#</a></h2>
+<p>O suficiente para uma listagem paginada no servidor: um elemento com <code>id</code>, o endpoint e o <code>&lt;thead&gt;</code>.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span>
+     <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;id&quot;</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;email&quot;</span>&gt;</span>E-mail<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;page=1&amp;limit=20&amp;_=1760630400000
+<span class="hljs-attribute">X-Requested-With</span><span class="hljs-punctuation">: </span>XMLHttpRequest
+<span class="hljs-attribute">Accept</span><span class="hljs-punctuation">: </span>application/json, text/javascript, */*; q=0.01</code></pre></div>
+<blockquote class="callout callout-result"><p><strong>Resultado:</strong> a biblioteca cria o <code>&lt;tbody&gt;</code>, o resumo (“Exibindo 1 a 20 de 137 registros”) e a paginação logo
+abaixo da tabela. O parâmetro <code>_</code> só evita cache do navegador; o <code>InputHelper</code> o ignora.</p>
+</blockquote>
+<h2 id="tela-com-toolbar-automática">Tela com toolbar automática <a class="anchor" href="#tela-com-toolbar-automática" aria-label="Link para esta seção">#</a></h2>
+<p><code>data-paginationjs-toolbar</code> cria os controles prontos, com <code>&lt;label&gt;</code>, na ordem informada.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span>
+     <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-toolbar</span>=<span class="hljs-string">&quot;search,limit,columns,reload,clear&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;id&quot;</span> <span class="hljs-attr">data-paginationjs-sortable</span> <span class="hljs-attr">data-paginationjs-required</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span> <span class="hljs-attr">data-paginationjs-sortable</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;email&quot;</span>&gt;</span>E-mail<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;cidade&quot;</span> <span class="hljs-attr">data-paginationjs-sortable</span>&gt;</span>Cidade<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<figure class="preview"><figcaption>Como fica na tela</figcaption><div class="preview-body"><div class="hrpjs">
+<div class="hrpjs-toolbar">
+<div class="hrpjs-field hrpjs-field--search"><label class="hrpjs-label">Buscar</label><input class="hrpjs-input" type="search" value="ana"></div>
+<div class="hrpjs-field hrpjs-field--limit"><label class="hrpjs-label">Por página</label><select class="hrpjs-select"><option>20</option></select></div>
+<div class="hrpjs-field"><details class="hrpjs-columns"><summary class="hrpjs-columns-toggle">Colunas</summary></details></div>
+<button type="button" class="hrpjs-button">Atualizar</button>
+<button type="button" class="hrpjs-button">Limpar</button>
+</div>
+<table class="hrpjs-table"><thead><tr><th class="hrpjs-sorted-asc" aria-sort="ascending"><button type="button" class="hrpjs-sort">ID <span class="hrpjs-sort-icon">▲</span></button></th><th><button type="button" class="hrpjs-sort">Nome <span class="hrpjs-sort-icon">↕</span></button></th><th>E-mail</th><th><button type="button" class="hrpjs-sort">Cidade <span class="hrpjs-sort-icon">↕</span></button></th></tr></thead>
+<tbody><tr><td>1</td><td>Ana Silva</td><td>ana.silva1@exemplo.com.br</td><td>Rio de Janeiro</td></tr><tr><td>20</td><td>Ana Costa</td><td>ana.costa20@exemplo.com.br</td><td>Curitiba</td></tr><tr><td>40</td><td>Ana Lima</td><td>ana.lima40@exemplo.com.br</td><td>Salvador</td></tr></tbody></table>
+<div class="hrpjs-footer"><div class="hrpjs-summary">Exibindo 1 a 3 de 3 registros</div></div>
+</div></div></figure>
+<h2 id="controles-posicionados-por-você">Controles posicionados por você <a class="anchor" href="#controles-posicionados-por-você" aria-label="Link para esta seção">#</a></h2>
+<p>Sem toolbar, você coloca cada controle onde quiser e escreve o seu próprio <code>&lt;label&gt;</code>.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span>
+     <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;minha-barra&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Buscar cliente
+            <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">data-paginationjs-search</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Por página
+            <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">data-paginationjs-page-size</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-paginationjs-columns</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-reload</span>&gt;</span>Atualizar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;id&quot;</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;meu-rodape&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">data-paginationjs-summary</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-paginationjs-pager</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> o <code>&lt;select data-paginationjs-page-size&gt;</code> vazio recebe as opções de <code>data-paginationjs-limits</code>
+(padrão 10, 20, 50, 100). Se ele já tiver <code>&lt;option&gt;</code>, as suas são mantidas.</p>
+</blockquote>
+<h2 id="controles-fora-do-elemento-da-listagem">Controles fora do elemento da listagem <a class="anchor" href="#controles-fora-do-elemento-da-listagem" aria-label="Link para esta seção">#</a></h2>
+<p>Use <code>data-paginationjs-for=&quot;&lt;id da listagem&gt;&quot;</code> no controle ou num contêiner. Útil quando a busca fica no
+cabeçalho do template.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">header</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cabecalho-da-pagina&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-paginationjs-for</span>=<span class="hljs-string">&quot;clientes&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">data-paginationjs-search</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Buscar clientes&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-reload</span>&gt;</span>Atualizar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="identificador-estável-diferente-do-id">Identificador estável diferente do <code>id</code> <a class="anchor" href="#identificador-estável-diferente-do-id" aria-label="Link para esta seção">#</a></h2>
+<p>O <code>id</code> do HTML pode mudar entre telas; preferências e URL usam <code>data-paginationjs-id</code>.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;lista-123&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-id</span>=<span class="hljs-string">&quot;loja.clientes&quot;</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;loja.clientes&#x27;</span>).<span class="hljs-title function_">reload</span>();</code></pre></div>
+<h2 id="quantidade-inicial-e-opções-de-quantidade">Quantidade inicial e opções de quantidade <a class="anchor" href="#quantidade-inicial-e-opções-de-quantidade" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-limit</span>=<span class="hljs-string">&quot;50&quot;</span>
+     <span class="hljs-attr">data-paginationjs-limits</span>=<span class="hljs-string">&quot;25,50,100&quot;</span>
+     <span class="hljs-attr">data-paginationjs-toolbar</span>=<span class="hljs-string">&quot;limit&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;page=1&amp;limit=50&amp;_=...</code></pre></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> o servidor manda no limite real. Com <code>InputHelper::pagination(20, 100)</code>, pedir <code>limit=500</code> volta
+<code>por_pagina: 100</code>, e a listagem passa a usar 100.</p>
+</blockquote>
+<h2 id="parâmetros-fixos-em-toda-requisição">Parâmetros fixos em toda requisição <a class="anchor" href="#parâmetros-fixos-em-toda-requisição" aria-label="Link para esta seção">#</a></h2>
+<p>Para telas que listam um subconjunto fixo (ex.: clientes de uma categoria).</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes-governo&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-params</span>=<span class="hljs-string">&#x27;{&quot;categoria&quot;: &quot;governo&quot;, &quot;origem&quot;: &quot;painel&quot;}&#x27;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;categoria=governo&amp;origem=painel&amp;page=1&amp;limit=20&amp;_=...</code></pre></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> nunca coloque segredos em atributos HTML. O servidor deve validar <code>categoria</code> como qualquer filtro.</p>
+</blockquote>
+<h2 id="renomear-os-parâmetros-enviados">Renomear os parâmetros enviados <a class="anchor" href="#renomear-os-parâmetros-enviados" aria-label="Link para esta seção">#</a></h2>
+<p>Quando o endpoint já existe com outros nomes.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-names</span>=<span class="hljs-string">&#x27;{&quot;page&quot;: &quot;pagina&quot;, &quot;limit&quot;: &quot;por_pagina&quot;, &quot;search&quot;: &quot;busca&quot;, &quot;sort&quot;: &quot;ordem&quot;, &quot;direction&quot;: &quot;direcao&quot;}&#x27;</span>
+     <span class="hljs-attr">data-paginationjs-toolbar</span>=<span class="hljs-string">&quot;search&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;pagina=1&amp;por_pagina=20&amp;busca=ana&amp;_=...</code></pre></div>
+<h2 id="listagem-por-post">Listagem por POST <a class="anchor" href="#listagem-por-post" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-method</span>=<span class="hljs-string">&quot;POST&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">POST index.php?option=com_loja&amp;task=clientes.listar
+<span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>application/x-www-form-urlencoded; charset=UTF-8
+
+page=1&amp;limit=20&amp;status%5B%5D=ativo</code></pre></div>
+<h2 id="campo-que-identifica-a-linha">Campo que identifica a linha <a class="anchor" href="#campo-que-identifica-a-linha" aria-label="Link para esta seção">#</a></h2>
+<p>As ações usam a chave da linha (padrão <code>id</code>). Aceita caminho com ponto.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;pedidos&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=pedidos.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-row-key</span>=<span class="hljs-string">&quot;pedido.numero&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="idioma-e-moeda-dos-formatadores">Idioma e moeda dos formatadores <a class="anchor" href="#idioma-e-moeda-dos-formatadores" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;faturas&quot;</span> <span class="hljs-attr">data-paginationjs</span>
+     <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=faturas.listar&quot;</span>
+     <span class="hljs-attr">data-paginationjs-locale</span>=<span class="hljs-string">&quot;en-US&quot;</span>
+     <span class="hljs-attr">data-paginationjs-currency</span>=<span class="hljs-string">&quot;USD&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;valor&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;money&quot;</span>&gt;</span>Amount<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;vencimento&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;date&quot;</span>&gt;</span>Due<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-result"><p><strong>Resultado:</strong> <code>1234.5</code> vira <code>$1,234.50</code> e <code>2026-01-31</code> vira <code>01/31/2026</code>.</p>
+</blockquote>
+<h2 id="escolher-a-tabela-quando-há-mais-de-uma">Escolher a tabela quando há mais de uma <a class="anchor" href="#escolher-a-tabela-quando-há-mais-de-uma" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;legenda&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">data-paginationjs-table</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="conteúdo-antes-da-primeira-carga">Conteúdo antes da primeira carga <a class="anchor" href="#conteúdo-antes-da-primeira-carga" aria-label="Link para esta seção">#</a></h2>
+<p>Um <code>&lt;tbody&gt;</code> já preenchido (ex.: linhas renderizadas pelo PHP) é substituído na primeira resposta e volta
+intacto se a listagem for destruída.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>Carregando clientes…<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></code></pre></div>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="exemplos.html"><span>Anterior</span>Exemplos</a><a class="next" href="exemplos-colunas.html"><span>Próxima</span>Colunas</a></nav>
+        </main>
+    </div>
+</body>
+</html>

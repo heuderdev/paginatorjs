@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Atributos do elemento raiz — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
     <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
 </head>
 <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -14,23 +17,9 @@
     </header>
     <div class="layout">
         <nav class="sidebar" aria-label="Documentação">
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
-                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
-                <li><a href="atributos.html" aria-current="page">Atributos do elemento raiz</a></li>
-                <li><a href="colunas.html">Colunas</a></li>
-                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
-                <li><a href="controles.html">Controles declarativos</a></li>
-                <li><a href="acoes.html">Ações por linha</a></li>
-                <li><a href="api-js.html">API JavaScript</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
-                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
-                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
-                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
-                <li><a href="testes.html">Testes</a></li>
-            </ul>
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html" aria-current="page">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
         </nav>
         <main id="conteudo" class="content">
 <nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#textos-data-paginationjs-text-">Textos (data-paginationjs-text-*)</a></li><li><a href="#precedência-do-estado-inicial">Precedência do estado inicial</a></li></ul></nav>
@@ -76,7 +65,13 @@ Todo atributo tem um equivalente em JavaScript (segunda coluna) para quem inicia
 <td><code>data-paginationjs-adapter</code></td>
 <td><code>adapter</code></td>
 <td><code>apiresponse</code></td>
-<td><code>apiresponse</code> (contrato do <code>ApiResponseHelper</code>) ou <code>datatables</code>, ou um adaptador registrado.</td>
+<td><code>apiresponse</code> (contrato do <code>ApiResponseHelper</code>/<code>ResponseService</code>), <code>laravel</code> (<code>paginate()</code> puro, API Resource ou envelope), <code>datatables</code>, ou um adaptador registrado.</td>
+</tr>
+<tr>
+<td><code>data-paginationjs-csrf</code></td>
+<td><code>csrf</code></td>
+<td><code>auto</code></td>
+<td><code>auto</code>: cabeçalho <code>X-CSRF-Token</code> + campo <code>&lt;token&gt;=1</code> (Joomla). <code>header</code>: só o cabeçalho (recomendado no Laravel). Com <code>@csrf</code> (<code>_token</code>) na página, só o cabeçalho é enviado mesmo em <code>auto</code>.</td>
 </tr>
 <tr>
 <td><code>data-paginationjs-names</code></td>
@@ -303,7 +298,7 @@ Para mudar o padrão de todas as listagens: <code>HrPaginationjs.texts.empty = &
 <p><strong>URL</strong> (se <code>data-paginationjs-url</code>) <strong>&gt; preferências salvas</strong> (se <code>data-paginationjs-persist</code>) <strong>&gt; HTML</strong>
 (atributos e valores já preenchidos nos campos de filtro/busca).</p>
 
-<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="primeira-tela.html"><span>Anterior</span>Primeira tela em 2 minutos</a><a class="next" href="colunas.html"><span>Próxima</span>Colunas</a></nav>
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="exemplos-integracoes.html"><span>Anterior</span>Integrações</a><a class="next" href="colunas.html"><span>Próxima</span>Colunas</a></nav>
         </main>
     </div>
 </body>

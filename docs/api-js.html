@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>API JavaScript — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
     <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
 </head>
 <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -14,23 +17,9 @@
     </header>
     <div class="layout">
         <nav class="sidebar" aria-label="Documentação">
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
-                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
-                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
-                <li><a href="colunas.html">Colunas</a></li>
-                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
-                <li><a href="controles.html">Controles declarativos</a></li>
-                <li><a href="acoes.html">Ações por linha</a></li>
-                <li><a href="api-js.html" aria-current="page">API JavaScript</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
-                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
-                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
-                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
-                <li><a href="testes.html">Testes</a></li>
-            </ul>
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html" aria-current="page">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
         </nav>
         <main id="conteudo" class="content">
 <nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#objeto-global-hrpaginationjs">Objeto global HrPaginationjs</a></li><li><a href="#métodos-da-instância">Métodos da instância</a></li><li><a href="#erros">Erros</a></li></ul></nav>
@@ -103,8 +92,7 @@
 </tr>
 </tbody>
 </table></div>
-<pre><code class="language-js">var lista = HrPaginationjs.get(&#39;clientes&#39;);
-</code></pre>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> lista = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);</code></pre></div>
 <h2 id="métodos-da-instância">Métodos da instância <a class="anchor" href="#métodos-da-instância" aria-label="Link para esta seção">#</a></h2>
 <p>Resumo do comportamento:</p>
 <div class="table-wrap"><table>
@@ -213,10 +201,9 @@ mais recente.</p>
 biblioteca marca a própria rejeição como tratada. Se você encadear <code>.then(...)</code>, termine com <code>.catch(...)</code>
 (a nova promise criada pelo <code>.then</code> é sua).</li>
 </ul>
-<pre><code class="language-js">lista.setFilter(&#39;status&#39;, &#39;ativo&#39;)
-    .then(function (estado) { console.log(estado.total); })
-    .catch(function (erro) { if (erro.kind === &#39;session&#39;) location.reload(); });
-</code></pre>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript">lista.<span class="hljs-title function_">setFilter</span>(<span class="hljs-string">&#x27;status&#x27;</span>, <span class="hljs-string">&#x27;ativo&#x27;</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">estado</span>) { <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(estado.<span class="hljs-property">total</span>); })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">erro</span>) { <span class="hljs-keyword">if</span> (erro.<span class="hljs-property">kind</span> === <span class="hljs-string">&#x27;session&#x27;</span>) location.<span class="hljs-title function_">reload</span>(); });</code></pre></div>
 <h3 id="reload"><code>reload()</code> <a class="anchor" href="#reload" aria-label="Link para esta seção">#</a></h3>
 <p>Recarrega a página atual com os mesmos parâmetros, sempre indo ao servidor. Use após salvar um registro num modal.</p>
 <h3 id="setpagen"><code>setPage(n)</code> <a class="anchor" href="#setpagen" aria-label="Link para esta seção">#</a></h3>
@@ -230,8 +217,7 @@ corrige <strong>uma única vez</strong> para a última página válida. <code>n 
 <h3 id="setfilternome-valor--setfiltersobjeto-substituir"><code>setFilter(nome, valor)</code> / <code>setFilters(objeto, substituir?)</code> <a class="anchor" href="#setfilternome-valor--setfiltersobjeto-substituir" aria-label="Link para esta seção">#</a></h3>
 <p>Normaliza pelo tipo do campo de mesmo nome (<code>number</code>, <code>bool</code>, <code>date</code>…). <code>&#39;&#39;</code>, <code>null</code>, <code>[]</code> removem o filtro.
 <code>setFilters({...})</code> mescla; <code>setFilters({...}, true)</code> substitui todos. Os campos do formulário são atualizados.</p>
-<pre><code class="language-js">lista.setFilters({ status: &#39;ativo&#39;, uf: [&#39;SP&#39;, &#39;RJ&#39;] });
-</code></pre>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript">lista.<span class="hljs-title function_">setFilters</span>({ <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;ativo&#x27;</span>, <span class="hljs-attr">uf</span>: [<span class="hljs-string">&#x27;SP&#x27;</span>, <span class="hljs-string">&#x27;RJ&#x27;</span>] });</code></pre></div>
 <h3 id="clearfilters"><code>clearFilters()</code> <a class="anchor" href="#clearfilters" aria-label="Link para esta seção">#</a></h3>
 <p>Remove todos os filtros (mantém a busca).</p>
 <h3 id="setsortkey-direcao"><code>setSort(key, direcao?)</code> <a class="anchor" href="#setsortkey-direcao" aria-label="Link para esta seção">#</a></h3>
@@ -247,19 +233,18 @@ Sem <code>direcao</code>: alterna se já for a coluna atual; senão usa <code>da
 <p>Apaga as preferências salvas e volta colunas, quantidade e ordenação (e busca/filtros, se eram persistidos) ao
 padrão do HTML. Recarrega a partir da página 1.</p>
 <h3 id="getstate"><code>getState()</code> <a class="anchor" href="#getstate" aria-label="Link para esta seção">#</a></h3>
-<pre><code class="language-js">{
-    id: &#39;clientes&#39;,
-    page: 2, limit: 20, search: &#39;ana&#39;,
-    filters: { status: &#39;ativo&#39;, uf: [&#39;SP&#39;] },
-    sort: &#39;nome&#39;, direction: &#39;asc&#39;,
-    columns: [&#39;id&#39;, &#39;nome&#39;, &#39;email&#39;],      // visíveis, na ordem da tabela
-    hiddenColumns: [&#39;site&#39;],
-    loading: false,
-    error: null,                           // ou o objeto de erro
-    total: 135, totalPages: 7,
-    requestId: &#39;5f2c…&#39;
-}
-</code></pre>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript">{
+    <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;clientes&#x27;</span>,
+    <span class="hljs-attr">page</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">limit</span>: <span class="hljs-number">20</span>, <span class="hljs-attr">search</span>: <span class="hljs-string">&#x27;ana&#x27;</span>,
+    <span class="hljs-attr">filters</span>: { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;ativo&#x27;</span>, <span class="hljs-attr">uf</span>: [<span class="hljs-string">&#x27;SP&#x27;</span>] },
+    <span class="hljs-attr">sort</span>: <span class="hljs-string">&#x27;nome&#x27;</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;asc&#x27;</span>,
+    <span class="hljs-attr">columns</span>: [<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;nome&#x27;</span>, <span class="hljs-string">&#x27;email&#x27;</span>],      <span class="hljs-comment">// visíveis, na ordem da tabela</span>
+    <span class="hljs-attr">hiddenColumns</span>: [<span class="hljs-string">&#x27;site&#x27;</span>],
+    <span class="hljs-attr">loading</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">error</span>: <span class="hljs-literal">null</span>,                           <span class="hljs-comment">// ou o objeto de erro</span>
+    <span class="hljs-attr">total</span>: <span class="hljs-number">135</span>, <span class="hljs-attr">totalPages</span>: <span class="hljs-number">7</span>,
+    <span class="hljs-attr">requestId</span>: <span class="hljs-string">&#x27;5f2c…&#x27;</span>
+}</code></pre></div>
 <p>É uma cópia: alterar o objeto não altera a listagem.</p>
 <h3 id="getrows"><code>getRows()</code> <a class="anchor" href="#getrows" aria-label="Link para esta seção">#</a></h3>
 <p>Cópia das linhas da página atual.</p>
@@ -269,8 +254,7 @@ Pagination.js, remove tudo o que a biblioteca criou, restaura os <code>&lt;th&gt
 registro. Depois disso, <code>HrPaginationjs.init()</code> no mesmo elemento cria uma instância nova, sem duplicações.</p>
 <h2 id="erros">Erros <a class="anchor" href="#erros" aria-label="Link para esta seção">#</a></h2>
 <p>Objeto entregue em rejeições, em <code>getState().error</code> e no evento <code>hrpaginationjs:error</code>:</p>
-<pre><code class="language-js">{ kind: &#39;api&#39;, status: 200, message: &#39;Filtro inválido.&#39;, errors: { status: [&#39;…&#39;] }, requestId: &#39;abc&#39; }
-</code></pre>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript">{ <span class="hljs-attr">kind</span>: <span class="hljs-string">&#x27;api&#x27;</span>, <span class="hljs-attr">status</span>: <span class="hljs-number">200</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;Filtro inválido.&#x27;</span>, <span class="hljs-attr">errors</span>: { <span class="hljs-attr">status</span>: [<span class="hljs-string">&#x27;…&#x27;</span>] }, <span class="hljs-attr">requestId</span>: <span class="hljs-string">&#x27;abc&#x27;</span> }</code></pre></div>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -301,7 +285,7 @@ registro. Depois disso, <code>HrPaginationjs.init()</code> no mesmo elemento cri
 </tr>
 <tr>
 <td><code>session</code></td>
-<td>HTTP 401.</td>
+<td>HTTP 401 ou 419 (token/sessão vencidos no Laravel).</td>
 </tr>
 <tr>
 <td><code>permission</code></td>
@@ -321,7 +305,7 @@ registro. Depois disso, <code>HrPaginationjs.init()</code> no mesmo elemento cri
 </tr>
 </tbody>
 </table></div>
-<p><code>message</code> usa a <code>mensagem</code> do servidor quando existir (o <code>ApiResponseHelper</code> já entrega mensagens públicas);
+<p><code>message</code> usa a <code>mensagem</code> do servidor (ou o <code>message</code> do Laravel) quando existir (o <code>ApiResponseHelper</code> já entrega mensagens públicas);
 caso contrário, um texto padrão. Detalhes internos nunca são exibidos.</p>
 
 <nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="acoes.html"><span>Anterior</span>Ações por linha</a><a class="next" href="eventos.html"><span>Próxima</span>Eventos</a></nav>

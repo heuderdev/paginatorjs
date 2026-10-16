@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Filtros — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/exemplos-filtros.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html" aria-current="page">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#formulário-de-filtros-completo">Formulário de filtros completo</a></li><li><a href="#select-simples">Select simples</a></li><li><a href="#select-com-várias-escolhas">Select com várias escolhas</a></li><li><a href="#grupo-de-checkboxes">Grupo de checkboxes</a></li><li><a href="#checkbox-único-ligadesliga">Checkbox único (liga/desliga)</a></li><li><a href="#sim--não--todos-booleano">Sim / Não / Todos (booleano)</a></li><li><a href="#radio">Radio</a></li><li><a href="#números-decimal-e-inteiro">Números (decimal e inteiro)</a></li><li><a href="#datas">Datas</a></li><li><a href="#aplicar-só-ao-clicar-em-filtrar">Aplicar só ao clicar em “Filtrar”</a></li><li><a href="#campo-dentro-do-formulário-que-não-é-filtro">Campo dentro do formulário que não é filtro</a></li><li><a href="#filtro-avulso-sem-formulário">Filtro avulso, sem formulário</a></li><li><a href="#filtros-fora-da-listagem-barra-lateral">Filtros fora da listagem (barra lateral)</a></li><li><a href="#filtro-já-aplicado-ao-abrir">Filtro já aplicado ao abrir</a></li><li><a href="#filtro-escondido-definido-pela-tela">Filtro escondido (definido pela tela)</a></li></ul></nav>
+<h1 id="filtros">Filtros</h1>
+<p>Todo campo com <code>name</code> dentro de <code>&lt;form data-paginationjs-filters&gt;</code> é um filtro. O valor é enviado com o mesmo
+<code>name</code>, tipado e sem vazios. Qualquer mudança volta para a página 1 e faz <strong>uma</strong> requisição.</p>
+<h2 id="formulário-de-filtros-completo">Formulário de filtros completo <a class="anchor" href="#formulário-de-filtros-completo" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;filtros&quot;</span> <span class="hljs-attr">data-paginationjs-filters</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Status
+            <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;status&quot;</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>Todos<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;ativo&quot;</span>&gt;</span>Ativos<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;inativo&quot;</span>&gt;</span>Inativos<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">fieldset</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">legend</span>&gt;</span>Estados<span class="hljs-tag">&lt;/<span class="hljs-name">legend</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;uf[]&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;SP&quot;</span>&gt;</span> SP<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;uf[]&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;RJ&quot;</span>&gt;</span> RJ<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;uf[]&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;MG&quot;</span>&gt;</span> MG<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">fieldset</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Limite mínimo (R$)
+            <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;limite_min&quot;</span> <span class="hljs-attr">inputmode</span>=<span class="hljs-string">&quot;decimal&quot;</span> <span class="hljs-attr">data-paginationjs-type</span>=<span class="hljs-string">&quot;number&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Cadastro de <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;de&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>até <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;ate&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-clear</span>=<span class="hljs-string">&quot;filters&quot;</span>&gt;</span>Limpar filtros<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<figure class="preview"><figcaption>Como fica na tela</figcaption><div class="preview-body"><div class="pv-filtros"><label>Status<select><option>Ativos</option></select></label><label>Estados<span><input type="checkbox" checked> SP <input type="checkbox" checked> RJ <input type="checkbox"> MG</span></label><label>Limite mínimo (R$)<input value="10000,50"></label><label>Cadastro de<input type="date" value="2025-01-01"></label><label>até<input type="date" value="2025-06-30"></label><button type="button" class="pv-btn">Limpar filtros</button></div></div></figure>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada <span class="code-file">Com os valores acima</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;status=ativo&amp;uf%5B%5D=SP&amp;uf%5B%5D=RJ&amp;limite_min=10000.5&amp;de=2025-01-01&amp;ate=2025-06-30&amp;page=1&amp;limit=20&amp;_=...</code></pre></div>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">No controller</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-variable">$filtros</span> = <span class="hljs-title class_">InputHelper</span>::<span class="hljs-title function_ invoke__">filters</span>(<span class="hljs-keyword">array</span>(
+    <span class="hljs-string">&#x27;status&#x27;</span> =&gt; <span class="hljs-string">&#x27;cmd&#x27;</span>,
+    <span class="hljs-string">&#x27;uf&#x27;</span> =&gt; <span class="hljs-string">&#x27;array&#x27;</span>,
+    <span class="hljs-string">&#x27;limite_min&#x27;</span> =&gt; <span class="hljs-string">&#x27;float&#x27;</span>,
+    <span class="hljs-string">&#x27;de&#x27;</span> =&gt; <span class="hljs-string">&#x27;string&#x27;</span>,
+    <span class="hljs-string">&#x27;ate&#x27;</span> =&gt; <span class="hljs-string">&#x27;string&#x27;</span>,
+));</code></pre></div>
+<h2 id="select-simples">Select simples <a class="anchor" href="#select-simples" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;categoria&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Categoria&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>Todas<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;varejo&quot;</span>&gt;</span>Varejo<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;atacado&quot;</span>&gt;</span>Atacado<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-result"><p><strong>Resultado:</strong> “Todas” (valor vazio) <strong>não envia</strong> o parâmetro; as outras enviam <code>categoria=varejo</code>.</p>
+</blockquote>
+<h2 id="select-com-várias-escolhas">Select com várias escolhas <a class="anchor" href="#select-com-várias-escolhas" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;uf[]&quot;</span> <span class="hljs-attr">multiple</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;4&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Estados&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;SP&quot;</span>&gt;</span>SP<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;RJ&quot;</span>&gt;</span>RJ<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;MG&quot;</span>&gt;</span>MG<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;PR&quot;</span>&gt;</span>PR<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET ...&amp;uf%5B%5D=SP&amp;uf%5B%5D=PR&amp;page=1&amp;limit=20</code></pre></div>
+<h2 id="grupo-de-checkboxes">Grupo de checkboxes <a class="anchor" href="#grupo-de-checkboxes" aria-label="Link para esta seção">#</a></h2>
+<p>Vários checkboxes com o mesmo <code>name</code> viram lista (com ou sem <code>[]</code> no nome).</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;ativo&quot;</span>&gt;</span> Ativos<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;inativo&quot;</span>&gt;</span> Inativos<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;bloqueado&quot;</span>&gt;</span> Bloqueados<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada <span class="code-file">Dois marcados</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET ...&amp;status%5B%5D=ativo&amp;status%5B%5D=bloqueado&amp;page=1&amp;limit=20</code></pre></div>
+<h2 id="checkbox-único-ligadesliga">Checkbox único (liga/desliga) <a class="anchor" href="#checkbox-único-ligadesliga" aria-label="Link para esta seção">#</a></h2>
+<p>Marcado envia o <code>value</code> (ou <code>1</code>); desmarcado <strong>não envia</strong> (não filtra).</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;vip&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span> Somente VIP<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></code></pre></div>
+<h2 id="sim--não--todos-booleano">Sim / Não / Todos (booleano) <a class="anchor" href="#sim--não--todos-booleano" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;vip&quot;</span> <span class="hljs-attr">data-paginationjs-type</span>=<span class="hljs-string">&quot;bool&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;VIP&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>Todos<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span>Somente VIP<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;0&quot;</span>&gt;</span>Sem VIP<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> o tipo <code>bool</code> normaliza <code>1/0</code>, <code>true/false</code>, <code>sim/não</code>, <code>on/off</code> para <code>1</code> ou <code>0</code>.</p>
+</blockquote>
+<h2 id="radio">Radio <a class="anchor" href="#radio" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">fieldset</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">legend</span>&gt;</span>Período<span class="hljs-tag">&lt;/<span class="hljs-name">legend</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;periodo&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">checked</span>&gt;</span> Todos<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;periodo&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;7d&quot;</span>&gt;</span> 7 dias<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;periodo&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;30d&quot;</span>&gt;</span> 30 dias<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">fieldset</span>&gt;</span></code></pre></div>
+<h2 id="números-decimal-e-inteiro">Números (decimal e inteiro) <a class="anchor" href="#números-decimal-e-inteiro" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Limite mínimo <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;limite_min&quot;</span> <span class="hljs-attr">data-paginationjs-type</span>=<span class="hljs-string">&quot;number&quot;</span> <span class="hljs-attr">inputmode</span>=<span class="hljs-string">&quot;decimal&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Idade mínima <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;idade_min&quot;</span> <span class="hljs-attr">data-paginationjs-type</span>=<span class="hljs-string">&quot;int&quot;</span> <span class="hljs-attr">inputmode</span>=<span class="hljs-string">&quot;numeric&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Pedidos (type=number) <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;number&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;pedidos_min&quot;</span> <span class="hljs-attr">min</span>=<span class="hljs-string">&quot;0&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></code></pre></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Digitado</th>
+<th><code>number</code></th>
+<th><code>int</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>10,5</code></td>
+<td><code>10.5</code></td>
+<td><code>10</code></td>
+</tr>
+<tr>
+<td><code>abc</code></td>
+<td>não envia</td>
+<td>não envia</td>
+</tr>
+<tr>
+<td>(vazio)</td>
+<td>não envia</td>
+<td>não envia</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="datas">Datas <a class="anchor" href="#datas" aria-label="Link para esta seção">#</a></h2>
+<p><code>&lt;input type=&quot;date&quot;&gt;</code> já é tratado como data; para campos de texto use <code>data-paginationjs-type=&quot;date&quot;</code>.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>De <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;de&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Até <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;ate&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Vencimento <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;vencimento&quot;</span> <span class="hljs-attr">data-paginationjs-type</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">&quot;AAAA-MM-DD&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> só <code>AAAA-MM-DD</code> válido é enviado (<code>2026-02-30</code> é descartado). Converta fuso no servidor se o
+banco grava em UTC (ex.: <code>DateHelper::between()</code>).</p>
+</blockquote>
+<h2 id="aplicar-só-ao-clicar-em-filtrar">Aplicar só ao clicar em “Filtrar” <a class="anchor" href="#aplicar-só-ao-clicar-em-filtrar" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">data-paginationjs-filters</span> <span class="hljs-attr">data-paginationjs-apply</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Status&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;de&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;De&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;ate&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Até&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>Filtrar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-clear</span>=<span class="hljs-string">&quot;filters&quot;</span>&gt;</span>Limpar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-result"><p><strong>Resultado:</strong> mexer nos campos não consulta o servidor; o botão <strong>Filtrar</strong> (ou <code>Enter</code>) aplica tudo de uma vez.</p>
+</blockquote>
+<h2 id="campo-dentro-do-formulário-que-não-é-filtro">Campo dentro do formulário que não é filtro <a class="anchor" href="#campo-dentro-do-formulário-que-não-é-filtro" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">data-paginationjs-filters</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Status&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;apelido_da_busca&quot;</span> <span class="hljs-attr">data-paginationjs-ignore</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Salvar busca como&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></code></pre></div>
+<h2 id="filtro-avulso-sem-formulário">Filtro avulso, sem formulário <a class="anchor" href="#filtro-avulso-sem-formulário" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;categoria&quot;</span> <span class="hljs-attr">data-paginationjs-filter</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Categoria&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>Todas<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;varejo&quot;</span>&gt;</span>Varejo<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;vip&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-attr">data-paginationjs-filter</span>&gt;</span> Somente VIP<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></code></pre></div>
+<h2 id="filtros-fora-da-listagem-barra-lateral">Filtros fora da listagem (barra lateral) <a class="anchor" href="#filtros-fora-da-listagem-barra-lateral" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">aside</span> <span class="hljs-attr">data-paginationjs-for</span>=<span class="hljs-string">&quot;clientes&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">data-paginationjs-filters</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Status&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">aside</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<h2 id="filtro-já-aplicado-ao-abrir">Filtro já aplicado ao abrir <a class="anchor" href="#filtro-já-aplicado-ao-abrir" aria-label="Link para esta seção">#</a></h2>
+<p>O que estiver selecionado no HTML é o filtro inicial.</p>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php">&lt;select name=<span class="hljs-string">&quot;status&quot;</span> aria-label=<span class="hljs-string">&quot;Status&quot;</span>&gt;
+    &lt;option value=<span class="hljs-string">&quot;&quot;</span>&gt;Todos&lt;/option&gt;
+    &lt;option value=<span class="hljs-string">&quot;ativo&quot;</span> <span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> <span class="hljs-variable">$statusPadrao</span> === <span class="hljs-string">&#x27;ativo&#x27;</span> ? <span class="hljs-string">&#x27;selected&#x27;</span> : <span class="hljs-string">&#x27;&#x27;</span>; <span class="hljs-meta">?&gt;</span>&gt;Ativos&lt;/option&gt;
+    &lt;option value=<span class="hljs-string">&quot;inativo&quot;</span>&gt;Inativos&lt;/option&gt;
+&lt;/select&gt;</code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada <span class="code-file">Primeira requisição já filtrada</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;status=ativo&amp;page=1&amp;limit=20&amp;_=...</code></pre></div>
+<h2 id="filtro-escondido-definido-pela-tela">Filtro escondido (definido pela tela) <a class="anchor" href="#filtro-escondido-definido-pela-tela" aria-label="Link para esta seção">#</a></h2>
+<p>Para um filtro que o usuário não vê nem muda, prefira <code>data-paginationjs-params</code>
+(<a href="exemplos-telas.html#parâmetros-fixos-em-toda-requisição">exemplo</a>). Para um filtro que o código muda, use
+<code>setFilter</code> (<a href="exemplos-javascript.html#setfilter-e-setfilters">exemplo</a>).</p>
+<blockquote class="callout callout-warn"><p><strong>Importante:</strong> o servidor nunca deve confiar no filtro enviado: valide com lista branca
+(<code>array_intersect</code>, <code>InputHelper::oneOf</code>) e aplique a mesma regra de permissão na contagem e na consulta.</p>
+</blockquote>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="exemplos-busca.html"><span>Anterior</span>Busca</a><a class="next" href="exemplos-ordenacao-paginacao.html"><span>Próxima</span>Ordenação e paginação</a></nav>
+        </main>
+    </div>
+</body>
+</html>

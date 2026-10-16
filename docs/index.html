@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>hr-paginationjs — documentação</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
     <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
 </head>
 <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -14,23 +17,9 @@
     </header>
     <div class="layout">
         <nav class="sidebar" aria-label="Documentação">
-            <ul>
-                <li><a href="index.html" aria-current="page">Início</a></li>
-                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
-                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
-                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
-                <li><a href="colunas.html">Colunas</a></li>
-                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
-                <li><a href="controles.html">Controles declarativos</a></li>
-                <li><a href="acoes.html">Ações por linha</a></li>
-                <li><a href="api-js.html">API JavaScript</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
-                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
-                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
-                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
-                <li><a href="testes.html">Testes</a></li>
-            </ul>
+<p class="nav-group">Guia</p><ul><li><a href="index.html" aria-current="page">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
         </nav>
         <main id="conteudo" class="content">
 <nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#índice">Índice</a></li><li><a href="#arquivos">Arquivos</a></li><li><a href="#esta-documentação">Esta documentação</a></li><li><a href="#comandos">Comandos</a></li><li><a href="#rodar-os-exemplos">Rodar os exemplos</a></li><li><a href="#núcleo-extensões-e-fora-do-escopo">Núcleo, extensões e fora do escopo</a></li></ul></nav>
@@ -39,6 +28,9 @@
 <code>data-paginationjs-*</code>; JavaScript só é necessário para integrações específicas (eventos e API).</p>
 <p>Pagination.js 2.6.0 desenha <strong>apenas os botões de página</strong>. Requisição, estado, busca, filtros, ordenação,
 renderização, colunas, preferências e erros pertencem ao hr-paginationjs.</p>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> procurando como fazer algo? Comece pelos <strong><a href="exemplos.html">Exemplos</a></strong> — receitas prontas para copiar,
+organizadas por recurso.</p>
+</blockquote>
 <h2 id="índice">Índice <a class="anchor" href="#índice" aria-label="Link para esta seção">#</a></h2>
 <ol>
 <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
@@ -115,9 +107,8 @@ renderização, colunas, preferências e erros pertencem ao hr-paginationjs.</p>
 <p>Leia no navegador: <code>docs/index.html</code> (ex.: <code>http://localhost/paginatorjs/docs/</code>). Funciona também abrindo o
 arquivo direto, sem servidor.</p>
 <p>As páginas <code>.html</code> são geradas a partir de <code>docs/md/*.md</code> (a fonte). Depois de editar um <code>.md</code>, regere:</p>
-<pre><code class="language-bash">npm install
-npm run docs
-</code></pre>
+<div class="code-block code-bash"><div class="code-head"><span class="code-lang">Terminal</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-bash">npm install
+npm run docs</code></pre></div>
 <h2 id="comandos">Comandos <a class="anchor" href="#comandos" aria-label="Link para esta seção">#</a></h2>
 <div class="table-wrap"><table>
 <thead>
@@ -137,11 +128,11 @@ npm run docs
 </tr>
 <tr>
 <td><code>npm test</code></td>
-<td>35 testes contra <code>src/</code>.</td>
+<td>39 testes contra <code>src/</code>.</td>
 </tr>
 <tr>
 <td><code>npm run test:dist</code></td>
-<td>Os mesmos 35 testes contra <code>dist/hr-paginationjs.min.js</code>.</td>
+<td>Os mesmos 39 testes contra <code>dist/hr-paginationjs.min.js</code>.</td>
 </tr>
 <tr>
 <td><code>npm run test:all</code></td>

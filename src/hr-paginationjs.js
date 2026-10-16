@@ -314,16 +314,16 @@
         return target.dispatchEvent(event);
     }
 
-    function findToken(explicit) {
+    function tokenInfo(explicit) {
         if (explicit) {
-            return explicit;
+            return { token: explicit, source: 'option' };
         }
 
         if (window.Joomla && typeof window.Joomla.getOptions === 'function') {
             var option = window.Joomla.getOptions('csrf.token', '');
 
             if (option) {
-                return option;
+                return { token: option, source: 'joomla' };
             }
         }
 
@@ -331,13 +331,23 @@
 
         for (var i = 0; i < inputs.length; i++) {
             if (/^[a-f0-9]{32}$/i.test(inputs[i].name)) {
-                return inputs[i].name;
+                return { token: inputs[i].name, source: 'joomla' };
             }
+        }
+
+        var laravel = document.querySelector('input[type="hidden"][name="_token"]');
+
+        if (laravel && laravel.value) {
+            return { token: laravel.value, source: 'laravel' };
         }
 
         var meta = document.querySelector('meta[name="csrf-token"]');
 
-        return meta ? meta.getAttribute('content') || '' : '';
+        return { token: meta ? meta.getAttribute('content') || '' : '', source: 'meta' };
+    }
+
+    function findToken(explicit) {
+        return tokenInfo(explicit).token;
     }
 
     function normalizeScalar(value, type) {
@@ -653,6 +663,42 @@
         }
     };
 
+    adapters.laravel = {
+        names: { page: 'page', limit: 'limit', sort: 'sort', direction: 'direction', search: 'search' },
+        cacheExclude: [],
+        params: function (state, ctx) {
+            return adapters.apiresponse.params(state, ctx);
+        },
+        parse: function (body, ctx) {
+            if (!isPlainObject(body)) {
+                throw ctx.error('invalid');
+            }
+
+            if (typeof body.success === 'boolean') {
+                return adapters.apiresponse.parse(body, ctx);
+            }
+
+            var paging = isPlainObject(body.meta) && body.meta.total !== undefined ? body.meta : body;
+            var total = Number(paging.total);
+
+            if (!Array.isArray(body.data) || paging.total === null || paging.total === undefined || paging.total === '' || !isFinite(total) || total < 0) {
+                throw ctx.error('invalid');
+            }
+
+            var limit = toInt(paging.per_page, 0) > 0 ? toInt(paging.per_page, 0) : ctx.state.limit;
+
+            return {
+                rows: body.data,
+                total: total,
+                page: toInt(paging.current_page, 0) > 0 ? toInt(paging.current_page, 0) : ctx.state.page,
+                limit: limit,
+                totalPages: toInt(paging.last_page, -1) >= 0 ? toInt(paging.last_page, 0) : Math.ceil(total / limit),
+                message: typeof body.message === 'string' ? body.message : '',
+                requestId: ''
+            };
+        }
+    };
+
     function serialize(data) {
         var parts = [];
 
@@ -911,6 +957,7 @@
         cfg.toolbar = toList(o.toolbar || getAttr(root, 'toolbar'));
         cfg.headers = extend({}, o.headers);
         cfg.token = o.token || '';
+        cfg.csrf = String(o.csrf || getAttr(root, 'csrf') || 'auto').toLowerCase() === 'header' ? 'header' : 'auto';
         cfg.transport = typeof o.transport === 'function' ? o.transport : xhrTransport;
         cfg.formatters = extend({}, o.formatters);
 
@@ -2566,7 +2613,7 @@
             var status = result ? toInt(result.status, 0) : 0;
             var textStatus = result ? String(result.textStatus || '') : 'error';
             var requestId = (isPlainObject(body) && typeof body.request_id === 'string' && body.request_id) || (result && result.requestId) || '';
-            var message = isPlainObject(body) && typeof body.mensagem === 'string' ? body.mensagem : '';
+            var message = isPlainObject(body) && typeof body.mensagem === 'string' ? body.mensagem : (isPlainObject(body) && typeof body.message === 'string' ? body.message : '');
             var errors = isPlainObject(body) ? body.errors : null;
 
             if (textStatus === 'abort') {
@@ -2577,7 +2624,7 @@
                 return makeError('timeout', '', null, status, requestId);
             }
 
-            if (status === 401) {
+            if (status === 401 || status === 419) {
                 return makeError('session', message, errors, status, requestId);
             }
 
@@ -3019,11 +3066,14 @@
             }
 
             var headers = extend({}, cfg.headers);
-            var token = findToken(cfg.token);
+            var csrf = tokenInfo(cfg.token);
 
-            if (token) {
-                data[token] = '1';
-                headers['X-CSRF-Token'] = token;
+            if (csrf.token) {
+                headers['X-CSRF-Token'] = csrf.token;
+
+                if (cfg.csrf !== 'header' && csrf.source !== 'laravel') {
+                    data[csrf.token] = '1';
+                }
             }
 
             var method = String(getAttr(button, 'action-method') || 'POST').toUpperCase();
@@ -3043,11 +3093,17 @@
 
                     var error = classify(result);
                     var body = result ? result.body : null;
+                    var status = result ? toInt(result.status, 0) : 0;
 
-                    if (!error && (!isPlainObject(body) || body.success !== true)) {
-                        error = isPlainObject(body) && body.success === false
-                            ? makeError('api', body.mensagem || cfg.texts.actionError, body.errors, toInt(result.status, 0), body.request_id)
-                            : makeError('invalid', '', null, toInt(result.status, 0), '');
+                    if (error && error.kind === 'invalid' && status === 204) {
+                        error = null;
+                        body = {};
+                    }
+
+                    if (!error && (!isPlainObject(body) || body.success === false)) {
+                        error = isPlainObject(body)
+                            ? makeError('api', body.mensagem || body.message || cfg.texts.actionError, body.errors, status, body.request_id)
+                            : makeError('invalid', '', null, status, '');
                     }
 
                     if (error) {
@@ -3062,7 +3118,9 @@
                     }
 
                     cache = [];
-                    showNotice(typeof body.mensagem === 'string' && body.mensagem ? body.mensagem : cfg.texts.actionDone, false);
+                    var done = typeof body.mensagem === 'string' && body.mensagem ? body.mensagem : (typeof body.message === 'string' && body.message ? body.message : cfg.texts.actionDone);
+
+                    showNotice(done, false);
                     emit(root, 'actiondone', { id: cfg.id, action: actionName, key: key, row: clone(row), response: clone(body) });
 
                     if (toBool(getAttr(button, 'action-reload'), true)) {

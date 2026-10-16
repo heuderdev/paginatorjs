@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Colunas — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
     <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
 </head>
 <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -14,23 +17,9 @@
     </header>
     <div class="layout">
         <nav class="sidebar" aria-label="Documentação">
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
-                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
-                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
-                <li><a href="colunas.html" aria-current="page">Colunas</a></li>
-                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
-                <li><a href="controles.html">Controles declarativos</a></li>
-                <li><a href="acoes.html">Ações por linha</a></li>
-                <li><a href="api-js.html">API JavaScript</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
-                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
-                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
-                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
-                <li><a href="testes.html">Testes</a></li>
-            </ul>
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html" aria-current="page">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
         </nav>
         <main id="conteudo" class="content">
 <nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#atributos-do-th">Atributos do &amp;lt;th&amp;gt;</a></li><li><a href="#formatadores-embutidos">Formatadores embutidos</a></li><li><a href="#templates-template">Templates (&amp;lt;template&amp;gt;)</a></li><li><a href="#seletor-de-colunas">Seletor de colunas</a></li><li><a href="#mudança-de-esquema-o-que-acontece-com-preferências-salvas">Mudança de esquema (o que acontece com preferências salvas)</a></li></ul></nav>
@@ -209,11 +198,10 @@ identidade da coluna é sempre a <code>key</code> — nunca a posição.</p>
 </tbody>
 </table></div>
 <h3 id="formatador-próprio">Formatador próprio <a class="anchor" href="#formatador-próprio" aria-label="Link para esta seção">#</a></h3>
-<pre><code class="language-js">HrPaginationjs.formatter(&#39;cpf&#39;, function (valor, linha, ctx) {
-    var d = String(valor || &#39;&#39;).replace(/\D/g, &#39;&#39;);
-    return d.length === 11 ? d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, &#39;$1.$2.$3-$4&#39;) : valor;
-});
-</code></pre>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">formatter</span>(<span class="hljs-string">&#x27;cpf&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">valor, linha, ctx</span>) {
+    <span class="hljs-keyword">var</span> d = <span class="hljs-title class_">String</span>(valor || <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\D/g</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+    <span class="hljs-keyword">return</span> d.<span class="hljs-property">length</span> === <span class="hljs-number">11</span> ? d.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/(\d{3})(\d{3})(\d{3})(\d{2})/</span>, <span class="hljs-string">&#x27;$1.$2.$3-$4&#x27;</span>) : valor;
+});</code></pre></div>
 <p><code>ctx</code> = <code>{ key, field, label, th, locale, currency, texts, html }</code>. O retorno pode ser:</p>
 <ul>
 <li><strong>string/número</strong> → inserido como <strong>texto</strong> (seguro);</li>
@@ -223,13 +211,12 @@ responsabilidade de quem escreve o formatador escapar os dados.</li>
 </ul>
 <p>Formatador que lança exceção não quebra a tabela: a célula mostra o <code>default</code> e um aviso vai para o console.</p>
 <h2 id="templates-template">Templates (<code>&lt;template&gt;</code>) <a class="anchor" href="#templates-template" aria-label="Link para esta seção">#</a></h2>
-<pre><code class="language-html">&lt;th data-paginationjs-key=&quot;status&quot; data-paginationjs-template=&quot;tpl-status&quot;&gt;Status&lt;/th&gt;
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">data-paginationjs-template</span>=<span class="hljs-string">&quot;tpl-status&quot;</span>&gt;</span>Status<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
 
-&lt;template id=&quot;tpl-status&quot;&gt;
-    &lt;span class=&quot;badge badge-{status}&quot;&gt;{status}&lt;/span&gt;
-    &lt;small data-paginationjs-if=&quot;bloqueado&quot;&gt;bloqueado em {bloqueado_em|date}&lt;/small&gt;
-&lt;/template&gt;
-</code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-status&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;badge badge-{status}&quot;</span>&gt;</span>{status}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">small</span> <span class="hljs-attr">data-paginationjs-if</span>=<span class="hljs-string">&quot;bloqueado&quot;</span>&gt;</span>bloqueado em {bloqueado_em|date}<span class="hljs-tag">&lt;/<span class="hljs-name">small</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre></div>
 <ul>
 <li><code>{campo}</code> e <code>{a.b}</code> são substituídos <strong>como texto</strong> em nós de texto e atributos.</li>
 <li><code>{campo|formatador}</code> aplica um formatador e usa o resultado como texto.</li>
@@ -286,7 +273,7 @@ mensagens é ajustado e a escolha vale para as próximas páginas.</li>
 </tr>
 </tbody>
 </table></div>
-<blockquote class="note"><p>Coluna oculta <strong>não é controle de acesso</strong>. Dados que o usuário não pode ver não devem estar na resposta.</p>
+<blockquote class="callout callout-note"><p>Coluna oculta <strong>não é controle de acesso</strong>. Dados que o usuário não pode ver não devem estar na resposta.</p>
 </blockquote>
 
 <nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="atributos.html"><span>Anterior</span>Atributos do elemento raiz</a><a class="next" href="busca-filtros-ordenacao.html"><span>Próxima</span>Busca, filtros e ordenação</a></nav>

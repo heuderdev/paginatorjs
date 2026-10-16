@@ -49,9 +49,11 @@ Fluxo:
 2. Confirmação, se houver.
 3. Envia `id=<chave>&<parâmetros>&<token>=1` com o cabeçalho `X-CSRF-Token: <token>`.
    O token é descoberto como no Vigia.js: `Joomla.getOptions('csrf.token')` → `<input type="hidden" name="<32 hex>" value="1">`
-   (`JHtml::_('form.token')`) → `<meta name="csrf-token">`. Compatível com `PermissionHelper::requireToken()`.
+   (`JHtml::_('form.token')`) → `<input type="hidden" name="_token">` (`@csrf` do Laravel) → `<meta name="csrf-token">`.
+   Compatível com `PermissionHelper::requireToken()` e com o `VerifyCsrfToken` do Laravel. Com
+   `data-paginationjs-csrf="header"` (ou com `@csrf` na página) o campo `<token>=1` não vai no corpo, só o cabeçalho.
 4. O botão fica `disabled` + `aria-busy` durante o envio.
-5. Resposta com `success: true` → mensagem do servidor no aviso, cache limpo, evento `hrpaginationjs:actiondone` e
+5. Resposta com `success: true` (ou JSON 2xx sem `success`, ou `204 No Content`) → mensagem do servidor (`mensagem` ou `message`) no aviso, cache limpo, evento `hrpaginationjs:actiondone` e
    recarga da página atual (se a página esvaziar, a biblioteca volta uma única vez para a última página válida).
 6. Qualquer erro (HTTP, `success: false`, sessão, permissão, resposta inválida) → mensagem no aviso e evento
    `hrpaginationjs:actionerror`.

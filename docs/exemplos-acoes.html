@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ações por linha — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/exemplos-acoes.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html" aria-current="page">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#coluna-de-ações">Coluna de ações</a></li><li><a href="#ação-que-abre-a-sua-tela-evento">Ação que abre a sua tela (evento)</a></li><li><a href="#link-de-navegação-comum-sem-ação">Link de navegação comum (sem ação)</a></li><li><a href="#ação-remota-com-confirmação">Ação remota com confirmação</a></li><li><a href="#ação-com-parâmetros-extras">Ação com parâmetros extras</a></li><li><a href="#nome-do-parâmetro-da-chave">Nome do parâmetro da chave</a></li><li><a href="#sem-recarregar-depois">Sem recarregar depois</a></li><li><a href="#ação-por-get">Ação por GET</a></li><li><a href="#de-onde-vem-o-token-csrf">De onde vem o token CSRF</a></li><li><a href="#modal-próprio-no-lugar-do-confirm">Modal próprio no lugar do confirm()</a></li><li><a href="#reagir-ao-sucesso-ou-ao-erro">Reagir ao sucesso ou ao erro</a></li></ul></nav>
+<h1 id="ações-por-linha">Ações por linha</h1>
+<p>Botões ou links com <code>data-paginationjs-action</code>, normalmente num <code>&lt;template&gt;</code> de uma coluna de ações.</p>
+<h2 id="coluna-de-ações">Coluna de ações <a class="anchor" href="#coluna-de-ações" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;acoes&quot;</span> <span class="hljs-attr">data-paginationjs-actions</span> <span class="hljs-attr">data-paginationjs-template</span>=<span class="hljs-string">&quot;tpl-acoes&quot;</span>&gt;</span>Ações<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-acoes&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;editar&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Editar {nome}&quot;</span>&gt;</span>Editar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;excluir&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.excluir&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action-confirm</span>=<span class="hljs-string">&quot;Excluir o cliente {nome}?&quot;</span>
+            <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Excluir {nome}&quot;</span>&gt;</span>Excluir<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre></div>
+<figure class="preview"><figcaption>Como fica na tela</figcaption><div class="preview-body"><table><thead><tr><th>ID</th><th>Nome</th><th>Ações</th></tr></thead><tbody>
+<tr><td>42</td><td>Ana Silva</td><td><button type="button" class="pv-btn">Editar</button> <button type="button" class="pv-btn" style="color:#b42318">Excluir</button></td></tr>
+<tr><td>43</td><td>Bruno Souza</td><td><button type="button" class="pv-btn">Editar</button> <button type="button" class="pv-btn" style="color:#b42318">Excluir</button></td></tr>
+</tbody></table></div></figure>
+<h2 id="ação-que-abre-a-sua-tela-evento">Ação que abre a sua tela (evento) <a class="anchor" href="#ação-que-abre-a-sua-tela-evento" aria-label="Link para esta seção">#</a></h2>
+<p>Sem <code>-remote</code>, o clique só dispara o evento <code>hrpaginationjs:action</code> — você decide o que fazer.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-acoes&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;editar&quot;</span>&gt;</span>Editar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;detalhes&quot;</span>&gt;</span>Detalhes<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre></div>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:action&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">var</span> linha = e.<span class="hljs-property">detail</span>.<span class="hljs-property">row</span>;   <span class="hljs-comment">// cópia da linha clicada</span>
+
+    <span class="hljs-keyword">if</span> (e.<span class="hljs-property">detail</span>.<span class="hljs-property">action</span> === <span class="hljs-string">&#x27;editar&#x27;</span>) {
+        <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span> = <span class="hljs-string">&#x27;index.php?option=com_loja&amp;view=cliente&amp;layout=edit&amp;id=&#x27;</span> + <span class="hljs-built_in">encodeURIComponent</span>(e.<span class="hljs-property">detail</span>.<span class="hljs-property">key</span>);
+    }
+
+    <span class="hljs-keyword">if</span> (e.<span class="hljs-property">detail</span>.<span class="hljs-property">action</span> === <span class="hljs-string">&#x27;detalhes&#x27;</span>) {
+        <span class="hljs-title function_">abrirPainelDeDetalhes</span>(linha);
+    }
+});</code></pre></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>e.detail</code></th>
+<th>Conteúdo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>action</code></td>
+<td>valor de <code>data-paginationjs-action</code></td>
+</tr>
+<tr>
+<td><code>key</code></td>
+<td>chave da linha (<code>data-paginationjs-row-key</code>, padrão <code>id</code>)</td>
+</tr>
+<tr>
+<td><code>row</code></td>
+<td>cópia da linha</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>posição da linha na página</td>
+</tr>
+<tr>
+<td><code>element</code></td>
+<td>o botão clicado</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="link-de-navegação-comum-sem-ação">Link de navegação comum (sem ação) <a class="anchor" href="#link-de-navegação-comum-sem-ação" aria-label="Link para esta seção">#</a></h2>
+<p>Um link normal não precisa de nada; só <strong>não</strong> use <code>data-paginationjs-action</code> nele (a ação bloqueia a navegação).</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-acoes&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;view=cliente&amp;id={id}&quot;</span>&gt;</span>Abrir<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre></div>
+<h2 id="ação-remota-com-confirmação">Ação remota com confirmação <a class="anchor" href="#ação-remota-com-confirmação" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;excluir&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.excluir&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action-confirm</span>=<span class="hljs-string">&quot;Excluir o cliente {nome}? Esta ação não pode ser desfeita.&quot;</span>&gt;</span>
+    Excluir
+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada <span class="code-file">Após confirmar</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">POST index.php?option=com_loja&amp;task=clientes.excluir
+<span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>application/x-www-form-urlencoded; charset=UTF-8
+<span class="hljs-attribute">X-CSRF-Token</span><span class="hljs-punctuation">: </span>3f9c…e1a7
+
+id=42&amp;3f9c…e1a7=1</code></pre></div>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">No controller</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">excluir</span>(<span class="hljs-params"></span>)
+</span>{
+    <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">PermissionHelper</span>::<span class="hljs-title function_ invoke__">requireToken</span>() || !<span class="hljs-title class_">PermissionHelper</span>::<span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;core.delete&#x27;</span>, <span class="hljs-string">&#x27;com_loja&#x27;</span>)) {
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-variable">$id</span> = <span class="hljs-title class_">InputHelper</span>::<span class="hljs-keyword">int</span>(<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;post&#x27;</span>);
+        <span class="hljs-variable language_">$this</span>-&gt;<span class="hljs-title function_ invoke__">tabela</span>()-&gt;<span class="hljs-title function_ invoke__">findOrFail</span>(<span class="hljs-variable">$id</span>);
+        <span class="hljs-variable language_">$this</span>-&gt;<span class="hljs-title function_ invoke__">tabela</span>()-&gt;<span class="hljs-title function_ invoke__">delete</span>(<span class="hljs-variable">$id</span>);
+
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">ApiResponseHelper</span>::<span class="hljs-title function_ invoke__">deleted</span>(<span class="hljs-string">&#x27;Cliente excluído.&#x27;</span>);
+    } <span class="hljs-keyword">catch</span> (<span class="hljs-built_in">Throwable</span> <span class="hljs-variable">$e</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">ApiResponseHelper</span>::<span class="hljs-title function_ invoke__">exception</span>(<span class="hljs-variable">$e</span>);
+    }
+}</code></pre></div>
+<figure class="preview"><figcaption>Depois do sucesso</figcaption><div class="preview-body"><div class="hrpjs"><div class="hrpjs-footer"><div class="hrpjs-notice">Cliente excluído.</div><div class="hrpjs-summary">Exibindo 1 a 20 de 136 registros</div></div></div></div></figure>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> o botão fica desabilitado durante o envio; com <code>success: true</code> a mensagem do servidor aparece,
+o cache é limpo e a página atual é recarregada. Com erro, a mensagem aparece em vermelho e a lista não muda.</p>
+</blockquote>
+<h2 id="ação-com-parâmetros-extras">Ação com parâmetros extras <a class="anchor" href="#ação-com-parâmetros-extras" aria-label="Link para esta seção">#</a></h2>
+<p><code>data-paginationjs-param-&lt;nome&gt;</code> vira um parâmetro; aceita <code>{campo}</code> da linha.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-status&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-if</span>=<span class="hljs-string">&quot;status=ativo&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;desativar&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.alterarStatus&quot;</span>
+            <span class="hljs-attr">data-paginationjs-param-status</span>=<span class="hljs-string">&quot;inativo&quot;</span>&gt;</span>Desativar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">data-paginationjs-if</span>=<span class="hljs-string">&quot;status=inativo&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;ativar&quot;</span>
+            <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.alterarStatus&quot;</span>
+            <span class="hljs-attr">data-paginationjs-param-status</span>=<span class="hljs-string">&quot;ativo&quot;</span>&gt;</span>Ativar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">POST index.php?option=com_loja&amp;task=clientes.alterarStatus
+
+id=42&amp;status=inativo&amp;3f9c…e1a7=1</code></pre></div>
+<h2 id="nome-do-parâmetro-da-chave">Nome do parâmetro da chave <a class="anchor" href="#nome-do-parâmetro-da-chave" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;cancelar&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=pedidos.cancelar&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action-key</span>=<span class="hljs-string">&quot;pedido_id&quot;</span>
+        <span class="hljs-attr">data-paginationjs-param-origem</span>=<span class="hljs-string">&quot;lista-{status}&quot;</span>&gt;</span>Cancelar pedido<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">POST index.php?option=com_loja&amp;task=pedidos.cancelar
+
+pedido_id=981&amp;origem=lista-aberto&amp;3f9c…e1a7=1</code></pre></div>
+<h2 id="sem-recarregar-depois">Sem recarregar depois <a class="anchor" href="#sem-recarregar-depois" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;reenviar&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.reenviarBoasVindas&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action-reload</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span>Reenviar e-mail<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre></div>
+<h2 id="ação-por-get">Ação por GET <a class="anchor" href="#ação-por-get" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action</span>=<span class="hljs-string">&quot;sincronizar&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.sincronizar&quot;</span>
+        <span class="hljs-attr">data-paginationjs-action-method</span>=<span class="hljs-string">&quot;GET&quot;</span>&gt;</span>Sincronizar<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> prefira <code>POST</code> para qualquer ação que altera dados. O token é enviado nos dois casos, mas o
+<code>PermissionHelper::requireToken()</code> confere <code>POST</code> por padrão.</p>
+</blockquote>
+<h2 id="de-onde-vem-o-token-csrf">De onde vem o token CSRF <a class="anchor" href="#de-onde-vem-o-token-csrf" aria-label="Link para esta seção">#</a></h2>
+<p>A biblioteca procura, nesta ordem (igual ao Vigia.js). Basta <strong>um</strong> deles na página:</p>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript <span class="code-file">1. Joomla 4/5 — já vem automático, nada a fazer</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">Joomla</span>.<span class="hljs-title function_">getOptions</span>(<span class="hljs-string">&#x27;csrf.token&#x27;</span>);</code></pre></div>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">2. Joomla 3 — campo oculto do token</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> <span class="hljs-title class_">JHtml</span>::<span class="hljs-title function_ invoke__">_</span>(<span class="hljs-string">&#x27;form.token&#x27;</span>); <span class="hljs-meta">?&gt;</span></code></pre></div>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML <span class="code-file">3. Qualquer site — meta tag</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;csrf-token&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;&lt;?php echo JSession::getFormToken(); ?&gt;&quot;</span>&gt;</span></code></pre></div>
+<h2 id="modal-próprio-no-lugar-do-confirm">Modal próprio no lugar do <code>confirm()</code> <a class="anchor" href="#modal-próprio-no-lugar-do-confirm" aria-label="Link para esta seção">#</a></h2>
+<p>Cancele o fluxo padrão com <code>preventDefault()</code> e faça a chamada depois da confirmação.</p>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> lista = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);
+
+lista.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:action&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">if</span> (e.<span class="hljs-property">detail</span>.<span class="hljs-property">action</span> !== <span class="hljs-string">&#x27;excluir&#x27;</span>) {
+        <span class="hljs-keyword">return</span>;
+    }
+
+    e.<span class="hljs-title function_">preventDefault</span>();
+
+    meuModal.<span class="hljs-title function_">confirmar</span>(<span class="hljs-string">&#x27;Excluir &#x27;</span> + e.<span class="hljs-property">detail</span>.<span class="hljs-property">row</span>.<span class="hljs-property">nome</span> + <span class="hljs-string">&#x27;?&#x27;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">var</span> xhr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();
+
+        xhr.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;POST&#x27;</span>, <span class="hljs-string">&#x27;index.php?option=com_loja&amp;task=clientes.excluir&#x27;</span>);
+        xhr.<span class="hljs-title function_">setRequestHeader</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-string">&#x27;application/x-www-form-urlencoded; charset=UTF-8&#x27;</span>);
+        xhr.<span class="hljs-title function_">setRequestHeader</span>(<span class="hljs-string">&#x27;X-Requested-With&#x27;</span>, <span class="hljs-string">&#x27;XMLHttpRequest&#x27;</span>);
+        xhr.<span class="hljs-property">onloadend</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+            <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">reload</span>();
+        };
+        xhr.<span class="hljs-title function_">send</span>(<span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">serialize</span>({ <span class="hljs-attr">id</span>: e.<span class="hljs-property">detail</span>.<span class="hljs-property">key</span> }) + <span class="hljs-string">&#x27;&amp;&#x27;</span> + <span class="hljs-built_in">encodeURIComponent</span>(<span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">findToken</span>()) + <span class="hljs-string">&#x27;=1&#x27;</span>);
+    });
+});</code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> mantenha <code>data-paginationjs-action-remote</code> no botão mesmo assim — sem o <code>preventDefault()</code> ele volta a
+funcionar sozinho.</p>
+</blockquote>
+<h2 id="reagir-ao-sucesso-ou-ao-erro">Reagir ao sucesso ou ao erro <a class="anchor" href="#reagir-ao-sucesso-ou-ao-erro" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> lista = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);
+
+lista.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:actiondone&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">if</span> (e.<span class="hljs-property">detail</span>.<span class="hljs-property">action</span> === <span class="hljs-string">&#x27;excluir&#x27;</span>) {
+        <span class="hljs-title function_">atualizarContadorDoMenu</span>();
+    }
+});
+
+lista.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:actionerror&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">if</span> (e.<span class="hljs-property">detail</span>.<span class="hljs-property">error</span>.<span class="hljs-property">kind</span> === <span class="hljs-string">&#x27;session&#x27;</span>) {
+        <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span> = <span class="hljs-string">&#x27;index.php?option=com_users&amp;view=login&#x27;</span>;
+    }
+});</code></pre></div>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="exemplos-ordenacao-paginacao.html"><span>Anterior</span>Ordenação e paginação</a><a class="next" href="exemplos-estados-textos.html"><span>Próxima</span>Estados e textos</a></nav>
+        </main>
+    </div>
+</body>
+</html>

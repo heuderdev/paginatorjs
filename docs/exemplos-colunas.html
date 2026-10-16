@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Colunas — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/exemplos-colunas.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html" aria-current="page">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#key-field-e-campos-aninhados">Key, field e campos aninhados</a></li><li><a href="#coluna-oculta-por-padrão-obrigatória-e-de-ações">Coluna oculta por padrão, obrigatória e de ações</a></li><li><a href="#rótulo-diferente-no-seletor-de-colunas">Rótulo diferente no seletor de colunas</a></li><li><a href="#alinhamento-largura-valor-padrão-e-classe">Alinhamento, largura, valor padrão e classe</a></li><li><a href="#formatadores-embutidos">Formatadores embutidos</a></li><li><a href="#template-montar-a-célula-com-html">Template: montar a célula com HTML</a></li><li><a href="#template-com-links-e-atributos">Template com links e atributos</a></li><li><a href="#template-com-formatador-dentro-campoformatador">Template com formatador dentro: {campo|formatador}</a></li><li><a href="#template-com-condição-data-paginationjs-if">Template com condição: data-paginationjs-if</a></li><li><a href="#formatador-próprio-javascript">Formatador próprio (JavaScript)</a></li><li><a href="#formatador-que-devolve-um-elemento">Formatador que devolve um elemento</a></li><li><a href="#formatador-que-devolve-html-explícito">Formatador que devolve HTML (explícito)</a></li><li><a href="#formatador-só-desta-listagem-init-manual">Formatador só desta listagem (init manual)</a></li><li><a href="#seletor-de-colunas">Seletor de colunas</a></li></ul></nav>
+<h1 id="colunas">Colunas</h1>
+<p>Cada <code>&lt;th&gt;</code> da última linha do <code>&lt;thead&gt;</code> é uma coluna. A <strong>key</strong> é a identidade (ordenação, preferências, API);
+o <strong>field</strong> é de onde vem o valor.</p>
+<h2 id="key-field-e-campos-aninhados">Key, field e campos aninhados <a class="anchor" href="#key-field-e-campos-aninhados" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- key = field = &quot;nome&quot; --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+
+        <span class="hljs-comment">&lt;!-- key pública &quot;limite&quot;, valor vindo de &quot;limite_credito&quot; --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;limite&quot;</span> <span class="hljs-attr">data-paginationjs-field</span>=<span class="hljs-string">&quot;limite_credito&quot;</span>&gt;</span>Limite<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+
+        <span class="hljs-comment">&lt;!-- objeto aninhado: linha.endereco.cidade --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;cidade&quot;</span> <span class="hljs-attr">data-paginationjs-field</span>=<span class="hljs-string">&quot;endereco.cidade&quot;</span>&gt;</span>Cidade<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> use a key curta e estável (<code>limite</code>) e deixe o nome real do banco só no servidor. O controller recebe
+<code>sort=limite</code> e traduz pela lista branca.</p>
+</blockquote>
+<h2 id="coluna-oculta-por-padrão-obrigatória-e-de-ações">Coluna oculta por padrão, obrigatória e de ações <a class="anchor" href="#coluna-oculta-por-padrão-obrigatória-e-de-ações" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;id&quot;</span> <span class="hljs-attr">data-paginationjs-required</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>                  <span class="hljs-comment">&lt;!-- sempre visível --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span> <span class="hljs-attr">data-paginationjs-required</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;email&quot;</span>&gt;</span>E-mail<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>                                     <span class="hljs-comment">&lt;!-- visível, pode ocultar --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;telefone&quot;</span> <span class="hljs-attr">data-paginationjs-hidden</span>&gt;</span>Telefone<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>       <span class="hljs-comment">&lt;!-- começa oculta --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;acoes&quot;</span> <span class="hljs-attr">data-paginationjs-actions</span>
+            <span class="hljs-attr">data-paginationjs-template</span>=<span class="hljs-string">&quot;tpl-acoes&quot;</span>&gt;</span>Ações<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>                             <span class="hljs-comment">&lt;!-- coluna de ações --&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> a coluna <code>actions</code> pode ser ocultada, mas não conta como “coluna de dados”: o usuário nunca
+consegue esconder todas as colunas de dados.</p>
+</blockquote>
+<h2 id="rótulo-diferente-no-seletor-de-colunas">Rótulo diferente no seletor de colunas <a class="anchor" href="#rótulo-diferente-no-seletor-de-colunas" aria-label="Link para esta seção">#</a></h2>
+<p>Quando o cabeçalho é um ícone ou abreviação.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;vip&quot;</span> <span class="hljs-attr">data-paginationjs-label</span>=<span class="hljs-string">&quot;Cliente VIP&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;bool&quot;</span>&gt;</span>★<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span></code></pre></div>
+<h2 id="alinhamento-largura-valor-padrão-e-classe">Alinhamento, largura, valor padrão e classe <a class="anchor" href="#alinhamento-largura-valor-padrão-e-classe" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;id&quot;</span> <span class="hljs-attr">data-paginationjs-width</span>=<span class="hljs-string">&quot;70px&quot;</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;limite&quot;</span> <span class="hljs-attr">data-paginationjs-field</span>=<span class="hljs-string">&quot;limite_credito&quot;</span>
+    <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;money&quot;</span> <span class="hljs-attr">data-paginationjs-align</span>=<span class="hljs-string">&quot;right&quot;</span>&gt;</span>Limite<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;site&quot;</span> <span class="hljs-attr">data-paginationjs-default</span>=<span class="hljs-string">&quot;—&quot;</span>&gt;</span>Site<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;obs&quot;</span> <span class="hljs-attr">data-paginationjs-class</span>=<span class="hljs-string">&quot;texto-pequeno quebra&quot;</span>&gt;</span>Observação<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-result"><p><strong>Resultado:</strong> <code>null</code>, <code>undefined</code> e <code>&quot;&quot;</code> em <code>site</code> aparecem como <code>—</code>; cada <code>&lt;td&gt;</code> de <code>obs</code> recebe as classes
+<code>texto-pequeno quebra</code>; o <code>&lt;th&gt;</code> e as <code>&lt;td&gt;</code> de <code>limite</code> recebem <code>hrpjs-align-right</code>.</p>
+</blockquote>
+<h2 id="formatadores-embutidos">Formatadores embutidos <a class="anchor" href="#formatadores-embutidos" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;text&quot;</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;pontos&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;number&quot;</span>&gt;</span>Pontos<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;peso&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;number&quot;</span> <span class="hljs-attr">data-paginationjs-decimals</span>=<span class="hljs-string">&quot;2&quot;</span>&gt;</span>Peso (kg)<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;limite&quot;</span> <span class="hljs-attr">data-paginationjs-field</span>=<span class="hljs-string">&quot;limite_credito&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;money&quot;</span>&gt;</span>Limite<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;dolar&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;money&quot;</span> <span class="hljs-attr">data-paginationjs-currency</span>=<span class="hljs-string">&quot;USD&quot;</span>&gt;</span>Em dólar<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nascimento&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;date&quot;</span>&gt;</span>Nascimento<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;criado&quot;</span> <span class="hljs-attr">data-paginationjs-field</span>=<span class="hljs-string">&quot;created_at&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;datetime&quot;</span>&gt;</span>Cadastro<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;vip&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;bool&quot;</span>&gt;</span>VIP<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;ativo&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;bool&quot;</span>
+            <span class="hljs-attr">data-paginationjs-true</span>=<span class="hljs-string">&quot;Liberado&quot;</span> <span class="hljs-attr">data-paginationjs-false</span>=<span class="hljs-string">&quot;Bloqueado&quot;</span>&gt;</span>Acesso<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;email&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;email&quot;</span>&gt;</span>E-mail<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;site&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;link&quot;</span>
+            <span class="hljs-attr">data-paginationjs-link-text</span>=<span class="hljs-string">&quot;Abrir site de {nome}&quot;</span> <span class="hljs-attr">data-paginationjs-link-target</span>=<span class="hljs-string">&quot;_blank&quot;</span>&gt;</span>Site<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span></code></pre></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Valor recebido</th>
+<th>Exibido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pontos</code></td>
+<td><code>1234567</code></td>
+<td><code>1.234.567</code></td>
+</tr>
+<tr>
+<td><code>peso</code></td>
+<td><code>72.5</code></td>
+<td><code>72,50</code></td>
+</tr>
+<tr>
+<td><code>limite</code></td>
+<td><code>12500.5</code></td>
+<td><code>R$ 12.500,50</code></td>
+</tr>
+<tr>
+<td><code>dolar</code></td>
+<td><code>99.9</code></td>
+<td><code>US$ 99,90</code></td>
+</tr>
+<tr>
+<td><code>nascimento</code></td>
+<td><code>&quot;1984-07-12&quot;</code></td>
+<td><code>12/07/1984</code> (sem conversão de fuso)</td>
+</tr>
+<tr>
+<td><code>criado</code></td>
+<td><code>&quot;2025-03-14 10:32:00&quot;</code></td>
+<td><code>14/03/2025, 10:32</code></td>
+</tr>
+<tr>
+<td><code>vip</code></td>
+<td><code>true</code> / <code>1</code> / <code>&quot;sim&quot;</code></td>
+<td><code>Sim</code></td>
+</tr>
+<tr>
+<td><code>ativo</code></td>
+<td><code>0</code></td>
+<td><code>Bloqueado</code></td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>&quot;ana@ex.com&quot;</code></td>
+<td>link <code>mailto:</code></td>
+</tr>
+<tr>
+<td><code>site</code></td>
+<td><code>&quot;https://ex.com/42&quot;</code></td>
+<td>link “Abrir site de Ana Silva” em nova aba</td>
+</tr>
+<tr>
+<td><code>site</code></td>
+<td><code>&quot;javascript:alert(1)&quot;</code></td>
+<td>texto puro (esquema recusado)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="template-montar-a-célula-com-html">Template: montar a célula com HTML <a class="anchor" href="#template-montar-a-célula-com-html" aria-label="Link para esta seção">#</a></h2>
+<p>O <code>&lt;template&gt;</code> é clonado para cada linha. <code>{campo}</code> vira <strong>texto</strong> (seguro), inclusive dentro de atributos.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;cliente&quot;</span> <span class="hljs-attr">data-paginationjs-template</span>=<span class="hljs-string">&quot;tpl-cliente&quot;</span>&gt;</span>Cliente<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-cliente&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>{nome}<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">small</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;muted&quot;</span>&gt;</span>{email} · {endereco.cidade}/{endereco.uf}<span class="hljs-tag">&lt;/<span class="hljs-name">small</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre></div>
+<figure class="preview"><figcaption>Como fica na tela</figcaption><div class="preview-body"><table><thead><tr><th>Cliente</th></tr></thead><tbody><tr><td><strong>Ana Silva</strong><br><small style="color:#667085">ana.silva42@exemplo.com.br · São Paulo/SP</small></td></tr></tbody></table></div></figure>
+<h2 id="template-com-links-e-atributos">Template com links e atributos <a class="anchor" href="#template-com-links-e-atributos" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-links&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;view=cliente&amp;id={id}&quot;</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Ver {nome}&quot;</span>&gt;</span>Ver<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;{site}&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;_blank&quot;</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;noopener&quot;</span>&gt;</span>Site<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/imagens/clientes/{id}.jpg&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Foto de {nome}&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;32&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;32&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> em <code>href</code>, <code>src</code>, <code>action</code>… o valor final é validado. Se <code>site</code> vier como <code>javascript:…</code> ou outro
+esquema não permitido, o atributo é <strong>removido</strong>. Atributos <code>on*</code>, <code>style</code> e <code>srcdoc</code> com <code>{}</code> também são removidos.</p>
+</blockquote>
+<h2 id="template-com-formatador-dentro-campoformatador">Template com formatador dentro: <code>{campo|formatador}</code> <a class="anchor" href="#template-com-formatador-dentro-campoformatador" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-resumo&quot;</span>&gt;</span>
+    {nome} — limite de {limite_credito|money}, cliente desde {created_at|date}
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-result"><p><strong>Resultado:</strong> <code>Ana Silva — limite de R$ 12.500,50, cliente desde 14/03/2025</code></p>
+</blockquote>
+<h2 id="template-com-condição-data-paginationjs-if">Template com condição: <code>data-paginationjs-if</code> <a class="anchor" href="#template-com-condição-data-paginationjs-if" aria-label="Link para esta seção">#</a></h2>
+<p>O elemento é removido quando a condição é falsa.</p>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tpl-status&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;badge badge-success&quot;</span> <span class="hljs-attr">data-paginationjs-if</span>=<span class="hljs-string">&quot;status=ativo&quot;</span>&gt;</span>Ativo<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;badge&quot;</span> <span class="hljs-attr">data-paginationjs-if</span>=<span class="hljs-string">&quot;status!=ativo&quot;</span>&gt;</span>Inativo<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;badge badge-warning&quot;</span> <span class="hljs-attr">data-paginationjs-if</span>=<span class="hljs-string">&quot;vip&quot;</span>&gt;</span>VIP<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;muted&quot;</span> <span class="hljs-attr">data-paginationjs-if</span>=<span class="hljs-string">&quot;!site&quot;</span>&gt;</span>sem site<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Condição</th>
+<th>Verdadeira quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vip</code></td>
+<td>o valor não é vazio, <code>0</code>, <code>&quot;0&quot;</code>, <code>false</code>, <code>null</code> nem lista vazia</td>
+</tr>
+<tr>
+<td><code>!site</code></td>
+<td>o contrário da anterior</td>
+</tr>
+<tr>
+<td><code>status=ativo</code></td>
+<td>o valor, como texto, é igual a <code>ativo</code></td>
+</tr>
+<tr>
+<td><code>status!=ativo</code></td>
+<td>o valor é diferente de <code>ativo</code></td>
+</tr>
+</tbody>
+</table></div>
+<figure class="preview"><figcaption>Como fica na tela</figcaption><div class="preview-body"><table><thead><tr><th>Cliente</th><th>Status</th></tr></thead><tbody>
+<tr><td>Ana Silva</td><td><span class="pv-badge pv-ativo">Ativo</span> <span class="pv-badge" style="background:#fef0c7;color:#b54708">VIP</span></td></tr>
+<tr><td>Bruno Souza</td><td><span class="pv-badge pv-inativo">Inativo</span> <span style="color:#667085">sem site</span></td></tr>
+</tbody></table></div></figure>
+<h2 id="formatador-próprio-javascript">Formatador próprio (JavaScript) <a class="anchor" href="#formatador-próprio-javascript" aria-label="Link para esta seção">#</a></h2>
+<p>Registre antes do fim do carregamento da página e use pelo nome no <code>&lt;th&gt;</code>.</p>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">formatter</span>(<span class="hljs-string">&#x27;cpf&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">valor</span>) {
+    <span class="hljs-keyword">var</span> d = <span class="hljs-title class_">String</span>(valor || <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\D/g</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+
+    <span class="hljs-keyword">return</span> d.<span class="hljs-property">length</span> === <span class="hljs-number">11</span> ? d.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/(\d{3})(\d{3})(\d{3})(\d{2})/</span>, <span class="hljs-string">&#x27;$1.$2.$3-$4&#x27;</span>) : valor;
+});
+
+<span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">formatter</span>(<span class="hljs-string">&#x27;telefone&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">valor</span>) {
+    <span class="hljs-keyword">var</span> d = <span class="hljs-title class_">String</span>(valor || <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\D/g</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+
+    <span class="hljs-keyword">return</span> d.<span class="hljs-property">length</span> === <span class="hljs-number">11</span> ? d.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/(\d{2})(\d{5})(\d{4})/</span>, <span class="hljs-string">&#x27;($1) $2-$3&#x27;</span>) : valor;
+});</code></pre></div>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;cpf&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;cpf&quot;</span>&gt;</span>CPF<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;telefone&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;telefone&quot;</span>&gt;</span>Telefone<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span></code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> o formatador também funciona dentro de templates: <code>{telefone|telefone}</code>.</p>
+</blockquote>
+<h2 id="formatador-que-devolve-um-elemento">Formatador que devolve um elemento <a class="anchor" href="#formatador-que-devolve-um-elemento" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">formatter</span>(<span class="hljs-string">&#x27;progresso&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">valor</span>) {
+    <span class="hljs-keyword">var</span> barra = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;progress&#x27;</span>);
+
+    barra.<span class="hljs-property">max</span> = <span class="hljs-number">100</span>;
+    barra.<span class="hljs-property">value</span> = <span class="hljs-title class_">Number</span>(valor) || <span class="hljs-number">0</span>;
+    barra.<span class="hljs-property">textContent</span> = barra.<span class="hljs-property">value</span> + <span class="hljs-string">&#x27;%&#x27;</span>;
+
+    <span class="hljs-keyword">return</span> barra;
+});</code></pre></div>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;percentual&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;progresso&quot;</span>&gt;</span>Andamento<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span></code></pre></div>
+<h2 id="formatador-que-devolve-html-explícito">Formatador que devolve HTML (explícito) <a class="anchor" href="#formatador-que-devolve-html-explícito" aria-label="Link para esta seção">#</a></h2>
+<p>A única forma de inserir HTML é devolver <code>ctx.html(...)</code> / <code>HrPaginationjs.html(...)</code>. <strong>Escape você mesmo</strong> os dados.</p>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">escapar</span>(<span class="hljs-params">texto</span>) {
+    <span class="hljs-keyword">var</span> div = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;div&#x27;</span>);
+
+    div.<span class="hljs-property">textContent</span> = texto;
+
+    <span class="hljs-keyword">return</span> div.<span class="hljs-property">innerHTML</span>;
+}
+
+<span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">formatter</span>(<span class="hljs-string">&#x27;destaque&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">valor, linha, ctx</span>) {
+    <span class="hljs-keyword">return</span> ctx.<span class="hljs-title function_">html</span>(<span class="hljs-string">&#x27;&lt;mark&gt;&#x27;</span> + <span class="hljs-title function_">escapar</span>(valor) + <span class="hljs-string">&#x27;&lt;/mark&gt;&#x27;</span>);
+});</code></pre></div>
+<h2 id="formatador-só-desta-listagem-init-manual">Formatador só desta listagem (init manual) <a class="anchor" href="#formatador-só-desta-listagem-init-manual" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;notas&quot;</span> <span class="hljs-attr">data-paginationjs</span>=<span class="hljs-string">&quot;manual&quot;</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=notas.listar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nota&quot;</span> <span class="hljs-attr">data-paginationjs-format</span>=<span class="hljs-string">&quot;estrelas&quot;</span>&gt;</span>Nota<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+    <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">init</span>(<span class="hljs-string">&#x27;notas&#x27;</span>, {
+        <span class="hljs-attr">formatters</span>: {
+            <span class="hljs-attr">estrelas</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">valor</span>) {
+                <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;★★★★★&#x27;</span>.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, <span class="hljs-title class_">Number</span>(valor) || <span class="hljs-number">0</span>) + <span class="hljs-string">&#x27;☆☆☆☆☆&#x27;</span>.<span class="hljs-title function_">slice</span>(<span class="hljs-title class_">Number</span>(valor) || <span class="hljs-number">0</span>);
+            }
+        }
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre></div>
+<h2 id="seletor-de-colunas">Seletor de colunas <a class="anchor" href="#seletor-de-colunas" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-paginationjs-columns</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;id&quot;</span> <span class="hljs-attr">data-paginationjs-required</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;nome&quot;</span> <span class="hljs-attr">data-paginationjs-required</span>&gt;</span>Nome<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;email&quot;</span>&gt;</span>E-mail<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;telefone&quot;</span> <span class="hljs-attr">data-paginationjs-hidden</span>&gt;</span>Telefone<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-paginationjs-key</span>=<span class="hljs-string">&quot;cidade&quot;</span>&gt;</span>Cidade<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre></div>
+<figure class="preview"><figcaption>Seletor aberto</figcaption><div class="preview-body"><div class="hrpjs"><details class="hrpjs-columns" open><summary class="hrpjs-columns-toggle">Colunas</summary><div class="hrpjs-columns-panel"><div class="hrpjs-columns-list">
+<label class="hrpjs-columns-item"><input type="checkbox" checked disabled> ID</label>
+<label class="hrpjs-columns-item"><input type="checkbox" checked disabled> Nome</label>
+<label class="hrpjs-columns-item"><input type="checkbox" checked> E-mail</label>
+<label class="hrpjs-columns-item"><input type="checkbox"> Telefone</label>
+<label class="hrpjs-columns-item"><input type="checkbox" checked> Cidade</label>
+</div><button type="button" class="hrpjs-button hrpjs-columns-reset">Restaurar padrão</button></div></details></div></div></figure>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> marcar/desmarcar <strong>não faz requisição</strong>; o <code>colspan</code> das mensagens se ajusta; <code>Esc</code> fecha o
+painel. Para lembrar a escolha, veja <a href="exemplos-preferencias-url-cache.html">Preferências</a>.</p>
+</blockquote>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="exemplos-telas.html"><span>Anterior</span>Montando a tela</a><a class="next" href="exemplos-busca.html"><span>Próxima</span>Busca</a></nav>
+        </main>
+    </div>
+</body>
+</html>

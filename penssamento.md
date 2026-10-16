@@ -203,3 +203,47 @@ Execução:
 - [x] Ponta a ponta com `exemplos/index.php` carregando `dist/*.min.*` (jQuery 1.12.4 e 4.0.0 slim) e `exemplos/minimo.html` → tudo OK, console sem erros.
 - [ ] Não executado: navegador real; o comportamento do `JHtml` no modo debug do Joomla (trocar `.min.js` pela versão sem `.min`) não foi testado num Joomla.
 
+
+## 12. Documentação com exemplos de implementação (pedido de 2026-10-16)
+
+Pedido: exemplos de todas as situações dos recursos, em HTML, com highlight.js, bem ilustrados e fáceis de copiar.
+Correção do usuário no meio do trabalho: "os exemplos é de como implementar e não para criar backend para receber"
+→ descartado o servidor simulado (`docs/assets/demo-server.js`) e as demos ao vivo; exemplos são código para copiar.
+
+- [x] `highlight.js 11.9.0` (devDependency) aplicado **no build** (`scripts/build-docs.js`): funciona offline/`file://`, sem script de highlight na página. Temas github (claro) e github-dark (escuro) em `docs/assets/highlight.css`.
+- [x] Todo bloco de código: rótulo da linguagem + nome do arquivo opcional (```` ```html views/... ````) e botão **Copiar** (`docs/assets/docs.js`, clipboard com fallback).
+- [x] Blocos `http` ("⇄ Requisição gerada") mostram o que a tela envia; blocos `preview` ("👁 Como fica na tela") são ilustrações estáticas com o CSS real da biblioteca; citações `> **Dica/Atenção/Importante/Resultado/Como funciona:**` viram caixas coloridas; diagrama SVG do fluxo na página de exemplos.
+- [x] Menu em grupos (Guia / Exemplos / Referência); o build falha se um `.md` não estiver no menu e remove `.html` órfãos.
+- [x] 11 páginas novas: `exemplos` (índice com cartões e diagrama), `exemplos-telas`, `-colunas`, `-busca`, `-filtros`, `-ordenacao-paginacao`, `-acoes`, `-estados-textos`, `-preferencias-url-cache`, `-javascript`, `-integracoes`.
+
+Verificação:
+- [x] `npm run docs` → 26 páginas; 200 blocos de código, todos com botão Copiar; 14 ilustrações; 46 caixas. Carregadas no jsdom a partir de `file://`: nenhum erro de script.
+- [x] Links internos e âncoras: 0 quebrados.
+- [x] Todo atributo `data-paginationjs-*` citado nas docs existe no `src` (conferido por script; os 4 alertas eram leituras via `parseJsonAttr`/`currentScript`). Todo `data-paginationjs-text-*` corresponde a uma chave real de texto.
+- [x] Os 11 exemplos HTML completos (com `<table>`) foram montados no jsdom com `dist/hr-paginationjs.min.js`: 1 requisição na carga, 1 linha renderizada, HTML malicioso exibido como texto, `href="javascript:"` removido, nenhum erro de configuração.
+- [ ] Não executado: navegador real (visual, cópia para a área de transferência). Exemplos parciais (com `...`) não são executáveis por definição.
+
+## 13. Compatibilidade com Laravel (pergunta de 2026-10-16)
+
+Fontes lidas: `helpers-joomla/js/vigia-laravel.js` (token só no cabeçalho, mensagem própria do 419) e
+`sextopremioprodutorrural/ResponseService.php` (mesmo envelope do `ApiResponseHelper`; `paginated()` gera `meta.paginacao`;
+`sessionExpired()` = 419; `fromThrowable()` para exceções).
+
+Teste em Laravel real: projeto descartável no scratchpad (`composer create-project`, Laravel 13.37, SQLite, 137 clientes),
+`ResponseService.php` copiado, `fromThrowable` registrado, `VerifyCsrfToken` ativo, `dist/*.min.*`, jsdom + `php artisan serve`.
+
+Primeira rodada (versão anterior): 11/13.
+- [x] Funcionava: `ResponseService::paginated()`, paginação, ordenação, filtros `uf[]`, busca, XSS, ação POST com CSRF via cabeçalho, 422, `DELETE` via `_method`, 401.
+- [x] Falhava: 419 classificado como `http` (não `session`); `paginate()` puro do Laravel tratado como resposta inválida. Observado: campo extra `<token>=1` no corpo (o Laravel ignora, mas polui `$request->all()`).
+
+Correções:
+- [x] 419 → `session`; mensagens leem `mensagem` ou `message` (Laravel).
+- [x] Adaptador `laravel`: `paginate()` puro, API Resource (`data` + `meta`) e envelope do `ResponseService`; sem `total` (simplePaginate/cursorPaginate) → `invalid`.
+- [x] CSRF: lê também `<input name="_token">` (`@csrf`) e, nesse caso, envia só o cabeçalho; novo `data-paginationjs-csrf="header"` para enviar só o cabeçalho quando o token vem da `<meta>`. Padrão `auto` mantém o comportamento do Joomla.
+- [x] Ações aceitam `204 No Content` e JSON 2xx sem `success` (mensagem de `message`).
+
+Execução:
+- [x] `npm test` 39/39; `npm run test:dist` 39/39; matriz jQuery 1.7.2 … 4.0.0 slim → 39/39 cada (1.6.4 recusado, esperado).
+- [x] Laravel real, segunda rodada: 16/16 (inclui corpo `id=13&status=inativo` sem campo extra, 419 → session, `paginate()` puro com troca de página, API Resource com 28 páginas).
+- [x] Docs: página nova `docs/laravel.html` (Guia) + atributos, backend, API JS, ações, testes, README e LEIAME do pacote. 27 páginas, 0 links quebrados.
+- [ ] Não executado: projeto Laravel do usuário (`C:\laragon\www\laravel`) não foi alterado nem usado; `@csrf` sem `<meta>` coberto só pelo teste unitário 37; navegador real.

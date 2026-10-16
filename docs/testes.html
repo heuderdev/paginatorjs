@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Testes — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
     <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
 </head>
 <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -14,26 +17,12 @@
     </header>
     <div class="layout">
         <nav class="sidebar" aria-label="Documentação">
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
-                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
-                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
-                <li><a href="colunas.html">Colunas</a></li>
-                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
-                <li><a href="controles.html">Controles declarativos</a></li>
-                <li><a href="acoes.html">Ações por linha</a></li>
-                <li><a href="api-js.html">API JavaScript</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
-                <li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li>
-                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
-                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
-                <li><a href="testes.html" aria-current="page">Testes</a></li>
-            </ul>
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html" aria-current="page">Testes</a></li></ul>
         </nav>
         <main id="conteudo" class="content">
-<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#rodar-no-node">Rodar no Node</a></li><li><a href="#cenários-cobertos">Cenários cobertos</a></li><li><a href="#limites">Limites</a></li></ul></nav>
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#rodar-no-node">Rodar no Node</a></li><li><a href="#cenários-cobertos">Cenários cobertos</a></li><li><a href="#laravel-real">Laravel real</a></li><li><a href="#limites">Limites</a></li></ul></nav>
 <h1 id="testes">Testes</h1>
 <p>O projeto não tinha infraestrutura de testes JavaScript reutilizável; foi criado um harness mínimo, sem
 dependências, que roda <strong>o mesmo arquivo de testes</strong> no navegador e no Node.</p>
@@ -64,20 +53,18 @@ dependências, que roda <strong>o mesmo arquivo de testes</strong> no navegador 
 </tbody>
 </table></div>
 <h2 id="rodar-no-node">Rodar no Node <a class="anchor" href="#rodar-no-node" aria-label="Link para esta seção">#</a></h2>
-<pre><code class="language-bash">npm install            # jsdom é dependência de desenvolvimento
-npm test               # contra src/hr-paginationjs.js
-npm run test:dist      # contra dist/hr-paginationjs.min.js (rode npm run build antes)
-npm run test:all       # build + os dois
-</code></pre>
+<div class="code-block code-bash"><div class="code-head"><span class="code-lang">Terminal</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-bash">npm install            <span class="hljs-comment"># jsdom é dependência de desenvolvimento</span>
+npm <span class="hljs-built_in">test</span>               <span class="hljs-comment"># contra src/hr-paginationjs.js</span>
+npm run <span class="hljs-built_in">test</span>:dist      <span class="hljs-comment"># contra dist/hr-paginationjs.min.js (rode npm run build antes)</span>
+npm run <span class="hljs-built_in">test</span>:all       <span class="hljs-comment"># build + os dois</span></code></pre></div>
 <p>Saída: a versão do jQuery e o arquivo testado, uma linha por teste e o total. Código de saída <code>1</code> se algum falhar.
 Opções do <code>tests/run-node.js</code>: <code>--lib &lt;arquivo&gt;</code> (biblioteca a testar) e <code>--jquery &lt;arquivo&gt;</code> (versão do jQuery).</p>
 <h3 id="testar-com-outra-versão-do-jquery">Testar com outra versão do jQuery <a class="anchor" href="#testar-com-outra-versão-do-jquery" aria-label="Link para esta seção">#</a></h3>
 <p>Por padrão é usado <code>vendor/jquery-1.12.4.min.js</code>. Para outra versão, baixe o arquivo numa pasta fora do projeto
 (ex.: <code>https://code.jquery.com/jquery-3.7.1.slim.min.js</code>) e:</p>
-<pre><code class="language-bash">node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js
-node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js --lib dist/hr-paginationjs.min.js
-</code></pre>
-<p>Matriz executada em 2026-10-16 (35 testes cada, tanto com <code>src/</code> quanto com <code>dist/hr-paginationjs.min.js</code>):</p>
+<div class="code-block code-bash"><div class="code-head"><span class="code-lang">Terminal</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-bash">node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js
+node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js --lib dist/hr-paginationjs.min.js</code></pre></div>
+<p>Matriz executada em 2026-10-16 (39 testes cada, tanto com <code>src/</code> quanto com <code>dist/hr-paginationjs.min.js</code>):</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -92,19 +79,19 @@ node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js --lib dist/hr-p
 </tr>
 <tr>
 <td>1.7.2, 1.8.3, 1.9.1, 1.10.2, 1.11.3, 1.12.4</td>
-<td>35/35</td>
+<td>39/39</td>
 </tr>
 <tr>
 <td>2.2.4</td>
-<td>35/35</td>
+<td>39/39</td>
 </tr>
 <tr>
 <td>3.0.0, 3.3.1, 3.5.1, 3.7.1, 3.7.1 <em>slim</em></td>
-<td>35/35</td>
+<td>39/39</td>
 </tr>
 <tr>
 <td>4.0.0, 4.0.0 <em>slim</em></td>
-<td>35/35</td>
+<td>39/39</td>
 </tr>
 </tbody>
 </table></div>
@@ -257,8 +244,30 @@ node tests/run-node.js --jquery C:/temp/jquery-3.7.1.slim.min.js --lib dist/hr-p
 <td>34</td>
 <td>jQuery anterior a 1.7 gera mensagem clara</td>
 </tr>
+<tr>
+<td>35</td>
+<td>Adaptador <code>laravel</code>: <code>paginate()</code> puro, API Resource, envelope do <code>ResponseService</code>, <code>simplePaginate</code> recusado</td>
+</tr>
+<tr>
+<td>36</td>
+<td>HTTP 419 vira <code>session</code>; mensagem lida de <code>message</code> (Laravel)</td>
+</tr>
+<tr>
+<td>37</td>
+<td>Token CSRF: <code>@csrf</code> e <code>data-paginationjs-csrf=&quot;header&quot;</code> enviam só o cabeçalho; <code>auto</code> mantém o campo do Joomla</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Ação remota: <code>204 No Content</code> e JSON sem envelope com <code>message</code> contam como sucesso</td>
+</tr>
 </tbody>
 </table></div>
+<h2 id="laravel-real">Laravel real <a class="anchor" href="#laravel-real" aria-label="Link para esta seção">#</a></h2>
+<p>Executado em 2026-10-16 num Laravel 13.37 criado do zero (SQLite, <code>VerifyCsrfToken</code> ativo, <code>ResponseService.php</code> do
+projeto e <code>ResponseService::fromThrowable</code> registrado), com <code>dist/hr-paginationjs.min.js</code> e jsdom contra
+<code>php artisan serve</code>: listagem, <code>money</code> em decimal do Eloquent, XSS, paginação, ordenação, filtros <code>status</code> + <code>uf[]</code>,
+busca, ação <code>POST</code> com token, corpo sem campo extra (<code>csrf=&quot;header&quot;</code>), 422, <code>DELETE</code> via <code>_method</code>, 419, 401,
+<code>paginate()</code> puro, troca de página nele e API Resource — 16 de 16.</p>
 <h2 id="limites">Limites <a class="anchor" href="#limites" aria-label="Link para esta seção">#</a></h2>
 <ul>
 <li>jsdom não calcula layout nem foco visual: “foco visível” e responsividade foram conferidos só por CSS.</li>

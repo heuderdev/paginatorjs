@@ -1,13 +1,13 @@
 [
   {
     "file": "hr-paginationjs.js",
-    "bytes": 126117,
-    "gzip": 25101
+    "bytes": 128685,
+    "gzip": 25476
   },
   {
     "file": "hr-paginationjs.min.js",
-    "bytes": 52253,
-    "gzip": 17795
+    "bytes": 53535,
+    "gzip": 18114
   },
   {
     "file": "hr-paginationjs.css",

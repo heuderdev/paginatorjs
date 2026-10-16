@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Exemplos — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/exemplos.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html" aria-current="page">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#como-funciona">Como funciona</a></li><li><a href="#índice-dos-exemplos">Índice dos exemplos</a></li><li><a href="#o-modelo-usado-nos-exemplos">O modelo usado nos exemplos</a></li></ul></nav>
+<h1 id="exemplos">Exemplos</h1>
+<p>Receitas prontas para <strong>implementar</strong> cada recurso na sua tela. Todo bloco tem o botão <strong>Copiar</strong>.
+O código é o que vai na view (HTML + atributos <code>data-paginationjs-*</code>); JavaScript só aparece quando o recurso é
+específico de JavaScript.</p>
+<p>Os blocos <strong>⇄ Requisição gerada</strong> mostram o que a tela envia ao endpoint, para você saber o que o controller recebe.
+Os blocos <strong>👁 Como fica na tela</strong> são ilustrações do resultado.</p>
+<h2 id="como-funciona">Como funciona <a class="anchor" href="#como-funciona" aria-label="Link para esta seção">#</a></h2>
+<div class="flow"><svg viewBox="0 0 860 170" role="img" aria-labelledby="flow-t flow-d" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif" font-size="13"><title id="flow-t">Fluxo de uma listagem</title><desc id="flow-d">A view declara a tela em HTML; o hr-paginationjs monta a requisição, chama o endpoint, valida a resposta do ApiResponseHelper e desenha tabela, resumo e paginação.</desc><defs><marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6b82"/></marker></defs><g stroke="#5d6b82" stroke-width="1.5" fill="none"><rect x="10" y="40" width="170" height="90" rx="10" fill="#e8f0fc" stroke="#1f5fbf"/><rect x="250" y="40" width="190" height="90" rx="10" fill="#ecfdf3" stroke="#12b76a"/><rect x="510" y="40" width="160" height="90" rx="10" fill="#fff8e6" stroke="#f2c94c"/><rect x="740" y="40" width="110" height="90" rx="10" fill="#f4f3ff" stroke="#7a5af8"/><path d="M180 85 H246" marker-end="url(#seta)"/><path d="M440 72 H506" marker-end="url(#seta)"/><path d="M510 100 H444" marker-end="url(#seta)"/><path d="M670 85 H736" marker-end="url(#seta)"/></g><g fill="#1d2939" text-anchor="middle"><text x="95" y="70" font-weight="700">Sua view</text><text x="95" y="92">HTML +</text><text x="95" y="110">data-paginationjs-*</text><text x="345" y="70" font-weight="700">hr-paginationjs</text><text x="345" y="92">estado, busca, filtros,</text><text x="345" y="110">ordenação, colunas</text><text x="590" y="70" font-weight="700">Seu endpoint</text><text x="590" y="92">ApiResponseHelper</text><text x="590" y="110">::paginated()</text><text x="795" y="70" font-weight="700">Tela</text><text x="795" y="92">tabela, resumo,</text><text x="795" y="110">Pagination.js</text></g><g fill="#5d6b82" font-size="11" text-anchor="middle"><text x="473" y="64">page, limit, sort…</text><text x="473" y="122">JSON</text></g></svg></div>
+
+<h2 id="índice-dos-exemplos">Índice dos exemplos <a class="anchor" href="#índice-dos-exemplos" aria-label="Link para esta seção">#</a></h2>
+<div class="cards">
+<a href="exemplos-telas.html"><strong>Montando a tela</strong><span>Mínimo, toolbar, posição dos controles, POST, parâmetros fixos, nomes</span></a>
+<a href="exemplos-colunas.html"><strong>Colunas</strong><span>Campos, formatadores, templates, condições, colunas ocultas e obrigatórias</span></a>
+<a href="exemplos-busca.html"><strong>Busca</strong><span>Debounce, mínimo de caracteres, campo externo, nome do parâmetro</span></a>
+<a href="exemplos-filtros.html"><strong>Filtros</strong><span>Select, checkbox, radio, número, data, múltiplos, aplicar no envio, limpar</span></a>
+<a href="exemplos-ordenacao-paginacao.html"><strong>Ordenação e paginação</strong><span>Ordem inicial, quantidade por página, botões do Pagination.js</span></a>
+<a href="exemplos-acoes.html"><strong>Ações por linha</strong><span>Evento, ação remota com confirmação e token, modal próprio</span></a>
+<a href="exemplos-estados-textos.html"><strong>Estados e textos</strong><span>Carregando, vazio, erro, sessão expirada, textos personalizados</span></a>
+<a href="exemplos-preferencias-url-cache.html"><strong>Preferências, URL e cache</strong><span>Lembrar colunas, estado no link, voltar/avançar, cache</span></a>
+<a href="exemplos-javascript.html"><strong>JavaScript</strong><span>Cada método da API, eventos, init manual, destruir e recriar</span></a>
+<a href="exemplos-integracoes.html"><strong>Integrações</strong><span>Joomla 3, DataTables legado, adaptador próprio, abas, tema</span></a>
+</div>
+
+<h2 id="o-modelo-usado-nos-exemplos">O modelo usado nos exemplos <a class="anchor" href="#o-modelo-usado-nos-exemplos" aria-label="Link para esta seção">#</a></h2>
+<p>Para não repetir, os exemplos usam uma listagem de clientes cujo endpoint devolve estes campos:</p>
+<div class="code-block code-json"><div class="code-head"><span class="code-lang">JSON <span class="code-file">Uma linha de data[]</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">42</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;nome&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Ana Silva&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;email&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ana.silva42@exemplo.com.br&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;uf&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;SP&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;cidade&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;São Paulo&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;endereco&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;cidade&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;São Paulo&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;uf&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;SP&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;cep&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;01000-420&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;limite_credito&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">12500.5</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ativo&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;vip&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;categoria&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;varejo&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;nascimento&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1984-07-12&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;created_at&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2025-03-14 10:32:00&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;site&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://www.exemplo.com.br/cliente/42&quot;</span>
+<span class="hljs-punctuation">}</span></code></pre></div>
+<p>E a resposta completa segue o <code>ApiResponseHelper::paginated()</code>:</p>
+<div class="code-block code-json"><div class="code-head"><span class="code-lang">JSON <span class="code-file">Resposta do endpoint</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;success&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;sucesso&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;mensagem&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Registros carregados.&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">42</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;nome&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Ana Silva&quot;</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;errors&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;request_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6bf735c3d97b99f4&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;meta&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;paginacao&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;total&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">137</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;por_pagina&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;pagina_atual&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;total_paginas&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">7</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> em todos os exemplos, os scripts são carregados uma vez por página, nesta ordem:
+<code>jQuery</code> → <code>pagination-2.6.0.min.js</code> → <code>hr-paginationjs.min.js</code>. Veja <a href="instalacao.html">Instalação</a>.</p>
+</blockquote>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="laravel.html"><span>Anterior</span>Laravel</a><a class="next" href="exemplos-telas.html"><span>Próxima</span>Montando a tela</a></nav>
+        </main>
+    </div>
+</body>
+</html>

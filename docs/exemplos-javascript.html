@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JavaScript — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+        <a class="brand" href="index.html">hr-paginationjs <small>docs</small></a>
+        <span class="source">Fonte: <code>docs/md/exemplos-javascript.md</code></span>
+    </header>
+    <div class="layout">
+        <nav class="sidebar" aria-label="Documentação">
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html" aria-current="page">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
+        </nav>
+        <main id="conteudo" class="content">
+<nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#pegar-a-instância">Pegar a instância</a></li><li><a href="#reload">reload()</a></li><li><a href="#setpage">setPage()</a></li><li><a href="#setlimit">setLimit()</a></li><li><a href="#setsearch">setSearch()</a></li><li><a href="#setfilter-e-setfilters">setFilter e setFilters</a></li><li><a href="#clearfilters">clearFilters()</a></li><li><a href="#setsort">setSort()</a></li><li><a href="#colunas-showcolumn-hidecolumn-togglecolumn-resetcolumns">Colunas: showColumn, hideColumn, toggleColumn, resetColumns</a></li><li><a href="#modo-compacto-exemplo-prático">Modo compacto (exemplo prático)</a></li><li><a href="#resetpreferences">resetPreferences()</a></li><li><a href="#getstate-e-getrows">getState() e getRows()</a></li><li><a href="#exportar-com-os-filtros-atuais">Exportar com os filtros atuais</a></li><li><a href="#promises">Promises</a></li><li><a href="#eventos">Eventos</a></li><li><a href="#iniciar-manualmente-com-opções">Iniciar manualmente com opções</a></li><li><a href="#desligar-a-inicialização-automática-da-página">Desligar a inicialização automática da página</a></li><li><a href="#conteúdo-carregado-depois-ajax-aba-modal">Conteúdo carregado depois (AJAX, aba, modal)</a></li><li><a href="#destruir-e-recriar">Destruir e recriar</a></li></ul></nav>
+<h1 id="javascript">JavaScript</h1>
+<p>Tudo nesta página é opcional. Use quando a tela precisa conversar com outras partes da página.</p>
+<h2 id="pegar-a-instância">Pegar a instância <a class="anchor" href="#pegar-a-instância" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> lista = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);          <span class="hljs-comment">// pelo id (ou data-paginationjs-id)</span>
+<span class="hljs-keyword">var</span> mesma = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#clientes&#x27;</span>));
+<span class="hljs-keyword">var</span> todas = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">instances</span>();              <span class="hljs-comment">// todas as listagens da página</span></code></pre></div>
+<blockquote class="callout callout-warn"><p><strong>Atenção:</strong> as listagens automáticas são criadas no <code>DOMContentLoaded</code>. Chame <code>get()</code> dentro de um listener
+de <code>DOMContentLoaded</code> registrado <strong>depois</strong> do script da biblioteca, ou em resposta a cliques.</p>
+</blockquote>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;DOMContentLoaded&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">var</span> lista = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);
+});</code></pre></div>
+<h2 id="reload">reload() <a class="anchor" href="#reload" aria-label="Link para esta seção">#</a></h2>
+<p>Recarrega a página atual indo ao servidor (ignora o cache). Ideal depois de salvar um formulário num modal.</p>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript">meuFormulario.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;salvo&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">reload</span>();
+});</code></pre></div>
+<h2 id="setpage">setPage() <a class="anchor" href="#setpage" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">setPage</span>(<span class="hljs-number">3</span>);</code></pre></div>
+<h2 id="setlimit">setLimit() <a class="anchor" href="#setlimit" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">setLimit</span>(<span class="hljs-number">100</span>);   <span class="hljs-comment">// volta para a página 1</span></code></pre></div>
+<h2 id="setsearch">setSearch() <a class="anchor" href="#setsearch" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;so-ana&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">setSearch</span>(<span class="hljs-string">&#x27;ana&#x27;</span>);   <span class="hljs-comment">// sem espera; atualiza o campo de busca</span>
+});
+
+<span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">setSearch</span>(<span class="hljs-string">&#x27;&#x27;</span>);           <span class="hljs-comment">// limpa</span></code></pre></div>
+<h2 id="setfilter-e-setfilters">setFilter e setFilters <a class="anchor" href="#setfilter-e-setfilters" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> lista = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);
+
+lista.<span class="hljs-title function_">setFilter</span>(<span class="hljs-string">&#x27;status&#x27;</span>, <span class="hljs-string">&#x27;ativo&#x27;</span>);                       <span class="hljs-comment">// um filtro</span>
+lista.<span class="hljs-title function_">setFilter</span>(<span class="hljs-string">&#x27;uf&#x27;</span>, [<span class="hljs-string">&#x27;SP&#x27;</span>, <span class="hljs-string">&#x27;RJ&#x27;</span>]);                      <span class="hljs-comment">// lista</span>
+lista.<span class="hljs-title function_">setFilter</span>(<span class="hljs-string">&#x27;status&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);                            <span class="hljs-comment">// remove</span>
+
+lista.<span class="hljs-title function_">setFilters</span>({ <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;ativo&#x27;</span>, <span class="hljs-attr">vip</span>: <span class="hljs-literal">true</span> });         <span class="hljs-comment">// mescla com os atuais</span>
+lista.<span class="hljs-title function_">setFilters</span>({ <span class="hljs-attr">categoria</span>: <span class="hljs-string">&#x27;governo&#x27;</span> }, <span class="hljs-literal">true</span>);         <span class="hljs-comment">// substitui todos</span></code></pre></div>
+<div class="code-block code-http"><div class="code-head"><span class="code-lang">Requisição gerada <span class="code-file">lista.setFilters({ status: &#39;ativo&#39;, vip: true }) com um select vip data-paginationjs-type=&quot;bool&quot;</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-http">GET index.php?option=com_loja&amp;task=clientes.listar&amp;status=ativo&amp;vip=1&amp;page=1&amp;limit=20&amp;_=...</code></pre></div>
+<blockquote class="callout callout-info"><p><strong>Como funciona:</strong> os campos do formulário com o mesmo <code>name</code> são atualizados para refletir o novo filtro.</p>
+</blockquote>
+<h2 id="clearfilters">clearFilters() <a class="anchor" href="#clearfilters" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">clearFilters</span>();   <span class="hljs-comment">// remove todos os filtros, mantém a busca</span></code></pre></div>
+<h2 id="setsort">setSort() <a class="anchor" href="#setsort" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> lista = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);
+
+lista.<span class="hljs-title function_">setSort</span>(<span class="hljs-string">&#x27;nome&#x27;</span>, <span class="hljs-string">&#x27;asc&#x27;</span>);
+lista.<span class="hljs-title function_">setSort</span>(<span class="hljs-string">&#x27;criado&#x27;</span>);       <span class="hljs-comment">// sem direção: alterna se já for a atual, senão usa sort-first</span>
+lista.<span class="hljs-title function_">setSort</span>(<span class="hljs-string">&#x27;&#x27;</span>);             <span class="hljs-comment">// remove a ordenação</span></code></pre></div>
+<h2 id="colunas-showcolumn-hidecolumn-togglecolumn-resetcolumns">Colunas: showColumn, hideColumn, toggleColumn, resetColumns <a class="anchor" href="#colunas-showcolumn-hidecolumn-togglecolumn-resetcolumns" aria-label="Link para esta seção">#</a></h2>
+<p>Não fazem requisição. Devolvem <code>false</code> quando a mudança não é permitida.</p>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> lista = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);
+
+lista.<span class="hljs-title function_">showColumn</span>(<span class="hljs-string">&#x27;telefone&#x27;</span>);
+lista.<span class="hljs-title function_">hideColumn</span>(<span class="hljs-string">&#x27;email&#x27;</span>);
+lista.<span class="hljs-title function_">toggleColumn</span>(<span class="hljs-string">&#x27;cidade&#x27;</span>);
+lista.<span class="hljs-title function_">toggleColumn</span>(<span class="hljs-string">&#x27;cidade&#x27;</span>, <span class="hljs-literal">true</span>);   <span class="hljs-comment">// força exibir</span>
+
+<span class="hljs-keyword">if</span> (!lista.<span class="hljs-title function_">hideColumn</span>(<span class="hljs-string">&#x27;id&#x27;</span>)) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;id é obrigatória&#x27;</span>);
+}
+
+lista.<span class="hljs-title function_">resetColumns</span>();</code></pre></div>
+<h2 id="modo-compacto-exemplo-prático">Modo compacto (exemplo prático) <a class="anchor" href="#modo-compacto-exemplo-prático" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;compacto&quot;</span> <span class="hljs-attr">aria-pressed</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span>Modo compacto<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;compacto&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">var</span> lista = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);
+        <span class="hljs-keyword">var</span> ligado = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;aria-pressed&#x27;</span>) !== <span class="hljs-string">&#x27;true&#x27;</span>;
+
+        [<span class="hljs-string">&#x27;email&#x27;</span>, <span class="hljs-string">&#x27;cidade&#x27;</span>, <span class="hljs-string">&#x27;telefone&#x27;</span>].<span class="hljs-title function_">forEach</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">key</span>) {
+            lista.<span class="hljs-title function_">toggleColumn</span>(key, !ligado);
+        });
+
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;aria-pressed&#x27;</span>, <span class="hljs-title class_">String</span>(ligado));
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre></div>
+<h2 id="resetpreferences">resetPreferences() <a class="anchor" href="#resetpreferences" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">resetPreferences</span>();</code></pre></div>
+<h2 id="getstate-e-getrows">getState() e getRows() <a class="anchor" href="#getstate-e-getrows" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> estado = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">getState</span>();
+<span class="hljs-keyword">var</span> linhas = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">getRows</span>();</code></pre></div>
+<div class="code-block code-json"><div class="code-head"><span class="code-lang">JSON <span class="code-file">getState()</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;clientes&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;page&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;limit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;search&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ana&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;filters&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ativo&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;uf&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;SP&quot;</span><span class="hljs-punctuation">]</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;sort&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;nome&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;direction&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;asc&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;columns&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;id&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;nome&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;email&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;hiddenColumns&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;telefone&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;loading&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;error&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;total&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">37</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;totalPages&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;requestId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6bf735c3d97b99f4&quot;</span>
+<span class="hljs-punctuation">}</span></code></pre></div>
+<h2 id="exportar-com-os-filtros-atuais">Exportar com os filtros atuais <a class="anchor" href="#exportar-com-os-filtros-atuais" aria-label="Link para esta seção">#</a></h2>
+<p>Use o estado para montar o link do endpoint de exportação existente.</p>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;exportar&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">var</span> s = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">getState</span>();
+    <span class="hljs-keyword">var</span> params = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">serialize</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>({ <span class="hljs-attr">search</span>: s.<span class="hljs-property">search</span>, <span class="hljs-attr">sort</span>: s.<span class="hljs-property">sort</span>, <span class="hljs-attr">direction</span>: s.<span class="hljs-property">direction</span> }, s.<span class="hljs-property">filters</span>));
+
+    <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span> = <span class="hljs-string">&#x27;index.php?option=com_loja&amp;task=clientes.exportar&amp;&#x27;</span> + params;
+});</code></pre></div>
+<h2 id="promises">Promises <a class="anchor" href="#promises" aria-label="Link para esta seção">#</a></h2>
+<p>Os métodos que consultam o servidor devolvem uma <code>Promise</code>.</p>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>).<span class="hljs-title function_">setFilter</span>(<span class="hljs-string">&#x27;status&#x27;</span>, <span class="hljs-string">&#x27;ativo&#x27;</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">estado</span>) {
+        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;total-ativos&#x27;</span>).<span class="hljs-property">textContent</span> = estado.<span class="hljs-property">total</span>;
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">erro</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(erro.<span class="hljs-property">kind</span>, erro.<span class="hljs-property">message</span>);
+    });</code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> chamadas seguidas (ex.: dois <code>setPage</code> rápidos) cancelam a anterior; todas as promises resolvem com o
+resultado da <strong>última</strong>.</p>
+</blockquote>
+<h2 id="eventos">Eventos <a class="anchor" href="#eventos" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> lista = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);
+
+lista.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:load&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;badge-total&#x27;</span>).<span class="hljs-property">textContent</span> = e.<span class="hljs-property">detail</span>.<span class="hljs-property">total</span>;
+});
+
+lista.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:beforeload&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;vai enviar&#x27;</span>, e.<span class="hljs-property">detail</span>.<span class="hljs-property">params</span>);
+});
+
+lista.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:columnschange&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;colunas visíveis&#x27;</span>, e.<span class="hljs-property">detail</span>.<span class="hljs-property">visible</span>);
+});
+
+lista.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;hrpaginationjs:statechange&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;página&#x27;</span>, e.<span class="hljs-property">detail</span>.<span class="hljs-property">state</span>.<span class="hljs-property">page</span>);
+});</code></pre></div>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript <span class="code-file">Com jQuery</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title function_">jQuery</span>(<span class="hljs-string">&#x27;#clientes&#x27;</span>).<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;hrpaginationjs:load&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">var</span> detalhe = e.<span class="hljs-property">originalEvent</span>.<span class="hljs-property">detail</span>;
+});</code></pre></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Evento</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hrpaginationjs:init</code></td>
+<td>listagem criada</td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:statechange</code></td>
+<td>página, busca, filtros, quantidade ou ordem mudaram</td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:beforeload</code></td>
+<td>antes de cada requisição</td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:load</code></td>
+<td>página desenhada</td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:error</code></td>
+<td>erro (exceto cancelamento)</td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:columnschange</code></td>
+<td>colunas mostradas/ocultadas</td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:action</code> / <code>actiondone</code> / <code>actionerror</code></td>
+<td>ações por linha</td>
+</tr>
+<tr>
+<td><code>hrpaginationjs:destroy</code></td>
+<td>antes de destruir</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="iniciar-manualmente-com-opções">Iniciar manualmente com opções <a class="anchor" href="#iniciar-manualmente-com-opções" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>=<span class="hljs-string">&quot;manual&quot;</span> <span class="hljs-attr">data-paginationjs-remote</span>=<span class="hljs-string">&quot;index.php?option=com_loja&amp;task=clientes.listar&quot;</span>&gt;</span>
+    ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+    <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">init</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>, {
+        <span class="hljs-attr">limit</span>: <span class="hljs-number">50</span>,
+        <span class="hljs-attr">sort</span>: <span class="hljs-string">&#x27;nome&#x27;</span>,
+        <span class="hljs-attr">direction</span>: <span class="hljs-string">&#x27;asc&#x27;</span>,
+        <span class="hljs-attr">headers</span>: { <span class="hljs-string">&#x27;X-Tela&#x27;</span>: <span class="hljs-string">&#x27;clientes&#x27;</span> },
+        <span class="hljs-attr">paginationOptions</span>: {
+            <span class="hljs-attr">showGoInput</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-attr">showGoButton</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-attr">formatGoInput</span>: <span class="hljs-string">&#x27;Ir para &lt;%= input %&gt;&#x27;</span>
+        }
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre></div>
+<h2 id="desligar-a-inicialização-automática-da-página">Desligar a inicialização automática da página <a class="anchor" href="#desligar-a-inicialização-automática-da-página" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/assets/hr-paginationjs/hr-paginationjs.min.js&quot;</span> <span class="hljs-attr">data-paginationjs-autoinit</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;DOMContentLoaded&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+        <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">scan</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;area-de-relatorios&#x27;</span>));
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre></div>
+<h2 id="conteúdo-carregado-depois-ajax-aba-modal">Conteúdo carregado depois (AJAX, aba, modal) <a class="anchor" href="#conteúdo-carregado-depois-ajax-aba-modal" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;index.php?option=com_loja&amp;view=pedidos&amp;format=raw&#x27;</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">r</span>) { <span class="hljs-keyword">return</span> r.<span class="hljs-title function_">text</span>(); })
+    .<span class="hljs-title function_">then</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">html</span>) {
+        <span class="hljs-keyword">var</span> area = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;area-pedidos&#x27;</span>);
+
+        area.<span class="hljs-property">innerHTML</span> = html;
+        <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">scan</span>(area);   <span class="hljs-comment">// inicia as listagens do HTML recebido</span>
+    });</code></pre></div>
+<h2 id="destruir-e-recriar">Destruir e recriar <a class="anchor" href="#destruir-e-recriar" aria-label="Link para esta seção">#</a></h2>
+<div class="code-block code-js"><div class="code-head"><span class="code-lang">JavaScript</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-javascript"><span class="hljs-keyword">var</span> lista = <span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);
+
+lista.<span class="hljs-title function_">destroy</span>();                    <span class="hljs-comment">// cancela a requisição, remove eventos e tudo que a lib criou</span>
+<span class="hljs-title class_">HrPaginationjs</span>.<span class="hljs-title function_">init</span>(<span class="hljs-string">&#x27;clientes&#x27;</span>);    <span class="hljs-comment">// cria de novo, sem duplicar nada</span></code></pre></div>
+<blockquote class="callout callout-tip"><p><strong>Dica:</strong> destrua antes de remover o elemento da página (ex.: ao fechar um modal), para liberar memória e
+cancelar requisições pendentes.</p>
+</blockquote>
+
+<nav class="pager" aria-label="Navegação entre páginas"><a class="prev" href="exemplos-preferencias-url-cache.html"><span>Anterior</span>Preferências, URL e cache</a><a class="next" href="exemplos-integracoes.html"><span>Próxima</span>Integrações</a></nav>
+        </main>
+    </div>
+</body>
+</html>

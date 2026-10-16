@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Preferências, estado na URL e cache — hr-paginationjs</title>
+    <link rel="stylesheet" href="../dist/hr-paginationjs.min.css">
+    <link rel="stylesheet" href="assets/highlight.css">
     <link rel="stylesheet" href="assets/docs.css">
+    <script src="assets/docs.js" defer></script>
 </head>
 <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -14,35 +17,20 @@
     </header>
     <div class="layout">
         <nav class="sidebar" aria-label="Documentação">
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="instalacao.html">Instalação e ordem de carregamento</a></li>
-                <li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li>
-                <li><a href="atributos.html">Atributos do elemento raiz</a></li>
-                <li><a href="colunas.html">Colunas</a></li>
-                <li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li>
-                <li><a href="controles.html">Controles declarativos</a></li>
-                <li><a href="acoes.html">Ações por linha</a></li>
-                <li><a href="api-js.html">API JavaScript</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="backend.html">Contrato da API e adaptadores</a></li>
-                <li><a href="preferencias-url-cache.html" aria-current="page">Preferências, estado na URL e cache</a></li>
-                <li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li>
-                <li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li>
-                <li><a href="testes.html">Testes</a></li>
-            </ul>
+<p class="nav-group">Guia</p><ul><li><a href="index.html">Início</a></li><li><a href="instalacao.html">Instalação e ordem de carregamento</a></li><li><a href="primeira-tela.html">Primeira tela em 2 minutos</a></li><li><a href="laravel.html">Laravel</a></li></ul>
+<p class="nav-group">Exemplos</p><ul><li><a href="exemplos.html">Exemplos</a></li><li><a href="exemplos-telas.html">Montando a tela</a></li><li><a href="exemplos-colunas.html">Colunas</a></li><li><a href="exemplos-busca.html">Busca</a></li><li><a href="exemplos-filtros.html">Filtros</a></li><li><a href="exemplos-ordenacao-paginacao.html">Ordenação e paginação</a></li><li><a href="exemplos-acoes.html">Ações por linha</a></li><li><a href="exemplos-estados-textos.html">Estados e textos</a></li><li><a href="exemplos-preferencias-url-cache.html">Preferências, URL e cache</a></li><li><a href="exemplos-javascript.html">JavaScript</a></li><li><a href="exemplos-integracoes.html">Integrações</a></li></ul>
+<p class="nav-group">Referência</p><ul><li><a href="atributos.html">Atributos do elemento raiz</a></li><li><a href="colunas.html">Colunas</a></li><li><a href="busca-filtros-ordenacao.html">Busca, filtros e ordenação</a></li><li><a href="controles.html">Controles declarativos</a></li><li><a href="acoes.html">Ações por linha</a></li><li><a href="api-js.html">API JavaScript</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="backend.html">Contrato da API e adaptadores</a></li><li><a href="preferencias-url-cache.html" aria-current="page">Preferências, estado na URL e cache</a></li><li><a href="paginationjs-opcoes.html">Opções do Pagination.js 2.6.0</a></li><li><a href="acessibilidade-seguranca.html">Acessibilidade e segurança</a></li><li><a href="testes.html">Testes</a></li></ul>
         </nav>
         <main id="conteudo" class="content">
 <nav class="toc" aria-label="Nesta página"><p>Nesta página</p><ul><li><a href="#preferências-localstorage">Preferências (localStorage)</a></li><li><a href="#estado-na-url">Estado na URL</a></li><li><a href="#cache">Cache</a></li></ul></nav>
 <h1 id="preferências-estado-na-url-e-cache">Preferências, estado na URL e cache</h1>
 <p>Os três são <strong>opcionais</strong> e desligados por padrão. A listagem funciona igual sem nenhum deles.</p>
 <h2 id="preferências-localstorage">Preferências (<code>localStorage</code>) <a class="anchor" href="#preferências-localstorage" aria-label="Link para esta seção">#</a></h2>
-<pre><code class="language-html">&lt;div id=&quot;clientes&quot; data-paginationjs ...
-     data-paginationjs-persist
-     data-paginationjs-namespace=&quot;com_loja&quot;
-     data-paginationjs-user=&quot;&lt;?php echo (int) JFactory::getUser()-&gt;id; ?&gt;&quot;
-     data-paginationjs-version=&quot;1&quot;&gt;
-</code></pre>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">...</span>
+     <span class="hljs-attr">data-paginationjs-persist</span>
+     <span class="hljs-attr">data-paginationjs-namespace</span>=<span class="hljs-string">&quot;com_loja&quot;</span>
+     <span class="hljs-attr">data-paginationjs-user</span>=<span class="hljs-string">&quot;&lt;?php echo (int) JFactory::getUser()-&gt;id; ?&gt;&quot;</span>
+     <span class="hljs-attr">data-paginationjs-version</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span></code></pre></div>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -108,8 +96,7 @@ Assim, usuários diferentes no mesmo navegador não compartilham preferências.<
 </table></div>
 <p><code>resetPreferences()</code> apaga a chave e volta ao padrão do HTML.</p>
 <h2 id="estado-na-url">Estado na URL <a class="anchor" href="#estado-na-url" aria-label="Link para esta seção">#</a></h2>
-<pre><code class="language-html">&lt;div id=&quot;clientes&quot; data-paginationjs ... data-paginationjs-url data-paginationjs-url-prefix=&quot;cli_&quot;&gt;
-</code></pre>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span> <span class="hljs-attr">...</span> <span class="hljs-attr">data-paginationjs-url</span> <span class="hljs-attr">data-paginationjs-url-prefix</span>=<span class="hljs-string">&quot;cli_&quot;</span>&gt;</span></code></pre></div>
 <p>Exemplo: <code>index.php?option=com_loja&amp;view=clientes&amp;cli_page=3&amp;cli_sort=nome&amp;cli_direction=asc&amp;cli_f_status=ativo</code></p>
 <div class="table-wrap"><table>
 <thead>
@@ -159,8 +146,7 @@ reescrever a URL (sem loop). A carga inicial nunca cria entrada.</li>
 <li>Valores da URL passam pela mesma validação (página ≥ 1, ordenação só em colunas ordenáveis, filtros tipados).</li>
 </ul>
 <h2 id="cache">Cache <a class="anchor" href="#cache" aria-label="Link para esta seção">#</a></h2>
-<pre><code class="language-html">&lt;div ... data-paginationjs-cache=&quot;60&quot; data-paginationjs-cache-max=&quot;20&quot;&gt;
-</code></pre>
+<div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">...</span> <span class="hljs-attr">data-paginationjs-cache</span>=<span class="hljs-string">&quot;60&quot;</span> <span class="hljs-attr">data-paginationjs-cache-max</span>=<span class="hljs-string">&quot;20&quot;</span>&gt;</span></code></pre></div>
 <ul>
 <li>Desligado por padrão (cada navegação consulta o servidor).</li>
 <li>Validade em segundos (<code>cache</code>) e limite de respostas por instância (<code>cache-max</code>; a mais antiga sai primeiro).</li>
