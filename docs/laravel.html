@@ -37,7 +37,7 @@ endpoint devolve</strong> e <strong>como o token CSRF é enviado</strong>. Há d
 <tbody>
 <tr>
 <td><strong>A.</strong> <code>ResponseService::paginated()</code></td>
-<td>Projetos que já usam o <code>ResponseService.php</code> (mesmo contrato do <code>ApiResponseHelper</code> do Joomla)</td>
+<td>Projetos que usam o <code>ResponseService.php</code> (mesmo contrato do <code>ApiResponseHelper</code> do Joomla) — <a href="#a-classe-responseservice-completa">classe completa abaixo</a></td>
 <td>nada a configurar</td>
 </tr>
 <tr>
@@ -144,6 +144,523 @@ que já vem no seu <code>vite</code>/<code>app.js</code> — desde que esteja em
         }
     });
 })</code></pre></div>
+<h3 id="a-classe-responseservice-completa">A classe <code>ResponseService</code> completa <a class="anchor" href="#a-classe-responseservice-completa" aria-label="Link para esta seção">#</a></h3>
+<p>Copie o bloco abaixo inteiro para <code>app/Services/ResponseService.php</code> (o mesmo arquivo está em
+<a href="https://github.com/heuderdev/paginatorjs/blob/main/exemplos/laravel/ResponseService.php" target="_blank" rel="noopener noreferrer"><code>exemplos/laravel/ResponseService.php</code></a>).
+Não depende de nada além do Laravel: <strong>PHP 8.1+ e Laravel 10+</strong>. Se colocar em outra pasta, ajuste só o <code>namespace</code>.</p>
+<p><code>paginated()</code> aceita o paginator puro, um API Resource ou uma transformação por linha — o envelope sai sempre igual:</p>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">Formas de chamar paginated()</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-comment">// 1. Linhas como o Eloquent serializa ($hidden, $casts e $appends valem)</span>
+<span class="hljs-keyword">return</span> <span class="hljs-title class_">ResponseService</span>::<span class="hljs-title function_ invoke__">paginated</span>(<span class="hljs-variable">$query</span>-&gt;<span class="hljs-title function_ invoke__">paginate</span>(<span class="hljs-variable">$limite</span>));
+
+<span class="hljs-comment">// 2. Linhas pelo API Resource ($this-&gt;when(), relações carregadas, additional() → meta)</span>
+<span class="hljs-keyword">return</span> <span class="hljs-title class_">ResponseService</span>::<span class="hljs-title function_ invoke__">paginated</span>(<span class="hljs-title class_">ClienteResource</span>::<span class="hljs-title function_ invoke__">collection</span>(<span class="hljs-variable">$query</span>-&gt;<span class="hljs-title function_ invoke__">paginate</span>(<span class="hljs-variable">$limite</span>)));
+
+<span class="hljs-comment">// 3. O mesmo, passando só a classe</span>
+<span class="hljs-keyword">return</span> <span class="hljs-title class_">ResponseService</span>::<span class="hljs-title function_ invoke__">paginated</span>(<span class="hljs-variable">$query</span>-&gt;<span class="hljs-title function_ invoke__">paginate</span>(<span class="hljs-variable">$limite</span>), <span class="hljs-attr">transform</span>: <span class="hljs-title class_">ClienteResource</span>::<span class="hljs-variable language_">class</span>);
+
+<span class="hljs-comment">// 4. Transformação simples por linha, com meta extra</span>
+<span class="hljs-keyword">return</span> <span class="hljs-title class_">ResponseService</span>::<span class="hljs-title function_ invoke__">paginated</span>(
+    <span class="hljs-variable">$query</span>-&gt;<span class="hljs-title function_ invoke__">paginate</span>(<span class="hljs-variable">$limite</span>),
+    <span class="hljs-attr">meta</span>: [<span class="hljs-string">&#x27;filtros_aplicados&#x27;</span> =&gt; <span class="hljs-variable">$request</span>-&gt;<span class="hljs-title function_ invoke__">only</span>(<span class="hljs-string">&#x27;status&#x27;</span>, <span class="hljs-string">&#x27;uf&#x27;</span>)],
+    <span class="hljs-attr">transform</span>: fn (Cliente <span class="hljs-variable">$c</span>) =&gt; [<span class="hljs-string">&#x27;id&#x27;</span> =&gt; <span class="hljs-variable">$c</span>-&gt;id, <span class="hljs-string">&#x27;nome&#x27;</span> =&gt; <span class="hljs-variable">$c</span>-&gt;nome, <span class="hljs-string">&#x27;limite&#x27;</span> =&gt; (<span class="hljs-keyword">float</span>) <span class="hljs-variable">$c</span>-&gt;limite_credito],
+);</code></pre></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Garantia</th>
+<th>Como</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data</code> é sempre lista e <code>meta.paginacao</code> sempre tem os 4 números</td>
+<td><code>array_values()</code> + <code>paginationMeta()</code>, aplicado por último (uma <code>meta</code> do controller não sobrescreve a paginação)</td>
+</tr>
+<tr>
+<td><code>simplePaginate()</code> / <code>cursorPaginate()</code> são recusados</td>
+<td><code>InvalidArgumentException</code> com mensagem clara — sem total a listagem não tem como paginar</td>
+</tr>
+<tr>
+<td>Página além da última</td>
+<td><code>data: []</code> com o <code>total</code> real; a biblioteca pede a última página uma vez</td>
+</tr>
+<tr>
+<td>Nenhuma lista vazia sem páginas</td>
+<td><code>total_paginas</code> é no mínimo 1</td>
+</tr>
+<tr>
+<td>Dados de banco legado (latin1) não derrubam a resposta</td>
+<td><code>JSON_INVALID_UTF8_SUBSTITUTE</code>: o byte inválido vira <code>�</code> em vez de erro 500</td>
+</tr>
+<tr>
+<td>Rastreável</td>
+<td><code>request_id</code> no corpo, no cabeçalho <code>X-Request-Id</code> e no log (reaproveita o do proxy quando seguro)</td>
+</tr>
+<tr>
+<td>Nada vaza em produção</td>
+<td>500 com mensagem pública; detalhes só com <code>APP_DEBUG=true</code>, em <code>meta.debug</code></td>
+</tr>
+<tr>
+<td>Resposta sem cache</td>
+<td><code>Cache-Control: no-store</code></td>
+</tr>
+<tr>
+<td><code>throw new HttpResponseException(...)</code> (ex.: <code>failedValidation</code> de FormRequest)</td>
+<td>repassada como foi montada, não vira 500</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout callout-result"><p><strong>Resultado:</strong> verificado num Laravel 13.37 real: as quatro formas de chamar, Resource com <code>$this-&gt;when()</code> e
+<code>additional()</code>, <code>meta</code> do controller preservada, <code>simplePaginate()</code> recusado, lista vazia, página 99 de 14, UTF-8
+inválido, <code>HttpResponseException</code>, <code>findOrFail</code> (404 sem vazar a mensagem interna), exceção (500 público), <code>abort(401)</code>
+e token ausente (419) — 21 de 21 verificações.</p>
+</blockquote>
+<div class="code-block code-php"><div class="code-head"><span class="code-lang">PHP <span class="code-file">app/Services/ResponseService.php</span></span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-php"><span class="hljs-meta">&lt;?php</span>
+
+<span class="hljs-keyword">declare</span>(strict_types=<span class="hljs-number">1</span>);
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title class_">App</span>\<span class="hljs-title class_">Services</span>;
+
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Auth</span>\<span class="hljs-title">Access</span>\<span class="hljs-title">AuthorizationException</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Auth</span>\<span class="hljs-title">AuthenticationException</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Contracts</span>\<span class="hljs-title">Pagination</span>\<span class="hljs-title">LengthAwarePaginator</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Contracts</span>\<span class="hljs-title">Validation</span>\<span class="hljs-title">Validator</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Database</span>\<span class="hljs-title">Eloquent</span>\<span class="hljs-title">ModelNotFoundException</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Http</span>\<span class="hljs-title">Exceptions</span>\<span class="hljs-title">HttpResponseException</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Http</span>\<span class="hljs-title">Exceptions</span>\<span class="hljs-title">ThrottleRequestsException</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Http</span>\<span class="hljs-title">JsonResponse</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Http</span>\<span class="hljs-title">Request</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Http</span>\<span class="hljs-title">Resources</span>\<span class="hljs-title">Json</span>\<span class="hljs-title">JsonResource</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Http</span>\<span class="hljs-title">Resources</span>\<span class="hljs-title">Json</span>\<span class="hljs-title">ResourceCollection</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Session</span>\<span class="hljs-title">TokenMismatchException</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Support</span>\<span class="hljs-title">Facades</span>\<span class="hljs-title">Log</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Illuminate</span>\<span class="hljs-title">Validation</span>\<span class="hljs-title">ValidationException</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">InvalidArgumentException</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Symfony</span>\<span class="hljs-title">Component</span>\<span class="hljs-title">HttpFoundation</span>\<span class="hljs-title">Response</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Symfony</span>\<span class="hljs-title">Component</span>\<span class="hljs-title">HttpKernel</span>\<span class="hljs-title">Exception</span>\<span class="hljs-title">HttpExceptionInterface</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">Throwable</span>;
+
+<span class="hljs-comment">/*
+ * Envelope JSON único para a API (mesmo contrato do ApiResponseHelper do
+ * Joomla), lido sem configuração pelo hr-paginationjs:
+ *
+ * {
+ *     &quot;success&quot;: true,
+ *     &quot;status&quot;: &quot;sucesso&quot;,              // sucesso | erro | aviso | info
+ *     &quot;mensagem&quot;: &quot;Registros carregados.&quot;,
+ *     &quot;data&quot;: [ ... ],
+ *     &quot;errors&quot;: {},                     // { &quot;email&quot;: [&quot;...&quot;], &quot;_general&quot;: [&quot;...&quot;] }
+ *     &quot;request_id&quot;: &quot;9f2c...&quot;,
+ *     &quot;meta&quot;: { &quot;paginacao&quot;: { &quot;total&quot;: 137, &quot;por_pagina&quot;: 20, &quot;pagina_atual&quot;: 1, &quot;total_paginas&quot;: 7 } }
+ * }
+ *
+ * Requisitos: PHP 8.1+ e Laravel 10+.
+ *
+ * Instalação:
+ *   1. Copie para app/Services/ResponseService.php (ajuste o namespace se usar outra pasta).
+ *   2. Para que exceções (422, 401, 403, 404, 419, 429, 500...) também saiam
+ *      neste formato, registre ResponseService::fromThrowable() (veja o método).
+ *
+ * Uso no controller:
+ *   return ResponseService::paginated(Cliente::query()-&gt;paginate($limite));
+ *   return ResponseService::paginated($query-&gt;paginate($limite), transform: ClienteResource::class);
+ *   return ResponseService::created(&#x27;Pedido salvo.&#x27;, [&#x27;id&#x27; =&gt; $pedido-&gt;id]);
+ *   return ResponseService::validationError([&#x27;email&#x27; =&gt; &#x27;Já está em uso.&#x27;]);
+ */</span>
+<span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ResponseService</span>
+</span>{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">STATUS_SUCCESS</span> = <span class="hljs-string">&#x27;sucesso&#x27;</span>;
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">STATUS_ERROR</span> = <span class="hljs-string">&#x27;erro&#x27;</span>;
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">STATUS_WARNING</span> = <span class="hljs-string">&#x27;aviso&#x27;</span>;
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">STATUS_INFO</span> = <span class="hljs-string">&#x27;info&#x27;</span>;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">GENERAL</span> = <span class="hljs-string">&#x27;_general&#x27;</span>;
+
+    <span class="hljs-comment">// Dados vindos de bancos legados (latin1) não derrubam a resposta: o byte</span>
+    <span class="hljs-comment">// inválido vira U+FFFD em vez de uma exceção de JSON.</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">JSON_FLAGS</span> = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span>(<span class="hljs-params"></span>)
+    </span>{
+    }
+
+    <span class="hljs-comment">// ------------------------------------------------------------------</span>
+    <span class="hljs-comment">// Sucesso</span>
+    <span class="hljs-comment">// ------------------------------------------------------------------</span>
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Operação realizada com sucesso.&#x27;</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span> = <span class="hljs-literal">null</span>, <span class="hljs-keyword">array</span> <span class="hljs-variable">$meta</span> = [], <span class="hljs-keyword">int</span> <span class="hljs-variable">$httpStatus</span> = <span class="hljs-number">200</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">respond</span>(<span class="hljs-literal">true</span>, <span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">STATUS_SUCCESS</span>, <span class="hljs-variable">$message</span>, <span class="hljs-variable">$data</span>, [], <span class="hljs-variable">$httpStatus</span>, <span class="hljs-variable">$meta</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">created</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Registro criado com sucesso.&#x27;</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span> = <span class="hljs-literal">null</span>, <span class="hljs-keyword">array</span> <span class="hljs-variable">$meta</span> = []</span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">success</span>(<span class="hljs-variable">$message</span>, <span class="hljs-variable">$data</span>, <span class="hljs-variable">$meta</span>, <span class="hljs-number">201</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updated</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Registro atualizado com sucesso.&#x27;</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span> = <span class="hljs-literal">null</span>, <span class="hljs-keyword">array</span> <span class="hljs-variable">$meta</span> = []</span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">success</span>(<span class="hljs-variable">$message</span>, <span class="hljs-variable">$data</span>, <span class="hljs-variable">$meta</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deleted</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Registro excluído com sucesso.&#x27;</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span> = <span class="hljs-literal">null</span>, <span class="hljs-keyword">array</span> <span class="hljs-variable">$meta</span> = []</span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">success</span>(<span class="hljs-variable">$message</span>, <span class="hljs-variable">$data</span>, <span class="hljs-variable">$meta</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">info</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span> = <span class="hljs-literal">null</span>, <span class="hljs-keyword">array</span> <span class="hljs-variable">$meta</span> = []</span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">respond</span>(<span class="hljs-literal">true</span>, <span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">STATUS_INFO</span>, <span class="hljs-variable">$message</span>, <span class="hljs-variable">$data</span>, [], <span class="hljs-number">200</span>, <span class="hljs-variable">$meta</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">warning</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span> = <span class="hljs-literal">null</span>, <span class="hljs-keyword">array</span> <span class="hljs-variable">$meta</span> = []</span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">respond</span>(<span class="hljs-literal">true</span>, <span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">STATUS_WARNING</span>, <span class="hljs-variable">$message</span>, <span class="hljs-variable">$data</span>, [], <span class="hljs-number">200</span>, <span class="hljs-variable">$meta</span>);
+    }
+
+    <span class="hljs-comment">/*
+     * Listagem paginada: as linhas vão em &quot;data&quot; (sempre lista) e os números
+     * em &quot;meta.paginacao&quot; — exatamente o que o hr-paginationjs lê.
+     *
+     * $source:
+     *   $query-&gt;paginate($limite)                        → linhas como o Eloquent serializa
+     *   ClienteResource::collection($query-&gt;paginate())  → linhas resolvidas pelo Resource
+     *
+     * $transform (opcional, quando $source é o paginator):
+     *   ClienteResource::class                           → cada linha passa pelo Resource
+     *   fn (Cliente $c) =&gt; [&#x27;id&#x27; =&gt; $c-&gt;id, ...]         → cada linha passa pela função
+     *
+     * Exige total: simplePaginate()/cursorPaginate() não informam quantas
+     * páginas existem e são recusados aqui (erro do desenvolvedor, não do usuário).
+     *
+     * A página além da última volta com data: [] e o total real; o
+     * hr-paginationjs detecta e pede a última página uma vez.
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">paginated</span>(<span class="hljs-params">
+        LengthAwarePaginator|ResourceCollection <span class="hljs-variable">$source</span>,
+        <span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Registros carregados.&#x27;</span>,
+        <span class="hljs-keyword">array</span> <span class="hljs-variable">$meta</span> = [],
+        <span class="hljs-keyword">callable</span>|<span class="hljs-keyword">string</span>|<span class="hljs-literal">null</span> <span class="hljs-variable">$transform</span> = <span class="hljs-literal">null</span>,
+    </span>): <span class="hljs-title">JsonResponse</span> </span>{
+        <span class="hljs-variable">$request</span> = <span class="hljs-title function_ invoke__">request</span>();
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$source</span> <span class="hljs-keyword">instanceof</span> LengthAwarePaginator &amp;&amp; <span class="hljs-title function_ invoke__">is_string</span>(<span class="hljs-variable">$transform</span>) &amp;&amp; <span class="hljs-title function_ invoke__">is_subclass_of</span>(<span class="hljs-variable">$transform</span>, <span class="hljs-title class_">JsonResource</span>::<span class="hljs-variable language_">class</span>)) {
+            <span class="hljs-variable">$source</span> = <span class="hljs-variable">$transform</span>::<span class="hljs-title function_ invoke__">collection</span>(<span class="hljs-variable">$source</span>);
+            <span class="hljs-variable">$transform</span> = <span class="hljs-literal">null</span>;
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$source</span> <span class="hljs-keyword">instanceof</span> ResourceCollection) {
+            <span class="hljs-variable">$paginator</span> = <span class="hljs-variable">$source</span>-&gt;resource;
+
+            <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$paginator</span> <span class="hljs-keyword">instanceof</span> LengthAwarePaginator) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">InvalidArgumentException</span>(<span class="hljs-string">&#x27;ResponseService::paginated() exige um Resource::collection() sobre paginate(); simplePaginate() e cursorPaginate() não informam o total.&#x27;</span>);
+            }
+
+            <span class="hljs-keyword">if</span> (<span class="hljs-variable">$transform</span> !== <span class="hljs-literal">null</span>) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">InvalidArgumentException</span>(<span class="hljs-string">&#x27;ResponseService::paginated(): use $transform só com o paginator; o Resource já transforma as linhas.&#x27;</span>);
+            }
+
+            <span class="hljs-variable">$rows</span> = <span class="hljs-variable">$source</span>-&gt;<span class="hljs-title function_ invoke__">resolve</span>(<span class="hljs-variable">$request</span>);
+
+            <span class="hljs-comment">// with() e additional() do Resource vão para &quot;meta&quot;, sem sobrescrever o que o controller passou.</span>
+            <span class="hljs-variable">$meta</span> = <span class="hljs-title function_ invoke__">array_merge</span>(<span class="hljs-variable">$source</span>-&gt;<span class="hljs-title function_ invoke__">with</span>(<span class="hljs-variable">$request</span>), <span class="hljs-variable">$source</span>-&gt;additional, <span class="hljs-variable">$meta</span>);
+        } <span class="hljs-keyword">elseif</span> (<span class="hljs-variable">$transform</span> !== <span class="hljs-literal">null</span>) {
+            <span class="hljs-keyword">if</span> (!<span class="hljs-title function_ invoke__">is_callable</span>(<span class="hljs-variable">$transform</span>)) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">InvalidArgumentException</span>(<span class="hljs-string">&#x27;ResponseService::paginated(): $transform deve ser uma classe JsonResource ou um callable.&#x27;</span>);
+            }
+
+            <span class="hljs-variable">$paginator</span> = <span class="hljs-variable">$source</span>;
+            <span class="hljs-variable">$rows</span> = <span class="hljs-title function_ invoke__">array_map</span>(<span class="hljs-variable">$transform</span>, <span class="hljs-variable">$source</span>-&gt;<span class="hljs-title function_ invoke__">items</span>());
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-variable">$paginator</span> = <span class="hljs-variable">$source</span>;
+            <span class="hljs-variable">$rows</span> = <span class="hljs-variable">$source</span>-&gt;<span class="hljs-title function_ invoke__">items</span>();
+        }
+
+        <span class="hljs-comment">// Por último: o controller não consegue sobrescrever a paginação real por engano.</span>
+        <span class="hljs-variable">$meta</span>[<span class="hljs-string">&#x27;paginacao&#x27;</span>] = <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">paginationMeta</span>(<span class="hljs-variable">$paginator</span>);
+
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">success</span>(<span class="hljs-variable">$message</span>, <span class="hljs-title function_ invoke__">array_values</span>(<span class="hljs-variable">$rows</span>), <span class="hljs-variable">$meta</span>);
+    }
+
+    <span class="hljs-comment">// Os números de &quot;meta.paginacao&quot;, para quem montar a resposta à mão.</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">paginationMeta</span>(<span class="hljs-params">LengthAwarePaginator <span class="hljs-variable">$paginator</span></span>): <span class="hljs-title">array</span>
+    </span>{
+        <span class="hljs-keyword">return</span> [
+            <span class="hljs-string">&#x27;total&#x27;</span> =&gt; <span class="hljs-variable">$paginator</span>-&gt;<span class="hljs-title function_ invoke__">total</span>(),
+            <span class="hljs-string">&#x27;por_pagina&#x27;</span> =&gt; <span class="hljs-variable">$paginator</span>-&gt;<span class="hljs-title function_ invoke__">perPage</span>(),
+            <span class="hljs-string">&#x27;pagina_atual&#x27;</span> =&gt; <span class="hljs-variable">$paginator</span>-&gt;<span class="hljs-title function_ invoke__">currentPage</span>(),
+            <span class="hljs-string">&#x27;total_paginas&#x27;</span> =&gt; <span class="hljs-title function_ invoke__">max</span>(<span class="hljs-number">1</span>, <span class="hljs-variable">$paginator</span>-&gt;<span class="hljs-title function_ invoke__">lastPage</span>()),
+        ];
+    }
+
+    <span class="hljs-comment">// ------------------------------------------------------------------</span>
+    <span class="hljs-comment">// Erros</span>
+    <span class="hljs-comment">// ------------------------------------------------------------------</span>
+
+    <span class="hljs-comment">/*
+     * $errors aceita:
+     *   &#x27;mensagem&#x27;                       → _general
+     *   [&#x27;msg 1&#x27;, &#x27;msg 2&#x27;]               → _general
+     *   [&#x27;email&#x27; =&gt; &#x27;msg&#x27;]               → email: [&#x27;msg&#x27;]
+     *   [&#x27;email&#x27; =&gt; [&#x27;msg 1&#x27;, &#x27;msg 2&#x27;]]
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">error</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Não foi possível concluir a operação.&#x27;</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span> = <span class="hljs-literal">null</span>, <span class="hljs-keyword">array</span>|<span class="hljs-keyword">string</span> <span class="hljs-variable">$errors</span> = [], <span class="hljs-keyword">int</span> <span class="hljs-variable">$httpStatus</span> = <span class="hljs-number">400</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">respond</span>(<span class="hljs-literal">false</span>, <span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">STATUS_ERROR</span>, <span class="hljs-variable">$message</span>, <span class="hljs-variable">$data</span>, <span class="hljs-variable">$errors</span>, <span class="hljs-variable">$httpStatus</span>);
+    }
+
+    <span class="hljs-comment">// 422 com a primeira mensagem em &quot;mensagem&quot; (é o que a listagem e o aviso mostram).</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">validationError</span>(<span class="hljs-params"><span class="hljs-keyword">array</span>|<span class="hljs-keyword">string</span> <span class="hljs-variable">$errors</span>, ?<span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-literal">null</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-variable">$errors</span> = <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">normalizeErrors</span>(<span class="hljs-variable">$errors</span>);
+
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">respond</span>(<span class="hljs-literal">false</span>, <span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">STATUS_ERROR</span>, <span class="hljs-variable">$message</span> ?? <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">firstError</span>(<span class="hljs-variable">$errors</span>), <span class="hljs-literal">null</span>, <span class="hljs-variable">$errors</span>, <span class="hljs-number">422</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fromValidator</span>(<span class="hljs-params">Validator <span class="hljs-variable">$validator</span>, ?<span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-literal">null</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">validationError</span>(<span class="hljs-variable">$validator</span>-&gt;<span class="hljs-title function_ invoke__">errors</span>()-&gt;<span class="hljs-title function_ invoke__">toArray</span>(), <span class="hljs-variable">$message</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">badRequest</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Requisição inválida.&#x27;</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span> = <span class="hljs-literal">null</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$message</span>, <span class="hljs-variable">$data</span>, [], <span class="hljs-number">400</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unauthorized</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Usuário não autenticado.&#x27;</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$message</span>, <span class="hljs-literal">null</span>, [], <span class="hljs-number">401</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">forbidden</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Você não possui permissão para esta operação.&#x27;</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$message</span>, <span class="hljs-literal">null</span>, [], <span class="hljs-number">403</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">notFound</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Registro não encontrado.&#x27;</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$message</span>, <span class="hljs-literal">null</span>, [], <span class="hljs-number">404</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">methodNotAllowed</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Método de requisição não permitido.&#x27;</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$message</span>, <span class="hljs-literal">null</span>, [], <span class="hljs-number">405</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">conflict</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;A operação não pode ser concluída devido a um conflito de dados.&#x27;</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span> = <span class="hljs-literal">null</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$message</span>, <span class="hljs-variable">$data</span>, [], <span class="hljs-number">409</span>);
+    }
+
+    <span class="hljs-comment">// Token CSRF vencido (status próprio do Laravel).</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sessionExpired</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Sua sessão expirou. Recarregue a página.&#x27;</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$message</span>, <span class="hljs-literal">null</span>, [], <span class="hljs-number">419</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tooManyRequests</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Muitas tentativas. Aguarde alguns instantes e tente novamente.&#x27;</span>, ?<span class="hljs-keyword">int</span> <span class="hljs-variable">$retryAfter</span> = <span class="hljs-literal">null</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-variable">$response</span> = <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$message</span>, <span class="hljs-literal">null</span>, [], <span class="hljs-number">429</span>);
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$retryAfter</span>) {
+            <span class="hljs-variable">$response</span>-&gt;headers-&gt;<span class="hljs-title function_ invoke__">set</span>(<span class="hljs-string">&#x27;Retry-After&#x27;</span>, (<span class="hljs-keyword">string</span>) <span class="hljs-variable">$retryAfter</span>);
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$response</span>;
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">serviceUnavailable</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span> = <span class="hljs-string">&#x27;Serviço temporariamente indisponível.&#x27;</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$message</span>, <span class="hljs-literal">null</span>, [], <span class="hljs-number">503</span>);
+    }
+
+    <span class="hljs-comment">/*
+     * Registra a exceção no log (com o request_id) e devolve 500 com mensagem
+     * pública. Só com APP_DEBUG=true os detalhes vão em meta.debug.
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">exception</span>(<span class="hljs-params"><span class="hljs-built_in">Throwable</span> <span class="hljs-variable">$error</span>, <span class="hljs-keyword">string</span> <span class="hljs-variable">$publicMessage</span> = <span class="hljs-string">&#x27;Ocorreu um erro interno ao processar a solicitação.&#x27;</span>, <span class="hljs-keyword">array</span> <span class="hljs-variable">$context</span> = []</span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-title class_">Log</span>::<span class="hljs-title function_ invoke__">error</span>(<span class="hljs-variable">$error</span>-&gt;<span class="hljs-title function_ invoke__">getMessage</span>(), <span class="hljs-title function_ invoke__">array_merge</span>(<span class="hljs-variable">$context</span>, [
+            <span class="hljs-string">&#x27;request_id&#x27;</span> =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">requestId</span>(),
+            <span class="hljs-string">&#x27;exception&#x27;</span> =&gt; <span class="hljs-variable">$error</span>,
+        ]));
+
+        <span class="hljs-variable">$meta</span> = [];
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">config</span>(<span class="hljs-string">&#x27;app.debug&#x27;</span>)) {
+            <span class="hljs-variable">$meta</span>[<span class="hljs-string">&#x27;debug&#x27;</span>] = [
+                <span class="hljs-string">&#x27;tipo&#x27;</span> =&gt; <span class="hljs-variable">$error</span>::<span class="hljs-variable language_">class</span>,
+                <span class="hljs-string">&#x27;mensagem&#x27;</span> =&gt; <span class="hljs-variable">$error</span>-&gt;<span class="hljs-title function_ invoke__">getMessage</span>(),
+                <span class="hljs-string">&#x27;arquivo&#x27;</span> =&gt; <span class="hljs-variable">$error</span>-&gt;<span class="hljs-title function_ invoke__">getFile</span>(),
+                <span class="hljs-string">&#x27;linha&#x27;</span> =&gt; <span class="hljs-variable">$error</span>-&gt;<span class="hljs-title function_ invoke__">getLine</span>(),
+            ];
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">respond</span>(<span class="hljs-literal">false</span>, <span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">STATUS_ERROR</span>, <span class="hljs-variable">$publicMessage</span>, <span class="hljs-literal">null</span>, [], <span class="hljs-number">500</span>, <span class="hljs-variable">$meta</span>);
+    }
+
+    <span class="hljs-comment">/*
+     * Converte qualquer exceção para o contrato.
+     *
+     * Laravel 11+ (bootstrap/app.php):
+     *   -&gt;withExceptions(function (Exceptions $exceptions): void {
+     *       $exceptions-&gt;render(function (\Throwable $e, \Illuminate\Http\Request $request) {
+     *           if ($request-&gt;expectsJson()) {
+     *               return \App\Services\ResponseService::fromThrowable($e);
+     *           }
+     *       });
+     *   })
+     *
+     * Laravel 10 (app/Exceptions/Handler.php, método register()):
+     *   $this-&gt;renderable(function (\Throwable $e, $request) {
+     *       if ($request-&gt;expectsJson()) {
+     *           return \App\Services\ResponseService::fromThrowable($e);
+     *       }
+     *   });
+     *
+     * O hr-paginationjs envia X-Requested-With e Accept: application/json,
+     * então expectsJson() é verdadeiro nas requisições dele.
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fromThrowable</span>(<span class="hljs-params"><span class="hljs-built_in">Throwable</span> <span class="hljs-variable">$e</span></span>): <span class="hljs-title">Response</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">match</span> (<span class="hljs-literal">true</span>) {
+            <span class="hljs-comment">// response()-&gt;json(...) lançado de propósito (ex.: failedValidation de um FormRequest) sai como foi montado.</span>
+            <span class="hljs-variable">$e</span> <span class="hljs-keyword">instanceof</span> HttpResponseException =&gt; <span class="hljs-variable">$e</span>-&gt;<span class="hljs-title function_ invoke__">getResponse</span>(),
+            <span class="hljs-variable">$e</span> <span class="hljs-keyword">instanceof</span> ValidationException =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">validationError</span>(<span class="hljs-variable">$e</span>-&gt;<span class="hljs-title function_ invoke__">errors</span>()),
+            <span class="hljs-variable">$e</span> <span class="hljs-keyword">instanceof</span> AuthenticationException =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">unauthorized</span>(),
+            <span class="hljs-variable">$e</span> <span class="hljs-keyword">instanceof</span> AuthorizationException =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">forbidden</span>(<span class="hljs-variable">$e</span>-&gt;<span class="hljs-title function_ invoke__">getMessage</span>() ?: <span class="hljs-string">&#x27;Você não possui permissão para esta operação.&#x27;</span>),
+            <span class="hljs-variable">$e</span> <span class="hljs-keyword">instanceof</span> ModelNotFoundException =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">notFound</span>(),
+            <span class="hljs-variable">$e</span> <span class="hljs-keyword">instanceof</span> TokenMismatchException =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">sessionExpired</span>(),
+            <span class="hljs-variable">$e</span> <span class="hljs-keyword">instanceof</span> ThrottleRequestsException =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">tooManyRequests</span>(<span class="hljs-attr">retryAfter</span>: (<span class="hljs-keyword">int</span>) (<span class="hljs-variable">$e</span>-&gt;<span class="hljs-title function_ invoke__">getHeaders</span>()[<span class="hljs-string">&#x27;Retry-After&#x27;</span>] ?? <span class="hljs-number">0</span>) ?: <span class="hljs-literal">null</span>),
+            <span class="hljs-variable">$e</span> <span class="hljs-keyword">instanceof</span> HttpExceptionInterface =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">fromHttpException</span>(<span class="hljs-variable">$e</span>),
+            <span class="hljs-keyword">default</span> =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">exception</span>(<span class="hljs-variable">$e</span>),
+        };
+    }
+
+    <span class="hljs-comment">/*
+     * Um id por requisição: reaproveita o X-Request-Id recebido (proxy, load
+     * balancer) quando é seguro, ou gera um; fica guardado na Request para o
+     * log e todas as respostas da mesma requisição usarem o mesmo.
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">requestId</span>(<span class="hljs-params"></span>): <span class="hljs-title">string</span>
+    </span>{
+        <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> Request $request */</span>
+        <span class="hljs-variable">$request</span> = <span class="hljs-title function_ invoke__">request</span>();
+
+        <span class="hljs-variable">$id</span> = <span class="hljs-variable">$request</span>-&gt;attributes-&gt;<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;request_id&#x27;</span>);
+
+        <span class="hljs-keyword">if</span> (!<span class="hljs-title function_ invoke__">is_string</span>(<span class="hljs-variable">$id</span>) || <span class="hljs-variable">$id</span> === <span class="hljs-string">&#x27;&#x27;</span>) {
+            <span class="hljs-variable">$header</span> = (<span class="hljs-keyword">string</span>) <span class="hljs-variable">$request</span>-&gt;headers-&gt;<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;X-Request-Id&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+            <span class="hljs-variable">$id</span> = <span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/^[A-Za-z0-9._-]{8,128}$/&#x27;</span>, <span class="hljs-variable">$header</span>) ? <span class="hljs-variable">$header</span> : <span class="hljs-title function_ invoke__">bin2hex</span>(<span class="hljs-title function_ invoke__">random_bytes</span>(<span class="hljs-number">16</span>));
+            <span class="hljs-variable">$request</span>-&gt;attributes-&gt;<span class="hljs-title function_ invoke__">set</span>(<span class="hljs-string">&#x27;request_id&#x27;</span>, <span class="hljs-variable">$id</span>);
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$id</span>;
+    }
+
+    <span class="hljs-comment">// ------------------------------------------------------------------</span>
+    <span class="hljs-comment">// Internos</span>
+    <span class="hljs-comment">// ------------------------------------------------------------------</span>
+
+    <span class="hljs-keyword">private</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fromHttpException</span>(<span class="hljs-params">HttpExceptionInterface <span class="hljs-variable">$e</span></span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-variable">$status</span> = <span class="hljs-variable">$e</span>-&gt;<span class="hljs-title function_ invoke__">getStatusCode</span>();
+
+        <span class="hljs-comment">// abort(404), rota inexistente, 405, model não encontrado... chegam aqui.</span>
+        <span class="hljs-variable">$message</span> = <span class="hljs-keyword">match</span> (<span class="hljs-variable">$status</span>) {
+            <span class="hljs-number">401</span> =&gt; <span class="hljs-string">&#x27;Usuário não autenticado.&#x27;</span>,
+            <span class="hljs-number">403</span> =&gt; <span class="hljs-string">&#x27;Você não possui permissão para esta operação.&#x27;</span>,
+            <span class="hljs-number">404</span> =&gt; <span class="hljs-string">&#x27;Registro não encontrado.&#x27;</span>,
+            <span class="hljs-number">405</span> =&gt; <span class="hljs-string">&#x27;Método de requisição não permitido.&#x27;</span>,
+            <span class="hljs-number">413</span> =&gt; <span class="hljs-string">&#x27;Os arquivos enviados ultrapassam o tamanho máximo permitido pelo servidor.&#x27;</span>,
+            <span class="hljs-number">419</span> =&gt; <span class="hljs-string">&#x27;Sua sessão expirou. Recarregue a página.&#x27;</span>,
+            <span class="hljs-number">429</span> =&gt; <span class="hljs-string">&#x27;Muitas tentativas. Aguarde alguns instantes e tente novamente.&#x27;</span>,
+            <span class="hljs-number">503</span> =&gt; <span class="hljs-string">&#x27;Serviço temporariamente indisponível.&#x27;</span>,
+            <span class="hljs-keyword">default</span> =&gt; <span class="hljs-variable">$status</span> &gt;= <span class="hljs-number">500</span> ? <span class="hljs-string">&#x27;Ocorreu um erro interno ao processar a solicitação.&#x27;</span> : <span class="hljs-string">&#x27;Requisição inválida.&#x27;</span>,
+        };
+
+        <span class="hljs-comment">// abort(403, &#x27;Mensagem própria&#x27;) mantém a mensagem; nas demais, a mensagem</span>
+        <span class="hljs-comment">// interna do framework (&quot;No query results for model...&quot;) nunca vaza.</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$status</span> &lt; <span class="hljs-number">500</span> &amp;&amp; <span class="hljs-variable">$e</span>-&gt;<span class="hljs-title function_ invoke__">getMessage</span>() !== <span class="hljs-string">&#x27;&#x27;</span> &amp;&amp; !<span class="hljs-title function_ invoke__">in_array</span>(<span class="hljs-variable">$status</span>, [<span class="hljs-number">404</span>, <span class="hljs-number">405</span>, <span class="hljs-number">413</span>, <span class="hljs-number">419</span>], <span class="hljs-literal">true</span>)) {
+            <span class="hljs-variable">$message</span> = <span class="hljs-variable">$e</span>-&gt;<span class="hljs-title function_ invoke__">getMessage</span>();
+        }
+
+        <span class="hljs-variable">$response</span> = <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">respond</span>(<span class="hljs-literal">false</span>, <span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">STATUS_ERROR</span>, <span class="hljs-variable">$message</span>, <span class="hljs-literal">null</span>, [], <span class="hljs-variable">$status</span>);
+        <span class="hljs-variable">$response</span>-&gt;headers-&gt;<span class="hljs-title function_ invoke__">add</span>(<span class="hljs-variable">$e</span>-&gt;<span class="hljs-title function_ invoke__">getHeaders</span>());
+
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$response</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">respond</span>(<span class="hljs-params"><span class="hljs-keyword">bool</span> <span class="hljs-variable">$success</span>, <span class="hljs-keyword">string</span> <span class="hljs-variable">$status</span>, <span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span>, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$data</span>, <span class="hljs-keyword">array</span>|<span class="hljs-keyword">string</span> <span class="hljs-variable">$errors</span>, <span class="hljs-keyword">int</span> <span class="hljs-variable">$httpStatus</span>, <span class="hljs-keyword">array</span> <span class="hljs-variable">$meta</span> = []</span>): <span class="hljs-title">JsonResponse</span>
+    </span>{
+        <span class="hljs-variable">$errors</span> = <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">normalizeErrors</span>(<span class="hljs-variable">$errors</span>);
+
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$success</span> &amp;&amp; <span class="hljs-title function_ invoke__">trim</span>(<span class="hljs-variable">$message</span>) === <span class="hljs-string">&#x27;&#x27;</span>) {
+            <span class="hljs-variable">$message</span> = <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">firstError</span>(<span class="hljs-variable">$errors</span>);
+        }
+
+        <span class="hljs-variable">$payload</span> = [
+            <span class="hljs-string">&#x27;success&#x27;</span> =&gt; <span class="hljs-variable">$success</span>,
+            <span class="hljs-string">&#x27;status&#x27;</span> =&gt; <span class="hljs-variable">$status</span>,
+            <span class="hljs-string">&#x27;mensagem&#x27;</span> =&gt; <span class="hljs-variable">$message</span>,
+            <span class="hljs-string">&#x27;data&#x27;</span> =&gt; <span class="hljs-variable">$data</span>,
+            <span class="hljs-comment">// {} e não [] quando vazio, como no exemplo do contrato.</span>
+            <span class="hljs-string">&#x27;errors&#x27;</span> =&gt; <span class="hljs-variable">$errors</span> === [] ? <span class="hljs-keyword">new</span> \<span class="hljs-built_in">stdClass</span>() : <span class="hljs-variable">$errors</span>,
+            <span class="hljs-string">&#x27;request_id&#x27;</span> =&gt; <span class="hljs-built_in">self</span>::<span class="hljs-title function_ invoke__">requestId</span>(),
+        ];
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$meta</span> !== []) {
+            <span class="hljs-variable">$payload</span>[<span class="hljs-string">&#x27;meta&#x27;</span>] = <span class="hljs-variable">$meta</span>;
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JsonResponse</span>(<span class="hljs-variable">$payload</span>, <span class="hljs-variable">$httpStatus</span>, [
+            <span class="hljs-string">&#x27;X-Request-Id&#x27;</span> =&gt; <span class="hljs-variable">$payload</span>[<span class="hljs-string">&#x27;request_id&#x27;</span>],
+            <span class="hljs-string">&#x27;Cache-Control&#x27;</span> =&gt; <span class="hljs-string">&#x27;no-store, no-cache, must-revalidate&#x27;</span>,
+        ], <span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">JSON_FLAGS</span>);
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">normalizeErrors</span>(<span class="hljs-params"><span class="hljs-keyword">array</span>|<span class="hljs-keyword">string</span>|<span class="hljs-literal">null</span> <span class="hljs-variable">$errors</span></span>): <span class="hljs-title">array</span>
+    </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$errors</span> === <span class="hljs-literal">null</span> || <span class="hljs-variable">$errors</span> === <span class="hljs-string">&#x27;&#x27;</span> || <span class="hljs-variable">$errors</span> === []) {
+            <span class="hljs-keyword">return</span> [];
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">is_string</span>(<span class="hljs-variable">$errors</span>)) {
+            <span class="hljs-keyword">return</span> [<span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">GENERAL</span> =&gt; [<span class="hljs-variable">$errors</span>]];
+        }
+
+        <span class="hljs-comment">// Lista simples: [&#x27;msg 1&#x27;, &#x27;msg 2&#x27;] → _general</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">array_is_list</span>(<span class="hljs-variable">$errors</span>) &amp;&amp; <span class="hljs-title function_ invoke__">count</span>(<span class="hljs-title function_ invoke__">array_filter</span>(<span class="hljs-variable">$errors</span>, <span class="hljs-string">&#x27;is_scalar&#x27;</span>)) === <span class="hljs-title function_ invoke__">count</span>(<span class="hljs-variable">$errors</span>)) {
+            <span class="hljs-variable">$errors</span> = [<span class="hljs-built_in">self</span>::<span class="hljs-variable constant_">GENERAL</span> =&gt; <span class="hljs-variable">$errors</span>];
+        }
+
+        <span class="hljs-variable">$normalized</span> = [];
+
+        <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$errors</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$field</span> =&gt; <span class="hljs-variable">$messages</span>) {
+            <span class="hljs-variable">$messages</span> = <span class="hljs-title function_ invoke__">array_values</span>(<span class="hljs-title function_ invoke__">array_filter</span>(
+                <span class="hljs-title function_ invoke__">array_map</span>(<span class="hljs-string">&#x27;strval&#x27;</span>, (<span class="hljs-keyword">array</span>) <span class="hljs-variable">$messages</span>),
+                <span class="hljs-built_in">static</span> fn (<span class="hljs-keyword">string</span> <span class="hljs-variable">$message</span>): <span class="hljs-keyword">bool</span> =&gt; <span class="hljs-variable">$message</span> !== <span class="hljs-string">&#x27;&#x27;</span>
+            ));
+
+            <span class="hljs-keyword">if</span> (<span class="hljs-variable">$messages</span> !== []) {
+                <span class="hljs-variable">$normalized</span>[(<span class="hljs-keyword">string</span>) <span class="hljs-variable">$field</span>] = <span class="hljs-variable">$messages</span>;
+            }
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$normalized</span>;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-built_in">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">firstError</span>(<span class="hljs-params"><span class="hljs-keyword">array</span> <span class="hljs-variable">$errors</span>, <span class="hljs-keyword">string</span> <span class="hljs-variable">$default</span> = <span class="hljs-string">&#x27;Corrija os campos informados.&#x27;</span></span>): <span class="hljs-title">string</span>
+    </span>{
+        <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$errors</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$messages</span>) {
+            <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>(<span class="hljs-variable">$messages</span>)) {
+                <span class="hljs-keyword">return</span> (<span class="hljs-keyword">string</span>) <span class="hljs-title function_ invoke__">reset</span>(<span class="hljs-variable">$messages</span>);
+            }
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$default</span>;
+    }
+}</code></pre></div>
 <h2 id="b-com-paginate-puro-ou-api-resource">B. Com <code>paginate()</code> puro ou API Resource <a class="anchor" href="#b-com-paginate-puro-ou-api-resource" aria-label="Link para esta seção">#</a></h2>
 <p>Sem <code>ResponseService</code>, basta indicar o adaptador <code>laravel</code>:</p>
 <div class="code-block code-html"><div class="code-head"><span class="code-lang">HTML</span><button type="button" class="copy" data-label="Copiar" aria-label="Copiar código">Copiar</button></div><pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clientes&quot;</span> <span class="hljs-attr">data-paginationjs</span>

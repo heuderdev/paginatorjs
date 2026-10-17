@@ -247,3 +247,16 @@ Execução:
 - [x] Laravel real, segunda rodada: 16/16 (inclui corpo `id=13&status=inativo` sem campo extra, 419 → session, `paginate()` puro com troca de página, API Resource com 28 páginas).
 - [x] Docs: página nova `docs/laravel.html` (Guia) + atributos, backend, API JS, ações, testes, README e LEIAME do pacote. 27 páginas, 0 links quebrados.
 - [ ] Não executado: projeto Laravel do usuário (`C:\laragon\www\laravel`) não foi alterado nem usado; `@csrf` sem `<meta>` coberto só pelo teste unitário 37; navegador real.
+
+## 14. `ResponseService` completo para copiar e colar (pedido de 2026-10-17)
+
+Base: `C:\laragon\www\sextopremioprodutorrural\ResponseService.php` (não alterado). Nova versão em
+`exemplos/laravel/ResponseService.php`, embutida inteira em `docs/md/laravel.md` (seção "A classe ResponseService completa").
+
+- [x] `paginated()` aceita paginator, `Resource::collection()` (resolve `when()`, `additional()` → `meta`) e `transform:` (classe JsonResource ou callable).
+- [x] `meta.paginacao` aplicada por último; `total_paginas` ≥ 1; `simplePaginate()`/`cursorPaginate()` → `InvalidArgumentException`.
+- [x] Correção encontrada: `HttpResponseException` virava 500 no `fromThrowable()` (o callback `render` roda antes do Laravel tratá-la); agora é repassada.
+- [x] `JSON_INVALID_UTF8_SUBSTITUTE` (banco latin1 não derruba a resposta); `final`, `strict_types`.
+- [x] Laravel 13.37 descartável (scratchpad): 21/21 (quatro formas de chamar, vazio, página 99/14, UTF-8 inválido, HttpResponseException, findOrFail 404, 500 público, 401, 419). Expectativa errada do teste corrigida: `with()` de Resource de item não vale para `::collection()` (comportamento do próprio Laravel).
+- [x] Código da página (texto do botão Copiar, via jsdom) idêntico byte a byte ao arquivo testado.
+- [ ] Não executado: Laravel 10/11/12 (só 13.37); PHP < 8.4 (só lint e execução no 8.4.2); navegador real.
