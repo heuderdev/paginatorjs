@@ -1,5 +1,17 @@
 # Instalação e ordem de carregamento
 
+## Onde baixar
+
+O código-fonte e os arquivos prontos para produção (`dist/`) ficam no repositório do projeto no GitHub:
+[github.com/heuderdev/paginatorjs](https://github.com/heuderdev/paginatorjs).
+
+```bash
+git clone https://github.com/heuderdev/paginatorjs.git
+```
+
+Sem Git, use **Code → Download ZIP** na página do repositório. Para usar a biblioteca em uma página, basta copiar os
+arquivos de `dist/` (veja abaixo).
+
 ## Dependências
 
 | Dependência | Versão | Observação |
